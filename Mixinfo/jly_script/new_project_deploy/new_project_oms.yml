@@ -1,0 +1,70 @@
+
+---
+- name: 创建 user 用户 tomcat-oms conf disconf-oms 目录
+  hosts: '{{ hosts }}'
+  vars:
+      comp: '{{ comp }}'
+      codeName: '{{ codeName }}'
+      uid: '{{ uid }}'
+      ugroup: coreapp
+  tasks:
+    - name: 1、创建用户：用户名 用户 id 分配用户组 指定用户所属目录
+      user:
+        name: "{{ comp }}-{{ codeName }}"
+        uid: "{{ uid }}"
+        append: yes
+        group: "{{ ugroup }}"
+        state: present
+        home: "/data/app/{{ comp }}-{{ codeName }}"
+
+    - name: 2、创建目录:tomcat-oms logs|temp|work|pid|webapps
+      file: path={{ item }} state=directory owner={{ comp }}-{{ codeName }} group={{ ugroup }} mode=0755 recurse=yes
+      with_items:
+          #/app/{{ comp }}-cts/tomcat
+        - "/app/{{ comp }}-{{ codeName }}/tomcat/logs"
+        - "/app/{{ comp }}-{{ codeName }}/tomcat/temp"
+        - "/app/{{ comp }}-{{ codeName }}/tomcat/work"
+        - "/app/{{ comp }}-{{ codeName }}/tomcat/pid"
+        - "/app/{{ comp }}-{{ codeName }}/tomcat/webapps"
+
+    - name: 3、创建目录:conf
+      file: path={{ item }} state=directory recurse=yes
+      with_items:
+          #/usr/local/apache-tomcat-7.0.106/core-app/{{ comp }}-cts/conf
+        - "/usr/local/apache-tomcat-7.0.106/core-app/{{ comp }}-{{ codeName }}/conf"
+
+    - name: 4、创建目录:disconf 的core 和oms 目录
+      file: path={{ item }} state=directory recurse=yes
+      with_items:
+          #/etc/disconf/oms/{{ comp }}-cts
+        - "/etc/disconf/oms/{{ comp }}-{{ codeName }}"
+
+    - name: 5、分配权限
+      shell: cd /app && chmod 755 {{ comp }}-{{ codeName }}
+
+    - name: 6、template tomcat-oms:{{ comp }}-codeName.sh
+      template: src={{ item.local }} dest={{ item.remote }} owner={{ comp }}-{{ codeName }} group=coreapp
+      with_items:
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/comp-codeName.sh', remote: '/app/{{ comp }}-{{ codeName }}/tomcat/{{ comp }}-{{ codeName }}.sh'}
+
+    - name: 7.1、synchronize conf 内无项目相关的文件
+      synchronize: src={{ item.local }} dest={{ item.remote }} delete=yes
+      with_items:
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/conf/', remote: '/usr/local/apache-tomcat-7.0.106/core-app/{{ comp }}-{{ codeName }}/conf/'}
+
+    - name: 7.2、template conf：logging.properties server.xml
+      template: src={{ item.local }} dest={{ item.remote }}
+      with_items:
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/conf/logging.properties', remote: '/usr/local/apache-tomcat-7.0.106/core-app/{{ comp }}-{{ codeName }}/conf/logging.properties'}
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/conf/server.xml', remote: '/usr/local/apache-tomcat-7.0.106/core-app/{{ comp }}-{{ codeName }}/conf/server.xml'}
+
+    - name: 8、template disconf-oms disconf.properties
+      template: src={{ item.local }} dest={{ item.remote }}
+      with_items:
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/disconf-oms/disconf.properties', remote: '/etc/disconf/oms/{{ comp }}-{{ codeName }}/disconf.properties'}
+
+    - name: 9、chown conf
+      shell: cd /usr/local/apache-tomcat-7.0.106/core-app/{{ comp }}-{{ codeName }} && chown -R {{ comp }}-{{ codeName }}:coreapp conf
+
+    - name: 10、chown app
+      shell: cd /app && chown -R {{ comp }}-{{ codeName }}:coreapp {{ comp }}-{{ codeName }}

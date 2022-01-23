@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-mysql
+  namespace: my-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-mysql
+  template:
+    metadata:
+      labels:
+        app: my-mysql
+    spec:
+      containers:
+        - name: my-mysql
+          image: 'mysql:8.0.30'
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_USER
+              value: test
+            - name: MYSQL_PASSWORD
+              value: test
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - name: my-mysql-data
+              mountPath: /var/lib/mysql
+            - name: mysql-conf
+              mountPath: /etc/mysql/mysql.conf.d
+      volumes:
+        - name: mysql-conf
+          configMap:
+            name: mysql-conf
+        - name: my-mysql-data
+          persistentVolumeClaim:
+            claimName: my-mysql-data

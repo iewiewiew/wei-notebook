@@ -1,0 +1,56 @@
+
+
+
+---
+- name: 创建 user 用户 jetty-core conf disconf-core 目录
+  hosts: '{{ hosts }}'
+  vars:
+      comp: '{{ comp }}'
+      codeName: '{{ codeName }}'
+      uid: '{{ uid }}'
+      ugroup: coreapp
+  tasks:
+    - name: 1、创建用户： 用户名 用户 id 分配用户组 指定用户所属目录
+      user:
+        name: "{{ comp }}-{{ codeName }}"
+        uid: "{{ uid }}"
+        append: yes
+        group: "{{ ugroup }}"
+        state: present
+        home: "/data/app/{{ comp }}-{{ codeName }}"
+
+    - name: 2、创建目录:jetty-core logs|bin
+      file: path={{ item }} state=directory owner={{ comp }}-{{ codeName }} group={{ ugroup }} mode=0755 recurse=yes
+      with_items:
+          #/app/{{ comp }}-cts/jetty/cts-core
+        - "/app/{{ comp }}-{{ codeName }}/jetty/{{ codeName }}-core/logs"
+        - "/app/{{ comp }}-{{ codeName }}/jetty/{{ codeName }}-core/bin"
+
+    - name: 3、创建目录:disconf 的core 目录
+      file: path={{ item }} state=directory recurse=yes
+      with_items:
+          #/etc/disconf/core/{{ comp }}-cts
+        - "/etc/disconf/core/{{ comp }}-{{ codeName }}"
+
+    - name: 4、分配权限
+      shell: cd /app && chmod 755 {{ comp }}-{{ codeName }}
+
+
+    - name: 5、synchronize jetty-core 内无项目相关的文件 dump.sh|restart.sh|server.sh|start.bat|stop.sh
+      synchronize: src={{ item.local }} dest={{ item.remote }} delete=yes
+      with_items:
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/bin/', remote: '/app/{{ comp }}-{{ codeName }}/jetty/{{ codeName }}-core/bin/'}
+
+    - name: 6、template jetty-core：start.sh
+      template: src={{ item.local }} dest={{ item.remote }} owner={{ comp }}-{{ codeName }} group=coreapp
+      with_items:
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/bin/start.sh', remote: '/app/{{ comp }}-{{ codeName }}/jetty/{{ codeName }}-core/bin/'}
+
+
+    - name: 7、template disconf-core disconf.properties
+      template: src={{ item.local }} dest={{ item.remote }}
+      with_items:
+      - { local: '/jenkins_workspace/fb-script-dev-zdb/new_project_deploy/new_project_files/disconf-core/disconf.properties', remote: '/etc/disconf/core/{{ comp }}-{{ codeName }}/disconf.properties'}
+
+    - name: 8、chown app
+      shell: cd /app && chown -R {{ comp }}-{{ codeName }}:coreapp {{ comp }}-{{ codeName }}

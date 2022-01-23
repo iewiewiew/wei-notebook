@@ -1,0 +1,1 @@
+-f docker-compose-base.yml -f docker-compose-server.yml -f docker-compose-node-controller.yml -f docker-compose-mysql.yml -f docker-compose-kafka.yml -f docker-compose-prometheus.yml

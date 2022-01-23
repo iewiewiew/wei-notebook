@@ -1,0 +1,31 @@
+---
+- name: Install JMeter
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Install OpenJDK
+      yum:
+        name: java-1.8.0-openjdk
+        state: present
+
+    - name: Download and extract JMeter
+      unarchive:
+        src: https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.tgz
+        dest: /opt/
+        copy: no
+
+- name: Configure JMeter servers
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Configure JMeter server properties
+      copy:
+        src: jmeter-server.properties
+        dest: /opt/apache-jmeter-5.4.1/bin/
+      notify: restart jmeter-server
+
+  handlers:
+    - name: restart jmeter
+      systemd:
+        name: jmeter
+        state: restarted

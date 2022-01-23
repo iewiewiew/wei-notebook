@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ReplicationController # 资源类型
+metadata:  # 定义属性
+  name: myweb  # 定义名字（必须）
+spec:   # 详细属性
+  replicas: 2   # 副本数
+  selector:     # 选择器
+    app: myweb
+  template:   # 模版信息和 pod 一般一致，只是没有名字，因为 Pod 不能重名，RC 要控制多个，所以不能设置
+    metadata:
+      labels:
+        app: myweb
+    spec:
+      containers:
+        - name: myweb
+          image: nginx:1.13
+          ports:
+            - containerPort: 80

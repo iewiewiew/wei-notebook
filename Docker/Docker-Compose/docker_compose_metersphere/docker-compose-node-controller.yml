@@ -1,0 +1,45 @@
+version: "2.1"
+services:
+  ms-node-controller:
+    image: ${MS_PREFIX}/ms-node-controller:${MS_TAG}
+    container_name: ms-node-controller
+    environment:
+      HOST_HOSTNAME: $HOSTNAME
+      KAFKA_BOOTSTRAP-SERVERS: ${MS_KAFKA_EXT_HOST}:${MS_KAFKA_EXT_PORT}
+    ports:
+      - ${MS_NODE_CONTROLLER_PORT}:8082
+      - 9100:9100
+    healthcheck:
+      test: ["CMD", "nc", "-zv", "localhost", "8082"]
+      interval: 6s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ms-conf:/opt/metersphere/conf
+      - ms-data:/opt/metersphere/data
+      - ms-logs:/opt/metersphere/logs
+      - /var/run/docker.sock:/var/run/docker.sock
+    mem_limit: 1024m
+    networks:
+      - ms-network
+  
+  nodeexporter:
+    image: ${MS_PREFIX}/node-exporter:latest
+    container_name: nodeexporter
+    user: root
+    privileged: true
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nc", "-zv", "localhost", "9100"]
+      interval: 6s
+      timeout: 5s
+      retries: 10      
+    network_mode: service:ms-node-controller

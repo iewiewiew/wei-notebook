@@ -1,0 +1,10 @@
+global:
+  storageClass: "nfs-client"
+metrics:
+  enabled: true
+auth:
+  rootPassword: "5gTU4o7g5g"
+service:
+  type: "NodePort"
+  nodePorts:
+    mongodb: "30017"

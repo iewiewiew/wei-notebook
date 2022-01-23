@@ -1,0 +1,15 @@
+- name: inv keygen
+  hosts: localhost
+  tasks:
+  - name: mkdir credentials
+    file:
+      path: "{{inv_name}}/credentials"
+      state: directory
+      mode: 0600
+  # ssh-keygen -t rsa -b 2048 -f ${inv_name}/credentials/admin_rsa -C "$inv_name-admin" -q -N ""
+  - community.crypto.openssh_keypair:
+      path: "{{inv_name}}/credentials/admin_rsa"
+      size: 2048
+      comment: Administrator
+    when: not ((inv_name+'/credentials/admin_rsa.pub') is file)
+    name: keygen

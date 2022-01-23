@@ -1,0 +1,13 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: my-pvc
+  namespace: my-space
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "my-nfs"   #与 storageclass-nfs.yml metadata.name 保持一致
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi

@@ -1,0 +1,14 @@
+# 基础镜像
+FROM  openjdk:8-jre
+# author
+MAINTAINER wmh
+# 指定路径
+WORKDIR /
+# 复制 jar 文件到路径
+ADD lab-39-demo-2.2.2.RELEASE.jar lab-39-demo-2.2.2.RELEASE.jar
+# 指定时区
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+# 指定端口
+EXPOSE 8080
+# 启动系统服务
+ENTRYPOINT ["java","-javaagent:/root/apache-skywalking-apm-bin-es7/agent/skywalking-agent.jar","-Dskywalking.agent.service_name=demo-application","-Dskywalking.agent.instance_name=demo-application","-Dskywalking.collector.backend_service=127.0.0.1:11800","-Xmn512M","-Xms512M","-Xmx1024M","-Dspring.profiles.active=test","-jar","lab-39-demo-2.2.2.RELEASE.jar"]

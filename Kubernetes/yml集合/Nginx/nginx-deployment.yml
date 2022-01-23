@@ -1,0 +1,27 @@
+#spec.selector：用于定义 deployment 如何查找要管理的 pod，例如，使用在 pod 模板中定义的标签，如 app:nginx
+#spec.replicas：用于定义需要启动多少个副本
+#spec.template：用于定义 pod 的属性，例如，容器名称，容器镜像，labels 字段，等
+#kubectl apply -f Nginx-deployment.yml 集合
+#kubectl get deploy -o wide
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80

@@ -1,0 +1,9 @@
+---
+- hosts: test
+  tasks:
+    - name: test
+      command: ls -l
+      register: command_result # register 指令把 command 执行结果寄存到自定义变量中
+    - name: echo command
+      debug:
+        msg: "打印变量 {{ command_result }}"

@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Create a file
+      file:
+        path: /root/tmp/test.txt
+        state: touch
+
+
+- name: Configure JMeter clients
+  hosts: jmeter_clients
+  become: true
+  tasks:
+    - name: Configure JMeter client properties
+      copy:
+        src: jmeter.properties
+        dest: /opt/apache-jmeter-5.4.1/bin/

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deploy
+  namespace: kube-ops
+  labels:
+    app: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus-sa
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.14.0
+        imagePullPolicy: IfNotPresent
+        command:
+        - "/bin/prometheus"
+        args:
+        - "--config.file=/etc/prometheus/prometheus.yaml"
+        - "--storage.tsdb.path=/data/prometheus"
+        - "--storage.tsdb.retention=24h"
+        - "--web.enable-admin-api"
+        - "--web.enable-lifecycle"
+        ports:
+        - name: http
+          protocol: TCP
+          containerPort: 9090
+        volumeMounts:
+        - name: data
+          mountPath: "/data/prometheus"
+          subPath: prometheus
+        - name: prometheus-config
+          mountPath: "/etc/prometheus"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 500Mi
+          limits:
+            cpu: 100m
+            memory: 500Mi
+      securityContext:
+        runAsUser: 0
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: prometheus
+      - name: prometheus-config
+        configMap:
+          name: prometheus-config

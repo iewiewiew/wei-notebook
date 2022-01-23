@@ -1,0 +1,16 @@
+--2023-06-15 14:25:26--  https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+正在解析主机 raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.109.133, 185.199.108.133, 185.199.110.133
+正在连接 raw.githubusercontent.com (raw.githubusercontent.com)|185.199.109.133|:443... 已连接。
+已发出 HTTP 请求，正在等待回应... 读取文件头错误 (Operation timed out)。
+重试中。
+
+--2023-06-15 14:28:59--  (尝试次数： 2)  https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+正在连接 raw.githubusercontent.com (raw.githubusercontent.com)|185.199.109.133|:443... 已连接。
+已发出 HTTP 请求，正在等待回应... 200 OK
+长度：7621 (7.4K) [text/plain]
+正在保存至: “recommended.yaml”
+
+     0K .......                                               100% 1.62K=4.6s
+
+2023-06-15 14:35:17 (1.62 KB/s) - 已保存 “recommended.yaml” [7621/7621])
+

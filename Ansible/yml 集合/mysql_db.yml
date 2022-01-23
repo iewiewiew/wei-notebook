@@ -1,0 +1,52 @@
+---
+- name: mysql
+  hosts: test
+  tasks:
+    - name: "create a database"
+      mysql_db:
+        login_host: "127.0.0.1"
+        login_user: "root"
+        login_password: "root"
+        login_port: "3306"
+        name: "ansible"
+        encoding: "utf8"
+        state: "present"
+
+- name: mysql
+  hosts: test
+  tasks:
+    - name: "delete a database"
+      mysql_db:
+        login_host: "127.0.0.1"
+        login_user: "root"
+        login_password: "root"
+        login_port: "3306"
+        name: "ansible"
+        state: "absent"
+
+- name: mysql
+  hosts: test
+  tasks:
+    - name: "dump a database"
+      mysql_db:
+        login_host: "127.0.0.1"
+        login_user: "root"
+        login_password: "root"
+        login_port: "3306"
+        name: "ansible"
+        target: "/tmp/ansible.gz"
+        state: "dump"
+        
+---
+- name: mysql
+  hosts: test
+  tasks:
+    - name: "import a database"
+      mysql_db:
+        login_host: "127.0.0.1"
+        login_user: "root"
+        login_password: "root"
+        login_port: "3306"
+        name: "ansible"
+        target: "/tmp/ansible.gz"
+        state: "import"        

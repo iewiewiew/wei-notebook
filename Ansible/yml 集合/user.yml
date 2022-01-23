@@ -1,0 +1,11 @@
+---
+- hosts: test
+  tasks:
+    - name: "create user"
+      user:
+        name: "root" # 定义对象
+        uid: "666"
+        append: yes
+        group: "root"
+        state: present
+        home: "/root/tmp"
