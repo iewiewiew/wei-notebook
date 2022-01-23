@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: jenkins
+          image: 'jenkins/jenkins:2.346.3-2-alpine-jdk8'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: web
+              protocol: TCP
+            - containerPort: 50000
+              name: agent
+              protocol: TCP
+          volumeMounts:
+            - name: jenkins-strorage
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-strorage
+          persistentVolumeClaim:
+            claimName: jenkins-pvc-claim

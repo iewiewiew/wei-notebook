@@ -1,0 +1,209 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuboard
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kuboard-admin
+  namespace: kuboard
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kuboard-admin-crb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kuboard-admin
+  namespace: kuboard
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kuboard-viewer
+  namespace: kuboard
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kuboard-viewer-crb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+- kind: ServiceAccount
+  name: kuboard-viewer
+  namespace: kuboard
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    k8s.kuboard.cn/ingress: "false"
+    k8s.kuboard.cn/service: none
+    k8s.kuboard.cn/workload: kuboard-agent
+  labels:
+    k8s.kuboard.cn/name: kuboard-agent
+  name: kuboard-agent
+  namespace: kuboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: kuboard-agent
+  template:
+    metadata:
+      labels:
+        k8s.kuboard.cn/name: kuboard-agent
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
+              weight: 100
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: kuboard-v3
+                namespaces:
+                  - kuboard
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      serviceAccountName: kuboard-admin
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
+      containers:
+        - env:
+            - name: KUBOARD_ENDPOINT
+              value: "http://192.168.65.4:30080"
+            - name: KUBOARD_AGENT_HOST
+              value: "192.168.65.4"
+            - name: KUBOARD_AGENT_PORT
+              value: "30081"
+            - name: KUBOARD_AGENT_REMOTE_PORT
+              value: "35001"
+            - name: KUBOARD_AGENT_PROTOCOL
+              value: "kcp"
+            - name: KUBOARD_AGENT_PROXY
+              value: ""
+            - name: KUBOARD_K8S_CLUSTER_NAME
+              value: "default"
+            - name: KUBOARD_AGENT_KEY
+              value: "32b7d6572c6255211b4eec9009e4a816"
+            - name: KUBERNETES_TOKEN_NAME
+              value: "kuboard-admin"
+            - name: KUBOARD_ANONYMOUS_TOKEN
+              value: "0vPAhlKn6zIcNfvDsUBKX7t64yV4R46d"
+          image: "eipwork/kuboard-agent:v3"
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+                - /health.sh
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: kuboard-agent
+      restartPolicy: Always
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    k8s.kuboard.cn/ingress: "false"
+    k8s.kuboard.cn/service: none
+    k8s.kuboard.cn/workload: kuboard-agent-2
+  labels:
+    k8s.kuboard.cn/name: kuboard-agent-2
+  name: kuboard-agent-2
+  namespace: kuboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: kuboard-agent-2
+  template:
+    metadata:
+      labels:
+        k8s.kuboard.cn/name: kuboard-agent-2
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
+              weight: 100
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: kuboard-v3
+                namespaces:
+                  - kuboard
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      serviceAccountName: kuboard-viewer
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
+      containers:
+        - env:
+            - name: KUBOARD_ENDPOINT
+              value: "http://192.168.65.4:30080"
+            - name: KUBOARD_AGENT_HOST
+              value: "192.168.65.4"
+            - name: KUBOARD_AGENT_PORT
+              value: "30081"
+            - name: KUBOARD_AGENT_REMOTE_PORT
+              value: "35001"
+            - name: KUBOARD_AGENT_PROTOCOL
+              value: "kcp"
+            - name: KUBOARD_AGENT_PROXY
+              value: ""
+            - name: KUBOARD_K8S_CLUSTER_NAME
+              value: "default"
+            - name: KUBOARD_AGENT_KEY
+              value: "32b7d6572c6255211b4eec9009e4a816"
+            - name: KUBERNETES_TOKEN_NAME
+              value: "kuboard-viewer"
+            - name: KUBOARD_ANONYMOUS_TOKEN
+              value: "0vPAhlKn6zIcNfvDsUBKX7t64yV4R46d"
+          image: "eipwork/kuboard-agent:v3"
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+                - /health.sh
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: kuboard-agent
+      restartPolicy: Always

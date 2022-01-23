@@ -1,0 +1,11 @@
+---
+- name: test
+  hosts: test
+  tasks:
+  - name: "synchronize files"
+    synchronize:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+      delete: yes
+    with_items:
+    - { src: '/root/tmp/tmp.txt', dest: '/root/tmp/tmp.txt' }

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+# kubectl apply -f Nginx-replicationcontroller.yml 集合
+# kubectl get pod -o wide
+kind: ReplicationController
+metadata:
+  name: nginx-replicationcontroller
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: Nginx
+  template:
+    metadata:
+      labels:
+        app: Nginx
+    spec:
+      containers:
+        - name: Nginx
+          image: Nginx:1.14.2
+          ports:
+            - containerPort: 80

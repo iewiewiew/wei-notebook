@@ -1,0 +1,19 @@
+1、设置别名
+vi ~/.bashrc
+添加:alias ll='ls -l'
+    alias vim='vi'
+source ~/.bashrc
+
+2、设置时区（验证：date）
+    1、tzselect：通过向导选择你所在大洲、国家和城市
+    2、更改每个用户的时区：export TZ='Asia/Shanghai'    
+
+3、将 nginx 打成镜像
+
+4、base-core 路径是否有应用概念？
+
+5、maven 打包
+clean compile -U $SONAR_MAVEN_GOAL
+clean package -U -Dmaven.test.skip=true
+
+6、将基础镜像放到远程仓库，每次制作镜像的时候都需要拉取下来

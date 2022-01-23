@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  namespace: my-space
+  labels:
+    app: zk
+spec:
+  selector:
+    matchLabels:
+      app: zk
+  template:
+    metadata:
+      labels:
+        app: zk
+    spec:
+      nodeName: k8s-master
+      containers:
+        - name: zk
+          image: zookeeper
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 2181
+              name: zk
+          resources:
+            requests:
+              cpu: "0.1"
+              memory: "500Mi"
+            limits:
+              cpu: "0.1"
+              memory: "500Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: zk
+  name: zk-svc
+  namespace: my-space
+spec:
+  ports:
+    - port: 2181
+      nodePort: 30002
+      targetPort: 2181
+  selector:
+    app: zk
+  type: NodePort

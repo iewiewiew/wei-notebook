@@ -1,0 +1,14 @@
+---
+- name: test1
+  hosts: test
+  tasks:
+    - name: copy
+      copy: src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt owner=root group=root mode=644
+
+- name: test2
+  hosts: test
+  tasks:
+    - name: copy
+      copy:
+        src: /root/tmp/tmp.txt
+        dest: /root/tmp/tmp.txt

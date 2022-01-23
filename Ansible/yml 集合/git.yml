@@ -1,0 +1,12 @@
+---
+- name: test
+  hosts: test
+  vars:
+    git_dir: /root/tmp/wei-notebook  # 注：必须是空目录
+  tasks:
+    - name: "Clone the Git repo"
+      git:
+        repo: 'https://gitee.com/iewiewiew/wei-notebook.git'
+        dest: '{{ git_dir }}'
+        clone: yes
+        update: yes

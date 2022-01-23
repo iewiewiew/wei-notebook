@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: my-container
+          image: my-image
+          ports:
+            - containerPort: 8080
+
+# 执行替换命令
+sed -e "s/my-app/my-app/g; s/3/3/g; s/my-container/my-container/g; s/my-image/my-image/g; s/8080/8080/g" properties/chart.yaml.template > properties/new.chart.yaml

@@ -1,0 +1,52 @@
+version: "2.1"
+services:
+  zookeeper:
+    image: '${MS_PREFIX}/zookeeper:3'
+    container_name: zookeeper
+    healthcheck:
+      test: ["CMD", "zkCli.sh", "stat", "/"]
+      interval: 6s
+      timeout: 10s
+      retries: 20
+    volumes:
+      - 'ms-zookeeper-data:/bitnami'
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
+    networks:
+      - ms-network
+  kafka:
+    image: '${MS_PREFIX}/kafka:2'
+    container_name: kafka
+    ports:
+      - '${MS_KAFKA_EXT_PORT}:${MS_KAFKA_EXT_PORT}'
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--list", "--zookeeper", "zookeeper"]
+      interval: 6s
+      timeout: 10s
+      retries: 20
+    restart: on-failure
+    volumes:
+      - 'ms-kafka-data:/bitnami'
+    environment:
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_LISTENERS: INTERNAL://:9092,EXTERNAL://:${MS_KAFKA_EXT_PORT}
+      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://${MS_KAFKA_EXT_HOST}:${MS_KAFKA_EXT_PORT}
+      KAFKA_CFG_LOG_RETENTION_HOURS: 64
+    depends_on:
+      - zookeeper
+    networks:
+      - ms-network
+volumes:
+  ms-zookeeper-data:
+    driver_opts:
+      type: none
+      device: ${MS_BASE}/metersphere/data/zookeeper
+      o: bind
+  ms-kafka-data:
+    driver_opts:
+      type: none
+      device: ${MS_BASE}/metersphere/data/kafka
+      o: bind

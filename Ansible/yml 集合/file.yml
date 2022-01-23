@@ -1,0 +1,9 @@
+---
+- name: test
+  hosts: test
+  tasks:
+  - name: "create directory"
+    file: path={{ item }} state=directory owner=root group=root recurse=yes
+    with_items:
+    - "/root/tmp/logs"
+    - "/root/tmp/bin"

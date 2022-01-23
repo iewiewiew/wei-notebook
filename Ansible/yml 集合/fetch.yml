@@ -1,0 +1,9 @@
+---
+- name: test
+  hosts: test
+  tasks:
+    - name: "fetch"
+      fetch:
+        src: /root/tmp/tmp.txt
+        dest: /root/tmp
+        flat: true

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  namespace: my-space
+spec:
+  hostAliases:
+    - ip: "11.22.33.44"
+      hostnames:
+        - "foo.joker.com"
+  containers:
+    - name: container-1
+      image: nginx
+      ports:
+        - containerPort: 80
+    - name: container-2
+      image: busybox
+      command: ['sh', '-c', 'echo Hello from container-2! && sleep 3600']

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF8"?>
+
+<project name="ant-jmeter-test" default="run" basedir=".">
+    <!--这个位置：填写你的 jmeter 所在的目录，这里要改-->
+    <property name="jmeterPath" value="/root/jmeter/apache-jmeter-5.5"/>
+    <!--这个位置：填写你想要发送的邮箱的 smtp 服务器，这里要改-->
+    <property name="mailhost" value="smtp.qq.com"/>
+    <!--这个位置：填写你的 qq 邮箱，这里要改-->
+    <property name="username" value="1425615649@qq.com"/>
+    <!--这个位置：填写你的 qq 邮箱的授权码，这里要改，继续看我下面的文章会讲，如何获取-->
+    <property name="password" value="ervqgaxvcgzaieib"/>
+    <!--这个位置：填写发送的邮箱，建议也先填你自己的，这里要改-->
+    <property name="mailfrom" value="1425615649@qq.com"/>
+    <!--这个位置：填写邮件到的邮箱账号，这里建议也先填你自己的邮箱，这里要改-->
+    <property name="mail_to" value="1425615649@qq.com"/>
+    <!--这个位置：这里你自定义就好了，就是一个邮件里面的内容，影响不大，这里可以改-->
+    <property name="mailsubject" value="接口自动化测试报告"/>
+    <!--这个位置：这里填写你的邮箱的端口，qq 邮箱是25 -->
+    <property name="mail_port" value="25"/>
+    <!--这个位置：这里是邮件的一个说明，可以自定义，这里要改-->
+    <property name="message" value="这是接口自动化测试报告，详情请查看附件"/>
+
+    <tstamp>
+        <format property="time" pattern="yyyyMMddhhmm" />
+    </tstamp>
+    <property name="jmeter.home" value="${jmeterPath}" />
+    <!--这个位置：这里要改成你自己的 jtl 所在的目录，jmeterpath 前面已经填写好了，只需要将剩余目录写好就可以了，这里要改-->
+    <property name="jmeter.result.jtl.dir" value="${jmeterPath}/testcase/jtl" />
+    <!--这个位置：这里要改成你自己的 html 所在的目录，jmeterpath 前面已经填写好了，只需要将剩余目录写好就可以了，这里要改-->
+    <property name="jmeter.result.html.dir" value="${jmeterPath}/testcase/html" />
+    <property name="htmlReportNameSummary" value="TestReport" />
+    <property name="jmeter.result.jtlName" value="${jmeter.result.jtl.dir}/${htmlReportNameSummary}${time}.jtl" />
+    <property name="jmeter.result.htmlName" value="${jmeter.result.html.dir}/${htmlReportNameSummary}${time}.html" />
+
+    <target name="run">
+        <antcall target="test" />
+        <antcall target="report" />
+        <antcall target="sendEmail" />
+    </target>
+
+    <!--执行接口测试-->
+    <target name="test">
+        <echo>执行接口自动化测试</echo>
+        <taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask" />
+        <jmeter jmeterhome="${jmeter.home}" resultlog="${jmeter.result.jtlName}">
+            <!--要执行的测试脚本-->
+            <testplans dir="${jmeterPath}/testcase/scrpit" includes="*.jmx" />
+            <property name="jmeter.save.saveservice.output_format" value="xml"/>
+        </jmeter>
+    </target>
+
+    <!--解决报告中 NAN 字段显示问题-->
+    <path id="xslt.classpath">
+        <fileset dir="${jmeter.home}/lib" includes="xalan-2.7.2.jar"/>
+        <fileset dir="${jmeter.home}/lib" includes="serializer-2.7.2.jar"/>
+    </path>
+
+    <!--生成 HTML 测试报告-->
+    <target name="report">
+        <echo>生成接口自动测试报告</echo>
+        <xslt classpathref="xslt.classpath"
+              force="true"
+              in="${jmeter.result.jtlName}" out="${jmeter.result.htmlName}"
+              style="${jmeter.home}/extras/jmeter.results.shanhe.me.xsl"  />
+
+        <!--复制图片-->
+        <copy todir="${jmeter.result.html.dir}">
+            <fileset dir="${jmeter.home}/extras">
+                <include name="collapse.png" />
+                <include name="expand.png" />
+            </fileset>
+        </copy>
+    </target>
+    <!--自动发送邮件-->
+    <target name="sendEmail">
+        <echo>发送自动化测试报告</echo>
+        <mail mailhost="${mailhost}"
+              ssl="ture"
+              user="${username}"
+              password="${password}"
+              mailport="${mail_port}"
+              subject="${mailsubject}"
+              messagemimetype="text/html"
+              tolist="${mail_to}">
+            <from address="${mailfrom}" />
+            <attachments>
+                <fileset dir="${jmeter.result.html.dir}">
+                    <include name="${htmlReportNameSummary}${time}.html"/>
+                    <include name="collapse.png" />
+                    <include name="expand.png" />
+                </fileset>
+            </attachments>
+            <message>
+                ${message}
+            </message>
+        </mail>
+    </target>
+</project>

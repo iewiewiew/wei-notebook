@@ -1,0 +1,11 @@
+- name: add several users
+  user: name={{ item }} state=present groups=wheel
+  with_items:
+    - testuser1
+    - testuser2
+
+- name: add several users
+  user: name={{ item.name }} state=present groups={{ item.groups }}
+  with_items:
+    - { name: 'testuser1', groups: 'wheel' }
+    - { name: 'testuser2', groups: 'root' }

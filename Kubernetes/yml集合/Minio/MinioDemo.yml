@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: my-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          env:
+            - name: MINIO_ROOT_USER
+              value: "minioadmin"
+            - name: MINIO_ROOT_PASSWORD
+              value: "minioadmin"
+          image: minio/minio:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - minio server /data --console-address ":5000"
+          ports:
+            - name: data
+              containerPort: 9000
+              protocol: "TCP"
+            - name: console
+              containerPort: 5000
+              protocol: "TCP"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: my-space
+spec:
+  ports:
+    - name: data
+      port: 9000
+      targetPort: 9000
+      protocol: TCP
+    - name: console
+      port: 5000
+      targetPort: 5000
+      nodePort: 32075
+      protocol: TCP
+  selector:
+    app: minio
+  type: NodePort

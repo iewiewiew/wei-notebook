@@ -1,0 +1,9 @@
+#docker_compose_demo.yml 集合
+version: '3'
+services:
+  web:
+    build: ../..
+    ports:
+      - "5000:5000"
+  redis:
+    image: "redis:alpine"

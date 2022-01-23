@@ -1,0 +1,8 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: my-nfs
+  namespace: my-space
+provisioner: storage.pri/nfs
+reclaimPolicy: Delete
+allowVolumeExpansion: True  #允许 pvc 创建后扩容
