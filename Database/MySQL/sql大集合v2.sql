@@ -90,8 +90,8 @@ drop database if exists dbname;
 
 -- 2、表管理
 -- 1、表的创建（create）
-drop table if exists `t_table_info`;
-create table `t_table_info`  (
+drop table if exists dbname.`t_table_info`;
+create table dbname.`t_table_info`  (
   `id` int(0) not null,
   `name` varchar(255) character set utf8mb4 collate utf8mb4_0900_ai_ci null default null comment '姓名（varchar(m) 存放长度不固定的字符）',
   `age` int(0) null default null comment '年龄',

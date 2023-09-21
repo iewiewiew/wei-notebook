@@ -36,3 +36,13 @@ MinIO 是根据 GNU Affero 通用公共许可证 v3.0发布的高性能对象存
 - 有操作页面
 - 功能简单: 这一设计原则让 MinIO 不容易出错、更快启动
 - 支持纠删码：MinIO 使用纠删码、Checksum 来防止硬件错误和静默数据污染。在最高冗余度配置下，即使丢失1/2的磁盘也能恢复数据
+
+
+
+## 三、MinIO 使用
+`mc anonymous set public local/demo/*`
+
+- mc: 这是MinIO Client（mc）工具的命令行前缀，用于执行与MinIO对象存储系统相关的操作。  
+- anonymous: 这是指定的身份标识，表示匿名用户。  
+- set public: 这是命令的一部分，用于设置指定对象的访问权限为公共访问。
+- local/demo/*: 这是要设置为公共访问权限的对象的路径或通配符。在这个示例中，local/demo/*是一个路径通配符，它匹配指定桶（Bucket）下的所有对象。

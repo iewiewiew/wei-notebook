@@ -2,7 +2,7 @@
 
 
 
-repository_url="https://administrator:admin123456@gitee.com/administrator/wei-demo-001.git"
+repository_url="https://admin:admin@gitee.com/admin/wei-demo-001.git"
 num_iterations=5
 previous_result=""
 

@@ -7,6 +7,7 @@
 > Description：Linux   
 
 
+
 1. awk
 2. cat
 3. cd
@@ -59,29 +60,30 @@
 50. source
 51. ss
 52. ssh
-53. sshpass
-54. su
-55. systemctl
-56. tar
-57. tcpdump
-58. top
-59. traceroute
-60. tree
-61. uid
-62. uname
-63. unzip
-64. useradd
-65. uuidgen
-66. vim
-67. wc
-68. whereis
-69. whoami
-70. yum
-71. zcat
-72. zless
-73. zmore
-74. zip
-75. Linux 查看硬件资源命令
+53. sha256sum
+54. sshpass
+55. su
+56. systemctl
+57. tar
+58. tcpdump
+59. top
+60. traceroute
+61. tree
+62. uid
+63. uname
+64. unzip
+65. useradd
+66. uuidgen
+67. vim
+68. wc
+69. whereis
+70. whoami
+71. yum
+72. zcat
+73. zless
+74. zmore
+75. zip
+76. Linux 查看硬件资源命令
 
 ---
 
@@ -155,6 +157,7 @@ rwx 说明：
 - -s 选项表示使用静默模式（silent mode），不输出任何进度或统计信息，仅输出需要的内容。
 - -S 选项表示显示错误（show errors），在 HTTP 服务器返回错误码时输出错误信息。
 - -L 选项表示跟踪重定向（follow redirect），自动跟踪 HTTP 重定向链接。
+- -m 参数用于设置请求的最大执行时间，也称为超时时间，-m 10 表示设置超时时间为 10 秒。
 例子：curl -fsSL https://get.docker.com -o get-docker.sh
 
 ### cut
@@ -433,13 +436,14 @@ ping -c 5 -s 64 gitee.com
 - sed '10s/find/replace/' file        #替换文件第 10 行内容
 - sed '10,20s/find/replace/' file     #替换文件中 10-20 行内容
 - sed -r 's/regex/replace/g' file     #替换文件中所有出现的字符串
+- sed -i -r 's/find/replace/g' /dir/* #在整个目录下的所有文件中使用 sed 进行替换操作
 - sed -i 's/find/replace/g' file      #替换文件中所有出现的字符并且覆盖文件
 - sed -i '/find/i\newline' file       #在文件的匹配文本前插入行
 - sed -i '/find/a\newline' file       #在文件的匹配文本后插入行
 - sed '/line/s/find/replace/' file    #先搜索行特征再执行替换
 - sed -e 's/f/r/'-e 's/f/r' file      #执行多次替换
 - sed 's#find#replace#' file          #使用 # 替换 / 来避免 pattern 中有斜杆
-- sed -i-r 's/^\s+//g' file           #删除文件每行头部空格
+- sed -i -r 's/^\s+//g' file           #删除文件每行头部空格
 - sed '/^$/d' file                    #删除文件空行并打印
 - sed -i 's/\s\+$//' file             #删除文件每行末尾多余空格
 - sed -n '2p' file                    #打印文件第二行
@@ -497,11 +501,17 @@ ping -c 5 -s 64 gitee.com
 - exit #退出免密登录
 
 ### ssh
-sshpass是一个用于自动化SSH连接的命令行工具，允许以明文形式提供密码
+sshpass是一个用于自动化SSH连接的命令行工具，允许以明文形式提供密码。注：先使用 ssh user@hostname，添加信息到本地 host 才能使用 sshpass
 sshpass -p 'your_password' ssh user@hostname
+sshpass -p 'your_password' ssh root@hostname -o StrictHostKeyChecking=no -o BatchMode=yes 'docker ps'
+
 - your_password：使用的SSH连接密码。
 - user：SSH连接的用户名。
 - hostname：SSH连接的主机名或IP地址。
+
+### sha256sum
+sha256sum 是一个用于计算文件 SHA-256 哈希值的命令行工具。SHA-256 是一种常用的哈希算法，用于生成文件的唯一标识符。
+- sha256sum <文件名>   # sha256sum README.md
 
 ### su
 - su 用户名   #su 是switch user 的缩写, 表示用户切换, 从新的用户状态下输入“exit”即可退回到刚才的用户状态
@@ -656,7 +666,7 @@ vim 进入命令模式, 输入：dd , 按 u可恢复删除的内容
 37. rpm -qa                     #查看所有安装的软件包
 ```
 
-### 草稿
+### 知识碎片
 ```
 查看服务器开放的端口
 iptables -n -L

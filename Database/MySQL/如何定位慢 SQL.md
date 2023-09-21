@@ -9,9 +9,10 @@
 
 ## 一、
 查看是否开启慢查询
-show variables like '%slow%';
+`show variables like '%slow%';`
 
 结果
+```
 Variable_name               Value
 log_slow_admin_statements	OFF
 log_slow_extra	            OFF
@@ -20,6 +21,7 @@ log_slow_slave_statements	OFF
 slow_launch_time	        2
 slow_query_log	            OFF
 slow_query_log_file	        /usr/local/mysql/data/menghuadeMacBook-Pro-slow.log
+```
 
 sudo cp /usr/local/mysql/data/menghuadeMacBook-Pro-slow.log /Users/menghuawei/IdeaProjects/my-project/wei-notebook/Database/MySQL
 

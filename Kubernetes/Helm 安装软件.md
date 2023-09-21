@@ -12,7 +12,7 @@
 [Helm 官方文档](https://helm.sh/zh/docs/)  
 [Helm 仓库](https://artifacthub.io/)  
 [bitnami charts](https://charts.bitnami.com/)  
-[Helm 笔记](./Helm 包管理器.md)  
+[Helm 包管理器](./Helm 包管理器.md)  
 
 
 

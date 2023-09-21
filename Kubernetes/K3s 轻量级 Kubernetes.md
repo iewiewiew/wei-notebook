@@ -36,8 +36,14 @@ cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 cat ~/.kube/config
 
+vim ~/.kube/config
+修改 127.0.0.1 为公网 IP
+
 重启
 systemctl restart k3s
+
+停止
+systemctl stop k3s
 
 查看状态
 systemctl status k3s.service

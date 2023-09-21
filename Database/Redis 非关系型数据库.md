@@ -218,3 +218,39 @@ CLIENT KILL TYPE normal
 ```
 kubectl -n <namespace> exec -it pod/redis-master-0 -- redis-cli  info Replication | grep role
 ```
+
+### 4.4、查看 Redis 使用情况
+在 Redis server 上测试实例的响应延迟情况
+`redis-cli -h 127.0.0.1 -p 6379 --intrinsic-latency 60`
+
+查看一段时间内 Redis 的最小、最大、平均访问延迟
+```
+redis-cli -h 127.0.0.1 -p 6379 --latency-history -i 1
+redis-cli -h 127.0.0.1 -p 6379 --bigkeys -i 0.01
+```
+
+吞吐量
+`info stats`
+
+从Rdis上一次启动以来总计处理的命令数
+total_commands_processed:2255
+当前Redis实例的OPS，redis内部较实时的每秒执行的命令数
+instantaneous_ops_per_sec:12
+网络总入量
+total_net_input_bytes:34312
+网络总出量
+total_net_output_bytes:78215
+每秒输入量，单位是kb/s
+instantaneous_input_kbps:1.20
+每秒输出量，单位是kb/s
+instantaneous_output_kbps:2.62
+
+info Replication
+
+info cpu
+
+info memory
+used_memory_rss_human：表示目前的内存实际占用——表示当前的内存情况。
+used_memory_peak_human：表示内存峰值占用——表示曾经的内存情况（主要是用来抓不到现场的时候查问题用的）。
+
+info clients

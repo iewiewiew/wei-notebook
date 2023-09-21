@@ -332,7 +332,7 @@ curl -X post http://127.0.0.1:5555/job/test-demo-param2/buildWithParameters?toke
 
 
 
-## 六、其它
+## 六、知识碎片
 
 **IDEA 集成 Jenkins**
 
@@ -388,4 +388,9 @@ docker exec -it jenkins bash -c 'cat /usr/local/bin/jenkins.sh'
 进入 系统管理 > 脚本命令行，执行：
 System.setProperty('org.apache.commons.jelly.tags.fmt.timeZone','Asia/Shanghai')
 ```
+
+Jenkins SSH 超时，在高级设置超时时间
+
+构建后操作 SSH 打印出脚本日志  
+在 SSH Publishers 高级勾选 Verbose output in console 
 

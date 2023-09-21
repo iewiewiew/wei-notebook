@@ -77,4 +77,53 @@ select @@profiling;
 set profiling = 1;
 select * from user ;
 
-show profiles\G;
+-- show profiles\G;
+
+
+-- ---------------------------------------------------
+
+
+-- 查看 binlog 文件列表
+SHOW BINARY LOGS;
+
+-- 查看 binlog 文件内容
+SHOW BINLOG EVENTS;
+
+
+-- ---------------------------------------------------
+
+
+-- 查看安全文件位置
+SHOW VARIABLES LIKE 'secure_file_priv';
+
+set secure_file_priv = '/Users/menghuawei/IdeaProjects/my-project/wei-notebook/.tmp/';
+select * INTO OUTFILE '/Users/menghuawei/IdeaProjects/my-project/wei-notebook/.tmp/file.sql' from dbname.t_table_info;
+
+SHOW VARIABLES LIKE 'config_file';
+
+show variables like '%datadir%';
+
+
+-- ---------------------------------------------------
+
+
+-- 数据库允许的最大连接数
+show variables like 'max_connections';
+
+-- 数据库当前的连接数
+show global status like 'Threads_connected';
+
+
+-- 列出MySQL服务器运行各种状态值
+show global status;
+
+-- 并发请求数量
+show global status like 'Threads_running';
+
+-- 查看session的连接号
+select connection_id();
+
+-- show master status \G;
+-- show slave status;
+-- show slave status \G;
+

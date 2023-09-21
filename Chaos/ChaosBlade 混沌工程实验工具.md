@@ -30,7 +30,7 @@ ChaosBlade 支持多种环境部署与演练，包括 linux、docker、kubernete
 - Agent：核心逻辑组件，部署在用户终端的主机或 Kubernetes 集群内，主要负责和 ChaosBlade-Box Server 建联上报心跳并作为命令下发通道。
 - ChaosBlade：主要执行工具，能在主机和 Kubernetes 等不同环境上执行故障注入，能对系统网络设备、文件系统、内核及系统上运行的应用等进行故障干扰。
 
-![chaosblade 架构](img/chaosblade 架构.png)
+![chaosblade 架构](img/chaosblade_architect.png)
 
 
 
@@ -134,6 +134,7 @@ helm uninstall chaosblade-box -n chaosblade
 ```
 
 **ChaosBlade Box 页面**
+
 ![chaosblade](img/chaosblade.png)
 
 **安装探针**
@@ -159,7 +160,7 @@ helm uninstall agent -n chaosblade
 
 ## 三、ChaosBlade 实验
 ### 3.1、ChaosBlade 场景
-![](img/chaosblade 场景.png)
+![](img/chaosblade_scene.png)
 ```
 ck          Clickhouse experiment 
 cplus       C++ chaos experiments
@@ -850,6 +851,8 @@ dd if=/dev/urandom of=randomdata.bin bs=1M count=10
 
 
 ## 五、其它
+
+[高可用测试用例](https://wi9wku2j1p.feishu.cn/sheets/H5HEsuWGohJZsKtLTQscMVY4n8c)
 
 **踩坑**
 

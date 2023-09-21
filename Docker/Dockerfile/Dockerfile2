@@ -1,0 +1,8 @@
+# 使用一个轻量级的基础镜像
+FROM nginx:alpine
+
+# 定义容器启动时要执行的命令
+CMD ["nginx", "-g", "daemon off;"]
+
+# 定义容器启动时要执行的命令
+CMD ["echo", "Hello, Docker!"]

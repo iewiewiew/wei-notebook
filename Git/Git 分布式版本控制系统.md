@@ -134,6 +134,7 @@ git cat-file -p <commitId 或者 ？>
 
 #### .git 目录结构
 查看命令：tree -L 1 .git
+```
 .git
 ├── COMMIT_EDITMSG
 ├── FETCH_HEAD
@@ -149,40 +150,28 @@ git cat-file -p <commitId 或者 ？>
 ├── objects
 ├── packed-refs
 └── refs
+```
 
 - .git/COMMIT_EDITMSG - 存储提交消息
-
 - .git/FETCH_HEAD - 存储最近一次从远程仓库执行的 git fetch 命令的结果
-
 - .git/HEAD - 当前代码仓库的分支指针
-
 - .git/ORIG_HEAD - 保存上一次执行某些具有潜在危险操作的命令（如git reset、git revert、git cherry-pick等）前所处的提交
-
 - .git/config - 当前代码仓库本地的配置文件
   - 本地配置文件（.git/config）和全局配置文件（~/.gitconfig）
   - 通过执行如下命令，可以将用户配置记录到本地代码仓库的配置文件中去
   - git config user.name "demo"
   - git config user.email "demo@demo.com"
-
 - .git/description - 当前代码仓库的描述信息
-
 - .git/hooks - 当前代码仓库默认钩子脚本
-
 - .git/index - 暂存区、Stage 或 Cache，记录将要提交到版本库的文件和文件状态
-
 - .git/info - 当前仓库的排除等信息
-
 - .git/lfs - 存储 lfs 信息
-
 - .git/logs - 操作日志
-
 - .git/objects - 当前代码仓库代码的存储位置
   - blob 类型
   - commit 类型
   - tree 类型
-  
 - .git/packed-refs - 记录了分支、标签和其他引用的提交（commit）信息
-
 - .git/refs - 当前代码仓库的头指针
 
 #### .gitignore
@@ -219,20 +208,20 @@ Git 不能直接提交空文件夹，需在空文件夹里 vi .gitkeep，按 Esc
 13. git gc
 14. git init
 15. git log
-16. git pull
-17. git push
-18. git rebase
-19. git remote
-20. git reset
-21. git revert
-22. git rm
-23. git show
-24. git stash
-25. git status
-26. git submodule
-27. git subtree
-28. git tag
-29. other
+17. git pull
+18. git push
+19. git rebase
+20. git remote
+21. git reset
+22. git revert
+23. git rm
+24. git show
+25. git stash
+26. git status
+27. git submodule
+28. git subtree
+29. git tag
+30. other
 
 #### git add
 
@@ -679,6 +668,8 @@ git log --pretty=oneline --graph --decorate --all
 
 查看分支合并情况
 git log --oneline --graph
+git log --oneline release..master    # 查看两个分支之间的 commit
+git log --oneline --graph README.md  # 查看指定文件 log，似乎没有用
 
 查看分叉历史，包括：提交历史、各个分支的指向以及项目的分支分叉情况
 git log --oneline --decorate --graph --all
@@ -706,6 +697,15 @@ git log --reverse
 
 查看特定分支测试用例
 git log --reverse <branch_name>
+
+打印出 PR 的 commit
+git log --merges --pretty=format:"%h - %an, %ar : %s"
+
+最近1周
+git log --merges --since="2 weeks ago" --pretty=format:"%h - %an, %ar : %s"
+
+最近10个
+git log --merges -n 10 --pretty=format:"%h - %an, %ar : %s"
 ```
 
 #### git pull
@@ -738,6 +738,9 @@ git push <hostName> --all
 使用账号密码进行 push 注：账号密码中的@需要用%40替换
 git push -f https://<username>:<password>@gitee.com/iewiewiew/wei-demo-001.git main
 git push -f https://username%40demo.com:123456@gitee.com/iewiewiew/wei-demo-001.git main
+
+以镜像的方式传到远程仓库
+git push --mirror git@gitee.com/path/to/path/new_project_name.git
 ```
 
 #### git rebase
@@ -1159,7 +1162,7 @@ git ls-files -z | xargs -0 du -ch | tail -1
 
 
 
-### 四、Git 零散记录
+### 四、Git 知识碎片
 
 #### Git 炸弹
 [什么是 Git 炸弹(git bomb)？](https://juejin.cn/post/7143544167178698783)
@@ -1242,7 +1245,14 @@ git lfs push https://gitee.com/<your-gitee-repo-path>.git --all
 2、batch response: LFS only supported repository in paid enterprise. 
 解决1：git config lfs.https://gitee.com/{your_gitee}/{your_repo}.git/info/lfs.locksverify false
 解决2：rm .git/hooks/pre-push
+
+检查Git LFS对象的状态
+git lfs fsck
 ```
+
+git lfs install --skip-smudge 是 Git LFS（Large File Storage）的安装命令，其中的 --skip-smudge 选项用于在安装 Git LFS 时跳过默认的清理过滤器设置。
+
+在 Git LFS 中，清理过滤器（smudge filter）是用于在检出文件时自动替换指定的大文件（通常是二进制文件）为其指针的机制。这有助于减小仓库的体积，因为实际的大文件内容会被存储在 Git LFS 服务器上，而不是直接存储在 Git 仓库中。
 
 #### Git Hooks
 
@@ -1356,6 +1366,7 @@ scalar clone https://dev.azure.com/ms-scalar/_git/scalar
 ```
 ssh -T gitee.com
 ssh -vvT gitee.com
+ssh -p 22 -T gitee.com   # 端口默认 22，如果不是则需 -p 指定
 ```
 
 #### GPG 签名
@@ -1426,6 +1437,12 @@ gpg --edit-key <GPG 密钥 ID>
 git reset --soft <第一个 commit 的 id>
 git commit --amend -m "提交代码"
 ```
+
+#### 其它
+Git 把文件存储在 .git/objects 之中
+find .git/objects/ -type f | wc -l
+
+“内容寻址存储(content addressed storage)”，它指的是对象在数据库中的文件名与文件内容的哈希值相同。
 
 
 

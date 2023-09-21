@@ -1,6 +1,6 @@
 [TOC]
 
-<H1 align="center">k0s 轻量级 Kubernetes</H1>
+<h1 align="center">k0s 轻量级 Kubernetes</h1>
 
 > By：weimenghua  
 > Date：2022.10.01   

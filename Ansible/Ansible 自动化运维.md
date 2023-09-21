@@ -20,7 +20,7 @@
 ## 一、Ansible 简介
 ansible 是自动化运维工具，基于 Python 开发，集合了众多运维工具（puppet、cfengine、chef、func、fabric）的优点，实现了批量系统配置、批量程序部署、批量运行命令等功能。
 
-**Ansible 的特点**
+### Ansible 的特点
 
 ansible 是基于模块工作的，本身没有批量部署的能力。真正具有批量部署的是 ansible 所运行的模块，ansible 只是提供一种框架。主要包括：  
 (1) 连接插件 connection plugins：负责和被监控端实现通信  
@@ -29,7 +29,7 @@ ansible 是基于模块工作的，本身没有批量部署的能力。真正具
 (4) 借助于插件完成记录日志邮件等功能  
 (5) playbook：剧本执行多个任务时，非必需可以让节点一次性运行多个任务  
 
-**Ansible 相关概念**
+## Ansible 相关概念
 
 - Play：将一系列主机与需要在主机上运行的任务列表相关联
 - Playbook：一个 ansible 脚本，它指定一系列 play 与一批 play 执行的对象主机
@@ -72,12 +72,6 @@ vim /etc/ansible/hosts
 ```
 ansible -m ping <hosts_name>
 ansible -m ping test
-```
-
-ansible 在目标机器上面执行 shell 命令
-```
-ansible <hosts_name> -m shell -a "cd /tmp && ls -l;"  
-ansible <hosts_name> -m shell -a "sh /tmp/demo.sh"
 ```
 
 查看组清单  
@@ -151,9 +145,23 @@ ansible-playbook -b playbook.yml
 
 ## 四、Ansible 模块
 
-### command 模块
-获取到 ansible playbook 中 command 模块的输出  
-可以通过使用 register 关键字来实现，register 关键字可以存储指定命令的输出结果到一个自定义的变量中，通过访问这个自定义变量就可以获取到命令的输出结果。
+### 4.1 命令相关
+
+- command 模块
+
+```
+查看帮助文档
+ansible-doc -s command
+
+命令
+ansible <host> -m command -a '<command>'
+
+例子
+ansible localhost -m command -a 'ls -l'
+ansible localhost -m command -a 'free -m'
+```
+
+获取到 ansible playbook 中 command 模块的输出，可以通过使用 register 关键字来实现，register 关键字可以存储指定命令的输出结果到一个自定义的变量中，通过访问这个自定义变量就可以获取到命令的输出结果。
 
 执行：ansible-playbook -C command.yml
 
@@ -169,15 +177,43 @@ ansible-playbook -b playbook.yml
         msg: "打印变量 {{ command_result }}"
 ```
 
-### copy 模块
-拷贝文件和目录  
-src 不能是空目录，空目录无法拷贝  
-拷贝过去的目录和文件如不指定属性，默认是 root:root，权限是 755 和 644  
+- shell 模块
+
+在远程节点上批量执行命令或脚本（可以是多个命令）
 
 ```
-ansible <host> -m copy -a 'src=/path/to/file dest=/path/to/file [owner=name] [group=name] [mode=number] 
-ansible test -m copy -a 'src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt owner=root group=root mode=644'
+命令
+ansible <host> -m shell -a '<command>'
 
+例子
+ansible localhost -m shell -a 'ls -l'
+ansible localhost -m shell -a "sh /tmp/demo.sh"
+```
+
+- script 模块
+
+把管理机本地脚本传输到远端被控节点并执行，参数同shell和command，比shell模块更强大，本地有一份脚本即可在所有被控机器上执行（且无需授权）。
+
+```
+命令
+ansible <host> -m script -a '<command>'
+
+举例
+ansible <host> -m script -a '/root/backup.sh'
+```
+
+### 4.2 文件相关
+
+- copy 模块
+
+拷贝文件和目录，src 不能是空目录，空目录无法拷贝，拷贝过去的目录和文件如不指定属性，默认是 root:root，权限是 755 和 644。owner 指定属主，相当于chown、group 指定属组，相当于chown、mode 指定权限，相当于chomd。加上backup=yes，批量复制前会对原文件（如有）进行备份。
+
+```
+命令
+ansible <host> -m copy -a 'src=/path/to/file dest=/path/to/file [owner=name] [group=name] [mode=number] 
+
+举例
+ansible test -m copy -a 'src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt owner=root group=root mode=644'
 ansible test -m copy -a "src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt" 
 ```
 
@@ -199,9 +235,57 @@ ansible test -m copy -a "src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt"
         dest: /root/tmp/tmp.txt
 ```
 
-### fetch 模块
+- synchronize 模块
+
+synchronize 基于 rsync 命令批量同步文件，必须保证远程服务器上有 rsync 这个命令，`yum install -y rsync`  
+**命令行方式**  
+compress=yes 表示开启压缩，delete 表示数据一致，rsync_opts 表示同步参数，--exclude 表示排除文件  
+把本地的 /tmp 目录以及里面除了 .txt 结尾的文件同步到 127.0.0.1 的 /mnt 目录里面，并且同步 /tmp 目录以及文件的属性，还要删除本地没有但远程主机有的文件
+
+示例代码为：
+
+```
+ansible 127.0.0.1 -m synchronize -a "src=/tmp dest=/mnt compress=yes delete=yes archive=yes rsync_opts=--exclude=*.txt"
+```
+
+**参数说明**
+
+- compress : 压缩传输(默认开启)
+- archive : 是否采用归档模式同步，保证源文件和目标文件属性一致
+- checksum : 是否校验
+- dirs : 非递归传送目录
+- links : 同步链接指向文件
+- recursive : 是否递归 yes/no
+- rsync_opts : 使用 rsync 参数
+- copy_links : 同步的时候是否复制链接
+- delete : 以推送方为主的无差异同步传输
+- src : 源目录以文件
+- dest : 目标文件及目录
+- dest_port : 目标接受的端口
+- rsync_path : 服务的路径，指定 rsync 在远程服务器上执行
+- rsync_remote_user : 设置远程用户名
+- --exclude=*.log : 此处为忽略 .log 结尾的文件，必须和 rsync_opts 使用例子：rsync_opts=--exclude=.txt
+- mode : 同步模式，rsync 的同步模式默认推送 （push）从远端拉取为 （pull）
+
+```
+---
+  - name: test
+    hosts: test
+    tasks:
+    - name: "synchronize files"
+      synchronize:
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+        delete: yes
+      with_items:
+      - { src: '/root/tmp/tmp.txt'， dest: '/root/tmp/tmp.txt' }
+```
+
+- fetch 模块
+
 远程文件 copy 到本地  
 **参数说明**
+
 - `flat`：如果设置为 true，则从 `src` 中仅保留文件名，而不是保留完整的路径。
 - `validate_checksum`：如果设置为 true，则在复制文件之前验证文件的校验和，以确保文件没有被修改。
 - `remote_src`：如果设置为 true，则从远程主机的 `src` 路径获取文件，否则从控制节点上的 `src` 路径获取文件。
@@ -220,7 +304,8 @@ ansible test -m copy -a "src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt"
         flat: true
 ```
 
-### file 模块
+- file 模块
+
 文件操作
 
 **参数说明**
@@ -249,7 +334,9 @@ ansible test -m copy -a "src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt"
     - "/root/tmp/bin"
 ```
 
-### git 模块
+### 4.3 其它模块
+
+- git 模块
 
 代码管理
 
@@ -270,7 +357,8 @@ ansible test -m copy -a "src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt"
         update: yes
 ```
 
-### get_url 模块
+- get_url 模块
+
 用途：用于将文件或软件从 http、https 或ftp 下载到本地节点上 ，类似于 wget
 
 **参数说明**
@@ -287,7 +375,8 @@ ansible test -m copy -a "src=/root/tmp/tmp.txt dest=/root/tmp/tmp.txt"
 ansible test -m get_url -a "url=http://nginx.org/download/nginx-1.12.2.tar.gz dest=/root/tmp/"
 ```
 
-### mysql_db 模块
+- mysql_db 模块
+
 操作数据库
 
 前提：yum install -y mysql / pip install pymysql
@@ -347,51 +436,8 @@ ansible test -m get_url -a "url=http://nginx.org/download/nginx-1.12.2.tar.gz de
         state: "import"        
 ```
 
-### synchronize 模块
+- user 模块
 
-synchronize 基于 rsync 命令批量同步文件，必须保证远程服务器上有 rsync 这个命令，`yum install -y rsync`  
-**命令行方式**  
-compress=yes 表示开启压缩，delete 表示数据一致，rsync_opts 表示同步参数，--exclude 表示排除文件  
-把本地的 /tmp 目录以及里面除了 .txt 结尾的文件同步到 127.0.0.1 的 /mnt 目录里面，并且同步 /tmp 目录以及文件的属性，还要删除本地没有但远程主机有的文件
-
-示例代码为：
-```
-ansible 127.0.0.1 -m synchronize -a "src=/tmp dest=/mnt compress=yes delete=yes archive=yes rsync_opts=--exclude=*.txt"
-```
-
-**参数说明**
-- compress : 压缩传输(默认开启)
-- archive : 是否采用归档模式同步，保证源文件和目标文件属性一致
-- checksum : 是否校验
-- dirs : 非递归传送目录
-- links : 同步链接指向文件
-- recursive : 是否递归 yes/no
-- rsync_opts : 使用 rsync 参数
-- copy_links : 同步的时候是否复制链接
-- delete : 以推送方为主的无差异同步传输
-- src : 源目录以文件
-- dest : 目标文件及目录
-- dest_port : 目标接受的端口
-- rsync_path : 服务的路径，指定 rsync 在远程服务器上执行
-- rsync_remote_user : 设置远程用户名
-- --exclude=*.log : 此处为忽略 .log 结尾的文件，必须和 rsync_opts 使用例子：rsync_opts=--exclude=.txt
-- mode : 同步模式，rsync 的同步模式默认推送 （push）从远端拉取为 （pull）
-
-```
----
-  - name: test
-    hosts: test
-    tasks:
-    - name: "synchronize files"
-      synchronize:
-        src: '{{ item.src }}'
-        dest: '{{ item.dest }}'
-        delete: yes
-      with_items:
-      - { src: '/root/tmp/tmp.txt'， dest: '/root/tmp/tmp.txt' }
-```
-
-### user 模块
 用户管理
 检查：`cat /etc/passwd ｜ cat /etc/group`
 
@@ -411,13 +457,14 @@ ansible 127.0.0.1 -m synchronize -a "src=/tmp dest=/mnt compress=yes delete=yes 
         home: "/root/tmp"
 ```
 
-### template 模块
+- template 模块
+
 文档内变量的替换  
 template 模块官网说明：template 使用了 Jinja2格式作为文件模版，进行文档内变量的替换的模块。它的每次使用都会被 ansible 标记为”changed”状态。  
 通俗来讲，就是在本地 file.j2 文件里的变量状态。例如在 file.j2 文件里有变量： username="{{ admin_username }}" password="{{ admin_password }}"。 那么，file.j2 文件会一直保持变量状态，直到 file.j2 文件被 ansible 的 template 模块执行后，文件里的变量就会被具体的值代替，并且传送到远程主机。  
 例如，在 roles 里面调用了 template 模块，那么 ansible 会在 roles 同级目录 global_vars 里找到存储变量的文件，或者有时会在 roles 目录里的 vars 目录定义变量的文件，然后，找到对应变量的值，再将变量传递给 file.j2 文件。  
 
-### with_items 模块
+- with_items 模块
 
 迭代
 
@@ -435,7 +482,7 @@ template 模块官网说明：template 使用了 Jinja2格式作为文件模版�
     - { name: 'testuser2'， groups: 'root' }
 ```
 
-### 其它模块
+其它
 
 ```
 修改主机名称
@@ -469,45 +516,6 @@ playbooks 使用 yaml 语法，在 ansible 中几乎所有的 yaml 文件都是�
 还可以用 json 格式传递参数：  
 `ansible-playbook var_in_command.yml --extra-vars "{'hosts':'vm-rhel7-1'， 'user':'root'}"`
 
-
-
-## 六、Ansible Galaxy 命令行工具
-
-### Ansible Role
-Ansible Role 是一种组织和重用 Ansible 配置的方式，它可以将相关的配置任务、变量和文件组织在一起，以便在多个项目或环境中重复使用。  
-[详细例子](https://github.com/iewiewiew/Software-Installation)
-
-### Ansible Galaxy
-初始化角色
-ansible-galaxy init roles
-
-[roles 目录结构](roles/roles-example)  
-- tasks 目录：用于存放主要的任务文件。
-- vars 目录：用于存放变量文件。
-- files 目录：用于存放要复制到目标主机的文件。
-- templates 目录：用于存放模板文件。
-- meta 目录：用于存放与 Role 相关的元数据，例如依赖关系。
-- handlers 目录：用于存放处理器文件。
-- defaults 目录：用于存放默认变量文件。
-
-搜索角色
-ansible-galaxy search 'redis'
-
-角色安装管理
-ansible-galaxy install geerlingguy.redis -p roles/
-
-
-
-
-## 七、其它
-### Ansible 踩坑
-ansible 脚本中的参数不能带-
-
-干了个蠢事，调试的时候加了 -C，我说咋又没报错，咋都没执行成功
-
-
-
-### 临时
 - hosts: "{{ groups.all | difference(['localhost']) }}"
 
 groups.all 是一个特殊的Ansible变量，表示所有已定义的主机组。
@@ -539,6 +547,7 @@ db2
 
 
 在Ansible中，delegate_to: localhost 是一种指令，用于将任务委派（delegate）给本地主机执行。这意味着特定的任务将在控制节点上（即运行Ansible的主机）而不是目标主机上执行。
+
 ```
 ---
 - name: Example Playbook
@@ -557,6 +566,7 @@ db2
 ```
 
 在Ansible中，ansible_facts 是一个特殊的变量，它包含了有关目标主机的各种系统信息和属性。ansible_facts 变量中的内容由Ansible在执行Playbook期间自动收集和提供。
+
 ```
 ---
 - name: Example Playbook
@@ -572,3 +582,48 @@ db2
     msg: "This task runs on non-CentOS hosts"
     when: ansible_facts['distribution'] != "CentOS"
 ```
+
+ansible-console 是一个交互式命令行工具，用于与远程主机进行交互操作。
+
+```
+打开控制台：ansible-console
+列出当前组主机列表：list
+列出所有的内置命令：？或者help
+```
+
+
+
+## 六、Ansible Galaxy
+
+### Ansible Role
+Ansible Role 是一种组织和重用 Ansible 配置的方式，它可以将相关的配置任务、变量和文件组织在一起，以便在多个项目或环境中重复使用。  
+[详细例子](https://github.com/iewiewiew/Software-Installation)
+
+### Ansible Galaxy
+
+初始化角色
+ansible-galaxy init roles
+
+[roles 目录结构](roles/roles-example)  
+
+- tasks 目录：用于存放主要的任务文件。
+- vars 目录：用于存放变量文件。
+- files 目录：用于存放要复制到目标主机的文件。
+- templates 目录：用于存放模板文件。
+- meta 目录：用于存放与 Role 相关的元数据，例如依赖关系。
+- handlers 目录：用于存放处理器文件。
+- defaults 目录：用于存放默认变量文件。
+
+搜索角色
+ansible-galaxy search 'redis'
+
+角色安装管理
+ansible-galaxy install geerlingguy.redis -p roles/
+
+
+
+## 七、知识碎片
+### Ansible 踩坑
+ansible 脚本中的参数不能带-
+
+干了个蠢事，调试的时候加了 -C，我说咋又没报错，咋都没执行成功
