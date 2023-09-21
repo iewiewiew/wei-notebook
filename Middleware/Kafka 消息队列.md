@@ -78,5 +78,6 @@ ip 地址应用本地 ip，使用127.0.0.1会报错
 使用 kafka-topics 工具查看主题列表
 kafka-topics --zookeeper <zookeeper_host>:<zookeeper_port> --list
 
+/opt/bitnami/kafka/bin/kafka-topics.sh
 ```
 

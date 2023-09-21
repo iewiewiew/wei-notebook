@@ -114,3 +114,118 @@ vim /etc/ssh/sshd_config
 
 ClientAliveInterval：指定服务器向客户端发送保持活动消息的时间间隔。如果在指定的时间内没有活动，服务器将向客户端发送一个保持活动的消息。
 ClientAliveCountMax：指定服务器在关闭连接之前允许客户端没有响应的次数。设置为 0 表示没有限制。
+
+
+
+### 其它
+history 命令记录序号、日期时间、用户、登录IP及对应执行的命令
+vim /etc/profile
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  `who am i | awk '{print $1,$5}'` "
+source /etc/profile
+
+
+### rsync+inotify-tools 实时同步数据
+```
+安装 raync
+yum install rsync -y
+
+同步整个目录A到目录B
+rsync -avz  本地目录A   本地目录B
+只同步目录A下的数据到目录B
+rsync -avz  本地目录A/  本地目录B
+
+安装 gcc 依赖
+yum install gcc* -y
+
+下载 inotify-tools
+wget https://sourceforge.net/projects/inotify-tools/files/inotify-tools/3.13/inotify-tools-3.13.tar.gz
+
+解压 inotify-tools
+tar -zxvf inotify-tools-3.13.tar.gz
+
+--prefix 指定安装目录
+cd inotify-tools
+./configure --prefix=/usr/local/inotify && make && make install
+
+设置软连接
+ln -s /usr/local/inotify/bin/inotifywait /usr/sbin/
+ln -s /usr/local/inotify/bin/inotifywatch /usr/sbin/
+
+编写同步脚本
+cat >> rsync.sh << EOF
+#!/bin/bash
+
+while true
+do
+inotifywait -rq -e  modify,create,delete /root/tmp
+rsync -avz --delete /root/tmp/ /root/tmp2
+done
+
+EOF
+
+执行脚本
+chmod u+x rsync.sh
+sh rsync.sh
+
+测试
+在 tmp 新增文件/文件夹，进入 tmp2 目录查看是否增加文件，如增加则验证成功
+```
+
+
+### Trickle 带宽控制供给
+```
+yum install trickle
+
+trickle -V
+
+trickle -d <download-rate> -u <upload-rate> <command>  // 1000 KB/s
+trickle -d 1000 wget http://10.0.1.25/iso/centos/CentOS-7.7-x86_64-Minimal-1908.iso
+
+trickled 配置：cat /etc/trickled.conf
+```
+
+
+
+### speedtest 测速工具
+```
+安装
+sudo yum install speedtest-cli
+
+测速
+speedtest-cli
+
+有教程用这个命令，经测试无效
+speedtest
+```
+
+![](./img/speedtest.png)
+
+
+
+### WonderShaper 网卡限速工具
+```
+安装 注：未安装成功
+sudo yum install -y wondersharper epel-release
+
+查看 eth0 当前的状态
+wondershaper -s -a eth0
+```
+
+
+
+### sshx 
+
+[sshx 分享终端](https://sshx.io/)
+
+安装 sshx: curl -sSf https://sshx.io/get | sh，执行 sshx 生成分享链接，点击链接可看见终端并一起协作。
+
+
+
+### 查看 Linux 开放公网的端口
+- netstat -tuln
+- ss -tuln
+- sudo lsof -i -P -n | grep LISTEN
+- sudo nmap -sT -O localhost
+
+
+

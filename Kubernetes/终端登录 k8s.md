@@ -21,6 +21,8 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl -h
 ```
 
+
+
 ### 2、配置
 
 ```
@@ -54,7 +56,12 @@ kubectl config set-credentials default --token=`k3s kubectl -n kubernetes-dashbo
 `
 kubectl config set-context default --user=default --cluster=default
 kubectl config use-context default
+
+查看本地 config
+cat ~/.kube/config
 ```
+
+
 
 ### 3、添加脚本
 
@@ -99,4 +106,3 @@ function log() {
 alias pod='pod'
 alias log='log'
 ```
-

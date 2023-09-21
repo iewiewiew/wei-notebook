@@ -13,10 +13,10 @@
 
 ## 一、环境搭建
 
-### 安装 JDK+JMeter+Ant
+### 1.1 安装 JDK+JMeter+Ant
 
+1. 安装软件
 ```
-1、安装软件
 1.1、安装 JDK
 https://www.oracle.com/java/technologies/downloads/#java8
 tar -zxvf jdk-8u351-linux-x64.tar.gz
@@ -26,9 +26,10 @@ wget --no-check-certificate https://dlcdn.apache.org//ant/binaries/apache-ant-1.
 
 1.3、安装 JMeter
 wget --no-check-certificate https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz && tar -zxvf apache-jmeter-5.5.tgz
+```
 
-
-2、配置环境变量
+2. 配置环境变量
+```
 踩坑：执行以下命令时识别不了$，需转义
 cat /etc/profile
 
@@ -44,9 +45,10 @@ export PATH=\$JAVA_HOME/bin:\$JMETER_HOME/bin:\$ANT_HOME/bin:\$PATH
 export CLASSPATH=.:\$JAVA_HOME/jre/lib/rt.jar:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar:\$JMETER_HOME/lib/ext/ApacheJMeter_core.jar:\$JMETER_HOME/lib/jorphan.jar
 
 source /etc/profile
+```
 
-
-3、检查
+3. 检查
+```
 3.1、查看 jdk 安装位置
 java -verbose
 
@@ -61,42 +63,52 @@ ant -version
 jmeter -v
 ```
 
-### 配置 JMeter+Ant
+### 1.2 配置 JMeter+Ant
 
+1. 将 JMeter 的 extras 目录下的 ant-jmeter-1.1.1.jar 文件复制到 Ant 安装目录的 lib 目录下
 ```
-1、将 JMeter 的 extras 目录下的 ant-jmeter-1.1.1.jar 文件复制到 Ant 安装目录的 lib 目录下
 cp /root/software/apache-jmeter-5.5/extras/ant-jmeter-1.1.1.jar /root/software/apache-ant-1.9.16/lib/
 检查：ls /root/software/apache-ant-1.9.16/lib/ |grep jmeter
+```
 
-2、将 JMeter 的 lib 目录下，把 serializer-2.7.2.jar、xalan-2.7.2.jar 文件复制到 Ant 的 lib 目录下
+2. 将 JMeter 的 lib 目录下，把 serializer-2.7.2.jar、xalan-2.7.2.jar 文件复制到 Ant 的 lib 目录下
+```
 cp /root/software/apache-jmeter-5.5/lib/serializer-2.7.2.jar /root/software/apache-ant-1.9.16/lib/
 检查：ls /root/software/apache-ant-1.9.16/lib/ |grep serializer
 
 cp /root/software/apache-jmeter-5.5/lib/xalan-2.7.2.jar /root/software/apache-ant-1.9.16/lib/
 检查：ls /root/software/apache-ant-1.9.16/lib/ |grep xalan
+```
 
-3、在网站上下载 commons-email.jar、activation-1.1.1.jar、javax.mail.jar 包，复制到 Ant 安装目录的 lib 目录下
+3. 在网站上下载 commons-email.jar、activation-1.1.1.jar、javax.mail.jar 包，复制到 Ant 安装目录的 lib 目录下
+```
 https://commons.apache.org/proper/commons-email/download_email.cgi
 http://www.java2s.com/Code/Jar/a/Downloadactivation111jar.htm
 https://github.com/javaee/javamail/releases/download/JAVAMAIL-1_6_2/javax.mail.jar
+```
 
-4、将有一个 jmeter.results.shanhe.me.xsl 模版下载并放到 JMeter 下的 extras 目录下
+4. 将有一个 jmeter.results.shanhe.me.xsl 模版下载并放到 JMeter 下的 extras 目录下
+```
 原：/root/software/apache-jmeter-5.5/extras/jmeter-results-detail-report_21.xsl
 检查：ls /root/software/apache-jmeter-5.5/extras |grep shanhe
+```
 
-5、修改 jmeter.properties
+5. 修改 jmeter.properties
+```
 vim /root/software/apache-jmeter-5.5/bin/jmeter.properties
 jmeter.save.saveservice.output_format=xml
 jmeter.save.saveservice.response_data=true //展示响应数据
 jmeter.save.saveservice.samplerData=true
+```
 
-6、配置 build.xml
+6. 配置 build.xml
+```
 在 JMeter 的目录下新建目录 testcase，在 testcase 新建 build.xml 文件，新建 html、jtl、script 目录，将 jmx 脚本放到 script 目录下
 cd /root/software/apache-jmeter-5.5/testcase && ant
 cd /root/software/apache-jmeter-5.5/testcase && ant -buildfile linux-build.xml
 ```
 
-### 执行 JMeter 脚本
+### 1.3 执行 JMeter 脚本
 
 ```
 jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]
@@ -113,33 +125,43 @@ CannotResolveClassException: kg.apc.jmeter.vizualizers.CorrectedResultCollector
 下载地址：https://jmeter-plugins.org/install/Install/，将 jmeter-plugins-manager-1.7.jar 复制到 Jmeter 的 Lib 目录下面的 ext 目录下面，然后重新启动。好像没用？然后我把压测报告的结果树删除就可以了。
 ```
 
-### 搭建 JMeter 分布式集群
+### 1.4 搭建 JMeter 分布式集群
 
-```
 修改/root/software/apache-jmeter-5.5/bin/jmeter.properties
 控制机 master 配置
+```
 1、server.rmi.ssl.disable=true 
 2、server_port=1099   
 3、remote_hosts=127.0.0.1,127.0.0.2:1099,127.0.0.3:1099
+```
 
 压力机 slave 配置
+```
 1、server.rmi.ssl.disable=true    
 2、server_port=1099 						该端口配合主机的 remote_hots 端口           
 3、server.rmi.localport:1009 	该端口对应压力机启动的端口，最好将该端口同 server_port 端口设置为同一端口
+```
 
 启动 master-jmeter
+```
 /root/software/apache-jmeter-5.5/bin/jmeter-server
+```
 
 启动 master-slave
+```
 /root/software/apache-jmeter-5.5/bin/jmeter-server -Djava.rml.server.hostname=127.0.0.2
 /root/software/apache-jmeter-5.5/bin/jmeter-server -Djava.rml.server.hostname=127.0.0.3
+```
 
 修改/root/software/apache-jmeter-5.5/bin/jmeter-server （替换为实际的 ip 地址）
+```
 RMI_HOST_DEF=-Djava.rmi.server.hostname=127.0.0.1
 RMI_HOST_DEF=-Djava.rmi.server.hostname=127.0.0.2
 RMI_HOST_DEF=-Djava.rmi.server.hostname=127.0.0.3
+```
 
 master 执行非 gui 执行命令：jmeter -n -t test.jmx -r -l result.jtl -e -o report_dir/report_name 
+```
 jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]
 -n   非 gui 运行
 -t   test.jmx  指定运行文件
@@ -149,33 +171,50 @@ jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]
 -e   运行完成后生产 html 报告
 -o   report_dir/report_name 指定 html 报告存放位置且文件夹必须为空
 -j   log/loger  指定 jmeter.log 存放位置
+```
 
 tips：
 remote_hosts=127.0.0.1 若 master，作为压力机，需要删除 127.0.0.1改成本机 IP，本机的 port 也需要打开，并且 master 机器也要启动 jmeter-server  bin 目录下执行 ./jmeter-server
 
 杀掉 JMeter 进程
+```
 ps -ef | grep jmeter | grep -v grep | awk '{ print $2 }' | xargs kill -9 
+```
 
 踩坑
 报错：使用 java 远程启动 jmeter 服务报错，报错内容：Neither the JAVA_HOME nor the JRE_HOME environment variable is defined
 解决：在 修改/root/software/apache-jmeter-5.5/bin/jmeter-server 顶部添加以下命令
+```
 export JAVA_HOME=/root/software/jdk1.8.0_351
 export JRE_HOME=/root/software/jdk1.8.0_351/jre
 ```
+
+### 1.5 JMeter 配置
+
+jvm参数优化 不要超过物理内存的四分之一。jmeter/bin目录下，vi jmeter，修改HEAP的size大小，默认1024M，可以设置成2048M
+HEAP="-Xms2g -Xmx2g -XX:MaxMetaspaceSize=256m"。
 
 
 
 ## 二、组件教程
 
-### 线程（用户）
+### 测试计划列表
 
-#### 基本线程组
+![](./img/添加测试计划.png)
+
+### 测试组件列表
+
+![](./img/测试组件.png)
+
+### 2.1 线程（用户）
+
+#### 2.1.1 基本线程组
 
 - Thread Group----模拟用户数，每一个线程就相当于一个虚拟的用户
 - setUp Thread Group----用于执行测试之前的初始化操作
 - tearDown Thread Group----用于执行测试结束之后的回收工作
 
-#### 性能相关线程组
+#### 2.1.2 性能相关线程组
 
 注：需安装插件
 
@@ -216,18 +255,18 @@ Ramp-up period 是指每个请求发生的总时间间隔，单位是秒。如�
 
 ![](./img/阶梯加压线程组.png)
 
+- 一个线程组内的多个请求是顺序执行的
+- 不同线程组内的请求是并行执行的
 
 
-### 组件
 
-**测试计划**
-
-![](./img/测试计划.png)
+### 2.2 组件
 
 
 #### 取样器
-**正则表达式提取器**
-Cookie 示例
+1. 正则表达式提取器
+   Cookie 示例
+
 ```
 Set-Cookie: XXL_JOB_LOGIN_IDENTITY=7b226964223a312c22757365726e616d65223a2261646d696e222c2270617373776f7264223a226531306164633339343962613539616262653536653035376632306638383365222c22726f6c65223a312c227065726d697373696f6e223a6e756c6c7d;
 ```
@@ -244,7 +283,7 @@ Set-Cookie: XXL_JOB_LOGIN_IDENTITY=7b226964223a312c22757365726e616d65223a2261646
 
 ![](./img/正则表达式处理器.png)
 
-**JSON 提取器**
+2. JSON 提取器
 
 **1、添加 JSON 提取器**
 
@@ -257,14 +296,14 @@ Set-Cookie: XXL_JOB_LOGIN_IDENTITY=7b226964223a312c22757365726e616d65223a2261646
 - Match No.（0 for Random）：0随机；n 取第几个匹配值；-1匹配所有，后续引用用 变量名_N 取第 N 个值
 - Default Values：可以给 error 也可以给0，根据情况调整
 
-
 **2、JSON path 表达式**
+
 JSON 串 []表示对象组成的数组，{}表示对象。
 例如要获取 id，可写$.data.id，$表示根元素，然后一级级属性往下去找，先找到 data，再往下子节点找到 id；也可写$..id，直接从根元素去递归查找到 id；如果只有1级目录，直接$.msg 即可；获取 token 同理。
 可设置查看格式为 JSON Path Tester，在下方进行 JSON 路径表达式测试。
 
-
 **3、JSON path 提取多个值**
+
 JSON 路径表达式，分号隔开。  
 注意：下面所有参数都得是\**;\**的格式，否则会出现越界的报错！
 
@@ -279,10 +318,16 @@ $..[*].friendId
 $.data.items[*].friendId
 ```
 
-**OS 进程取样器**  
-返回码0表示成功，1表示失败，128也是表示失败（1和128的区别是？）
+测试 JSON 提取器
 
-**SSH Command**
+在查看结果树页面，选择某一条测试结果，切换选择到 JSON Path Tester，在 JSON Path Expression 中输入提取规则，例如：$.data[*].displayName 即可查看结果
+
+![](./img/test_json_excrt.png)
+
+3. OS 进程取样器 
+   返回码0表示成功，1表示失败，128也是表示失败（1和128的区别是？）
+
+4. SSH Command
 
 在选项 > Plugins Manager 搜索 SSH 插件进行安装并重启 JMeter
 在线程组右键 > 添加取样器 > 选择 SSH Command，填写 Hostname、Port、User Name、Password 等信息
@@ -291,9 +336,18 @@ $.data.items[*].friendId
 
 
 
-#### 逻辑控制器  
+#### 逻辑控制器
 
-**IF 控制器**  
+1. Include控制器
+
+添加Include控制器，选择测试计划，可使用相对路径或者绝对路径，下面的例子 baidu.jmx 是一个测试片段。
+
+![](./img/include控制器.png)
+
+![](./img/测试片段.png)
+
+2. IF 控制器
+
 右键添加 > 逻辑控制器 > 如果（If）控制器，注意勾选2个方框  
 判断 true 或者 false，可用做判断上一个请求是否成功来决定是否走下一个请求  
 ${__groovy('${title}'=='张三',)}  
@@ -302,9 +356,9 @@ ${__groovy('${title}'=='张三',)}
 1、条件判断语句若是字符串，则需要用引号包围参数，如："user" == "test001"；  
 2、If Controller 之下的请求才会受到 If 控制器的约束，若是平级则不会受约束，因此建议将业务请求放在 If 控制器之下进行测试。
 
-**吞吐量控制器（Throughput Controller）**  
-参数说明  
+3. 吞吐量控制器（Throughput Controller） 
 
+参数说明
 - Total Executions（执行总次数，N 为整数）
 - Percent executions（执行百分比，N 为1-100整数）
 - Per User ：是否针对每个用户，在线程数为1的情况下，勾不勾选，执行效果一样
@@ -318,13 +372,13 @@ ${__groovy('${title}'=='张三',)}
 
 ![](./img/吞吐量控制器.png)
 
-**权重控制器（Weighted Switch Controller）**  
+4. 权重控制器（Weighted Switch Controller）  
 
 注意：在权重控制器下添加请求，此页面自动加载请求列表；设置线程组循环次数，权重才有效（感觉不太合理？）
 
 ![](./img/权重控制器.png)
 
-**临界部分控制器**
+5. 临界部分控制器
 
 临界部分控制器确保其子元素（取样器/控制器等）每次只允许一个线程执行，不允许并行执行，功能类似同步锁。（按顺序执行）
 
@@ -503,12 +557,11 @@ TRT：事务响应时间，监控查看响应时间的实时平均值、整体�
 ### JMeter 命令规范
 
 压测执行相关参数通过定义 JMeter 属性
-[示例]  
 在 JMeter 的“用户定义的变量”中定义变量 total_tps（表示混合压测总 TPS）  
-变量名：total_tps  
-变量值：${__P(p_total_tps,)} 注意：此处的属性名根据命令行传入名称填写  
-在执行压测时使用如下命令将参数传入  
-jmeter -n -t test.jmx -Jp_total_tps=50
+
+- 变量名：total_tps 
+-  变量值：${__P(p_total_tps,)} 注意：此处的属性名根据命令行传入名称填写,在执行压测时使用如下命令将参数传入，
+  `jmeter -n -t test.jmx -Jp_total_tps=50`
 
 
 
@@ -628,15 +681,11 @@ Maxinum value：${id_#}  # 获取数据最大条数
 
 2、CSV 配置
 
-文件名：CSV 文件路径
-
-文件编码：UTF-8
-
-变量名称：CSV 表头
-
-忽略首行：True False
-
-分割符：英文逗号
+- 文件名：CSV 文件路径
+- 文件编码：UTF-8
+- 变量名称：CSV 表头
+- 忽略首行：True False
+- 分割符：英文逗号
 
 
 
@@ -722,8 +771,6 @@ vars.put("str",str[i]);
 log.info("随机字符:" + str[i])
 ```
 
-
-
 ### JMeter 上传文件
 
 1、勾选对 POST 使用 multipart/form-data
@@ -736,9 +783,37 @@ log.info("随机字符:" + str[i])
 
 5、MIME 类型：multipart/form-data
 
+### JMeter 下载文件
 
+在下载文件接口后面添加 beanshell
 
-### 非 GUI 执行添加参数
+```
+import java.io.*;
+
+byte[] result = prev.getResponseData(); //这个是获取到请求返回的数据，prev是获取上个请求的返回
+
+String file_name = "/.tmp/artifact_BUILD_ARTIFACT.tar.gz"; //代表存放文件的位置和文件名
+
+File file = new File(file_name);
+
+FileOutputStream out = new FileOutputStream(file);
+
+out.write(result);
+
+out.close();
+```
+
+### JMeter 生成 CSV 测试报告
+
+注：csv 需要写绝对路径
+
+```
+/Users/menghuawei/software/apache-jmeter-5.5/jmeter -n -t gitee_all.jmx -l result.jtl -e -o `date +%Y%m%d%H%M%S` -Jcsv.output.dir=/Users/menghuawei/IdeaProjects/my-project/wei-notebook/.tmp/tmp
+```
+
+### JMeter 非 GUI 执行
+
+1. 非 GUI 执行添加参数
 
 ```
 添加 beanshell 后置处理器
@@ -757,7 +832,9 @@ ${__P(url,)}
 -Jurl=http://www.666.com
 ```
 
+2. 调试脚本
 
+把 bin/jmeter.properties 的 jmeter.save.saveservice.output_format=xml 配置为 xml 格式，将集群全部的 /bin/下的 jmeter.properties 文件，搜索 mode=Standard 并打开，若不打开，则集群模式下不会返回具体的详细信息。执行命令 jmeter -n -t demo.jmx -l result.jtl  直接导出 result.jtl， 在 jmeter 的 gui 模式下，导入查看结果树进行错误信息的查看。
 
 ### JMeter 二次开发
 
@@ -794,17 +871,9 @@ ${__P(url,)}
 
 
 
-## 四、其它
+## 四、知识碎片
 
-### 零散记录
-
-调试脚本
-把 bin/jmeter.properties 的 jmeter.save.saveservice.output_format=xml 配置为 xml 格式，
-
-将集群全部的 /bin/下的 jmeter.properties 文件，搜索 mode=Standard 并打开，若不打开，则集群模式下不会返回具体的详细信息。
-执行命令 jmeter -n -t demo.jmx -l result.jtl  直接导出 result.jtl， 在 jmeter 的 gui 模式下，导入查看结果树进行错误信息的查看。
-
-### 踩坑
+[一键运行 JMX](https://github.com/iewiewiew/jmeter-test)
 
 1、问题一
 
@@ -819,3 +888,10 @@ ${__P(url,)}
 设置线程组的持续时间时，循环次数勾永远（循环次数和持续时间，谁先结束就以谁为准）
 设置循环次数，就会非常非常慢，为啥？
 
+3、问题三
+使用 Nginx 代理访问 JMeter 测试报告，浏览器也会有缓存，清空缓存或者使用无痕浏览器访问即可。
+
+4、查看结果树生成CSV指定相对路径无效
+可以使用相对路径名或绝对路径名来指定文件名。相对路径是相对于当前工作目录（默认为 bin/目录）解析的。JMeter 还支持相对于包含当前测试计划（JMX 文件）的目录的路径。如果路径名以~/开头（或 jmeter.save.saveservice.base_prefix JMeter 属性中的任何内容），则假定该路径是相对于 JMX 文件位置的。
+
+5、不同的csv内容字段名称不能相同，否则后面引用变量都是第一个

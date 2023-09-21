@@ -8,17 +8,25 @@
 > Date：2023.05.25  
 > Description：Markdown  
 
-
-
 **参考资料**  
 [Markdonw 官网](https://www.markdownguide.org/)  
 [Markdown 官方教程](https://markdown.com.cn/)   
 [Markdown 在线编辑器](https://markdown.com.cn/editor/)  
+[markdownlint](https://github.com/DavidAnson/markdownlint/)
+
+## 目录
+
+* [目录1](#标题1（前面一个#号）)
+  * [目录11](## 标题2（前面两个#号）)
 
 # 标题1（前面一个#号）
 
+注：标题和正文之间有空行
+
 ## 标题2（前面两个#号）
+
 ### 标题3（前面三个#号）
+
 #### 标题4（前面四个#号）
 
 一级标题
@@ -26,7 +34,7 @@
 二级标题
 ---
 
-**文本加粗**  
+**文本加粗**  [什么时候使用加粗和标题？](https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md)
 *斜体文本*  
 _斜体文本_  
 ==高亮文本==  
@@ -86,8 +94,8 @@ ___
 :- 设置内容和标题栏居左对齐。  
 :-: 设置内容和标题栏居中对齐。  
 
-```
-多行代码
+```bash 
+多行代码 声明代码块语言环境：bash、python、java、javascript
 ```
 行内代码`行内代码`
 
@@ -161,3 +169,13 @@ if __name__ == '__main__':
 这里是可折叠的内容。
 
 </details>
+
+[Markdown 语法校验](https://github.com/DavidAnson/markdownlint-cli2)
+
+```
+npm install markdownlint-cli2 --global
+
+markdownlint-cli2 "**/*.md" "#node_modules"
+
+markdownlint-cli2 --fix "**/*.md" "#node_modules"
+```

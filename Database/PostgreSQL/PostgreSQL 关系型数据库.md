@@ -13,7 +13,7 @@
 
 
 
-### 一、PostgreSQL 环境搭建
+### 一、PostgreSQL 搭建
 
 ```
 运行容器
@@ -36,33 +36,36 @@ postgres
 
 **PostgreSQL 语法**
 
-[详细查看](./PostgreSQL%20集合.sql)
+[详细查看](./PostgreSQL.sql)
 
 **进入 postgres**
-
 ```
-默认账号：postgres，设置的密码：postgres
-
 docker exec -it postgres /bin/bash
 
-切换到 postgres 用户
+切换到 postgres 用户（注：可不切换）
 su - postgres
 
 使用 psql 命令登录 PostgreSQL 控制台
 psql
+psql -h postgresql.comm.svc.cluster.local -p 5432 -U postgres，输入密码
 
--- 查看数据库
+查看帮助
+\help <command_name>
+
+查看数据库
 \l
 
--- 进入数据库
+进入数据库
 \c <数据库名> 举例：\c dbname
 
--- 查看当前数据库下的表
+查看当前数据库下的表
 \d
+
+退出当前事务
+ABORT 
 ```
 
 **备份和恢复**
-
 ```
 进入 pod 进行操作备份和恢复 pg
 
@@ -71,6 +74,12 @@ export DB=automation; PGPASSWORD="root" pg_dump -h postgres-master -p 5432 -U po
 
 恢复
 export DB=automation; PGPASSWORD="root" pg_restore -h postgres-master -p 5432 -U "postgres" -d "dbname" --role "postgres" --clean --verbose "/bitnami/postgresql/data/pgsql.$DB.dump"
+```
+
+**其它**
+```
+在 /bin/sh 中执行 pg_isready 命令，以检查本地主机上 PostgreSQL 数据库服务器是否准备好接受名为 "postgres" 的数据库的连接，使用用户名 "postgres"，连接端口为 5432
+/bin/sh -c exec pg_isready -U "postgres" -d "dbname=postgres" -h 127.0.0.1 -p 5432
 ```
 
 **PostgreSQL 模式**
@@ -100,7 +109,7 @@ URL：jdbc:postgresql://127.0.0.1:5432/postgres
 --查看 pgsql 配置的最大连接数
 show max_connections;
 
---  修改最大连接数
+-- 修改最大连接数
 -- 方式一
 alter system set max_connections=10;
 -- 方式二

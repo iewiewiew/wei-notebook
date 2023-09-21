@@ -11,19 +11,24 @@
 **参考资料**  
 [Helm 官方文档](https://helm.sh/zh/docs/)  
 [Helm 仓库](https://artifacthub.io/)  
-[bitnami charts](https://charts.bitnami.com/)  
+[bitnami 源](https://charts.bitnami.com/)  
 [微软 azure 源](http://mirror.azure.cn/kubernetes/charts/)  
+[Helm 仓库](https://hub.grapps.cn/)
 [Helm 安装软件](./Helm 安装软件.md)
 
 
 
 ## 一、Helm 简介
 
+Helm的核心组成包括`Repository`、`Chart`、`Release`。
+
 Chart 代表着 Helm 包。它包含在 Kubernetes 集群内部运行应用程序，工具或服务所需的所有资源定义。你可以把它看作是 Homebrew formula，Apt dpkg，或 Yum RPM 在 Kubernetes 中的等价物。  
+
 Repository（仓库） 是用来存放和共享 charts 的地方。它就像 Perl 的 CPAN 档案库网络 或是 Fedora 的 软件包仓库，只不过它是供 Kubernetes 包所使用的。  
-Release 是运行在 Kubernetes 集群中的 chart 的实例。一个 chart 通常可以在同一个集群中安装多次。每一次安装都会创建一个新的 release。以 MySQL chart 为例，如果你想在你的集群中运行两个数据库，你可以安装该 chart 两次。每一个数据库都会拥有它自己的 release 和 release name。  
-在了解了上述这些概念以后，我们就可以这样来解释 Helm：  
-Helm 安装 charts 到 Kubernetes 集群中，每次安装都会创建一个新的 release。你可以在 Helm 的 chart repositories 中寻找新的 chart。
+
+Release 是运行在 Kubernetes 集群中的 chart 的实例。一个 chart 通常可以在同一个集群中安装多次。每一次安装都会创建一个新的 release。以 MySQL chart 为例，如果你想在你的集群中运行两个数据库，你可以安装该 chart 两次。每一个数据库都会拥有它自己的 release 和 release name。
+
+在了解了上述这些概念以后，我们就可以这样来解释 Helm：Helm 安装 charts 到 Kubernetes 集群中，每次安装都会创建一个新的 release。你可以在 Helm 的 chart repositories 中寻找新的 chart。
 
 
 
@@ -58,13 +63,37 @@ brew install helm
 
 3、验证
 helm version
+
+4、Helm 命令补全
+helm completion bash | sudo tee /etc/bash_completion.d/helm && bash
+```
+
+[helm-dashboard](https://github.com/komodorio/helm-dashboard) 注：未实践成功
+
+helm plugin 方式
+```
+helm plugin install https://github.com/komodorio/helm-dashboard.git
+helm dashboard
+# -port 指定端口号
+helm dashboard --port=31111
+```
+
+helm install 方式
+```
+helm repo add komodorio https://helm-charts.komodor.io
+helm repo update
+helm upgrade --install my-release komodorio/helm-dashboard
+
+helm plugin list
+which helm-dashboard
+helm plugin uninstall dashboard
 ```
 
 
 
 ## 三、Helm 使用
 
-**基本操作**
+### 基本操作
 
 ```
 1、helm search 
@@ -80,7 +109,7 @@ helm search hub
 查看应用（helm list --all 会展示 Helm 保留的所有 release 记录，包括失败或删除的条目（指定了 --keep-history））
 ```
 
-**仓库管理**
+### Repository 管理
 
 ```
 1、添加 chart 仓库
@@ -104,7 +133,7 @@ helm repo update
 helm list
 ```
 
-**chart 管理**
+### Chart 管理
 
 ```
 1、查看 chart 列表
@@ -122,54 +151,52 @@ helm repo update
 命令：helm pull <仓库名称>/<chart 名称> --version=<chart 版本>
 举例：helm pull bitnami/mysql --version=9.4.1
 
-5、安装 Chart
+5、创建 chart 包
+命令：helm create <chart 名称>
+举例：helm create mychart
+
+6、template
+拉取 chart 包
+命令：helm pull <仓库名称>/<chart 名称> --version=<chart 版本>
+举例：helm pull bitnami/mysql --version=9.4.1
+下载 mysql-9.4.1.tgz 到本地，执行：tar -zxvf mysql-9.4.1.tgz 解压 mysql-9.4.1.tgz 到mysql
+修改文件后执行：helm package mysql/ 重新打包
+```
+
+### Release 管理
+
+```
+1、安装 Chart
 命令：helm install <release 名称> <仓库名称>/<chart 名称> --version=<chart 版本>
 举例：helm install my-release bitnami/mysql --version=9.4.1
 命令：helm install <仓库名称>/<chart 名称> --generate-name //生成随机<release 名称>
 举例：helm install bitnami/mysql --generate-name
+参数说明：
+-n: 指定将服务部署在k8s的命名空间中
+--drun-run：测试安装，不进行实际安装操作
 
-5、查看发布信息
+2、查看发布信息
 命令：helm status <release 名称>
 举例：helm status my-release
 
-6、查看发布历史
+3、查看发布历史
 命令：helm history <release 名称>
 举例：helm history my-release
 
-7、回滚版本（每当发生了一次安装、升级或回滚操作，revision 的值就会加1。第一次 revision 的值永远是1。我们可以使用 helm history [RELEASE] 命令来查看一个特定 release 的修订版本号。）
+4、回滚版本（每当发生了一次安装、升级或回滚操作，revision 的值就会加1。第一次 revision 的值永远是1。我们可以使用 helm history [RELEASE] 命令来查看一个特定 release 的修订版本号。）
 命令：helm rollback <release 名称> 1
 举例：helm rollback my-release 1
 
-8、卸载 chart（该命令会从 Kubernetes 卸载 my-release， 它将删除和该版本相关的所有相关资源（service、deployment、 pod 等等）甚至版本历史。）
+5、卸载 chart（该命令会从 Kubernetes 卸载 my-release， 它将删除和该版本相关的所有相关资源（service、deployment、 pod 等等）甚至版本历史。）
 命令：helm uninstall <release 名称>
 举例：helm uninstall my-release
 
-9、删除 chart（heml list 查看发布的 chart）
+6、删除 chart（heml list 查看发布的 chart）
 命令：helm delete --purge <release 名称>
 举例：helm delete --purge my-release
-
-10、创建 chart 包
-命令：helm create <chart 名称>
-举例：helm create mychart
-
-11、其它
-安装 MySQL 客户端（未成功）
-yum install mariadb -y
 ```
 
-**template**
-
-```
-拉取 chart 包
-命令：helm pull <仓库名称>/<chart 名称> --version=<chart 版本>
-举例：helm pull bitnami/mysql --version=9.4.1
-
-下载 mysql-9.4.1.tgz 到本地，执行：tar -zxvf mysql-9.4.1.tgz 解压 mysql-9.4.1.tgz 到mysql
-
-修改文件后执行：helm package mysql/ 重新打包
-```
-
-**Helm 安装资源顺序**
+### Helm 安装资源顺序
 
 ```
 ns

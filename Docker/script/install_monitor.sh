@@ -16,11 +16,11 @@ IP_ADDR=`curl cip.cc |grep IP |awk -F: '{ print$2 }' |awk '{ print$1 }'`
 
 
 function init() {
-  grafana
+#  grafana
   prometheus
-  influxdb
+#  influxdb
   node_exporter
-  mysqld-exporter
+#  mysqld_exporter
 #  telegraf
 
   log "进入 Grafana: http://$IP_ADDR:3000/login admin/admin, 配置 Prometheus 数据源: http://$IP_ADDR:9090,
@@ -199,7 +199,8 @@ function node_exporter() {
 }
 
 
-function mysqld-exporter() {
+# 注: 方法名带着 - , 需要将脚本赋予执行权限, 并使用./demo.sh 的执行方式
+function mysqld_exporter() {
     SERVER_NAME=mysqld-exporter
     check
 

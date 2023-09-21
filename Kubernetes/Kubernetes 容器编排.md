@@ -1,6 +1,6 @@
 [TOC]
 
-<H1 align="center">Kubernetes 容器编排</H1>
+<h1 align="center">Kubernetes 容器编排</h1>
 
 > By：weimenghua  
 > Date：2022.10.01   
@@ -635,6 +635,9 @@ kubectl config use-context <集群名称>
 
 5、修改集群名称
 kubectl config rename-context <old-context-name> <new-context-name>
+
+6、--field-selector 参数用于根据字段选择器对资源进行筛选和过滤
+kubectl get services --all-namespace --field-seletor metadata.namespace != default
 ```
 
 **kubectl 使用方式**
@@ -1987,8 +1990,43 @@ etcdctl --endpoints https://192.168.137.156:2379 --cert /etc/kubernetes/pki/etcd
 etcdctl --endpoints https://192.168.137.156:2379 --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key --cacert /etc/kubernetes/pki/etcd/ca.crt get /registry/services/specs/default/kubernetes
 ```
 
+## Pull Secret
+在Kubernetes中，Pull Secret是一种用于从私有容器镜像仓库中拉取镜像的凭证。私有容器镜像仓库通常需要用户名和密码等凭证来访问，而Pull Secret就是用来存储这些凭证信息的Kubernetes对象。
+
+当您在Kubernetes集群中部署应用程序时，如果您的应用程序需要从私有的容器镜像仓库中拉取镜像，您就需要创建一个Pull Secret对象并将其关联到相应的Pod或ServiceAccount中。这样，Kubernetes就可以使用Pull Secret中存储的凭证信息来从私有镜像仓库中拉取镜像。
+
+要创建Pull Secret，您可以使用`kubectl create secret`命令，并指定`docker-registry`类型。在创建Pull Secret时，您需要提供私有镜像仓库的地址、用户名和密码等信息。例如：
+
+```bash
+kubectl create secret docker-registry my-pull-secret --docker-server=REGISTRY_SERVER --docker-username=USERNAME --docker-password=PASSWORD --docker-email=EMAIL
+```
+
+在创建Pull Secret之后，您可以在Pod的spec中通过`imagePullSecrets`字段将Pull Secret关联到Pod中，以便Pod可以使用Pull Secret中的凭证信息来拉取镜像。
+
+总的来说，Pull Secret是用来存储私有容器镜像仓库凭证信息的Kubernetes对象，它允许Kubernetes集群中的应用程序访问私有镜像仓库中的镜像。
+
+## 其它
+
+**网络诊断：**
+
+1. \1. 显示命名空间中 Pod 的 IP 地址：`kubectl get pods -n <namespace> -o custom-columns=POD:metadata.name,IP:status.podIP --no-headers`
+2. \2. 列出命名空间中的所有网络策略：`kubectl get networkpolicies -n <namespace>`
+3. \3. 查看一个网络策略详情：`kubectl describe networkpolicy <network-policy-name> -n <namespace>`
+
+**节点诊断：**
+
+1. \1. 获取特定节点上运行的 Pod 列表：`kubectl get pods --field-selector spec.nodeName=<node-name> -n <namespace>`
+
+**资源配额和限制：**
+
+1. \1. 列出命名空间中的资源配额：`kubectl get resourcequotas -n <namespace>`
+2. \2. 查看一个资源配额详情：`kubectl describe resourcequota <resource-quota-name> -n <namespace>`
+
 ## 踩坑
 
 创建 pod 时候不写 namespace 会报错，暂未找到原因，可以在命令后加 `--namespace=<namespace 名称>`
 
 举例：`kubectl run my-pod --image=nginx --namespace=my-namespace`
+
+[ ! -f ~/.kube/aliases.sh ] && curl -fsSL "https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases" > ~/.kube/aliases.sh && sed -i -e 's/kubectl/kctl/g' ~/.kube/aliases.sh
+source ~/.kube/aliases.sh

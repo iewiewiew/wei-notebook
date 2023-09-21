@@ -1,12 +1,15 @@
 [TOC]
 
----
-
 <h1 align="center">MQ 消息队列</h1>
 
 > By：weimenghua  
 > Date：2022.10.2  
 > Description：MQ
+
+**参考资料**  
+[9个问答牢记RocketMQ架构](https://mp.weixin.qq.com/s/L9lYIp3AMaXc6CRgVmsPEw)
+
+
 
 ## 消息队列
 

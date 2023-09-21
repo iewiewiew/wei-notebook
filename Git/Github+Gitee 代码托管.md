@@ -21,7 +21,8 @@
 
 
 
-### github
+### Github
+
 [github packages](https://docs.github.com/en/packages)  
 [github 的镜像仓库地址](https://ghcr.io)
 
@@ -34,3 +35,10 @@ docker push ghcr.io/USERNAME/REPO_NAME:TAG
 
 docker pull ghcr.io/USERNAME/REPO_NAME:TAG
 ```
+
+
+#### DIY Github 首页
+
+新建一个仓库名和自己 Github 用户名相同的仓库并且添加一个 README.md。
+
+[awesome-github-profile-readme](https://github.com/abhisheknaiidu/awesome-github-profile-readme)

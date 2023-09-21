@@ -12,21 +12,21 @@
       <stringProp name="TestPlan.user_define_classpath">/Users/menghuawei/IdeaProjects/my-project/wei-notebook/JMeter/jar 包/mysql-connector-java-8.0.19.jar,/Users/menghuawei/IdeaProjects/my-project/wei-notebook/Database/PostgreSQL/postgresql-42.5.0.jar</stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="JMeter 教程" enabled="false">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="JMeter 教程" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="循环控制器" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">5</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">10</stringProp>
+        <stringProp name="ThreadGroup.duration">1</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="通用变量" enabled="true">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="通用变量" enabled="false">
           <collectionProp name="Arguments.arguments">
             <elementProp name="demo2" elementType="Argument">
               <stringProp name="Argument.name">demo2</stringProp>
@@ -36,7 +36,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="百度 线程号：${__threadNum}   迭代次数：${__counter(True,)}" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="百度 线程号：${__threadNum}   迭代次数：${__counter(True,)}" enabled="false">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="用户定义的变量" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -1098,8 +1098,12 @@ ${__setProperty(demo2,${demo2},False)};
           </HTTPSamplerProxy>
           <hashTree/>
         </hashTree>
+        <IncludeController guiclass="IncludeControllerGui" testclass="IncludeController" testname="Include控制器" enabled="true">
+          <stringProp name="IncludeController.includepath">baidu.jmx</stringProp>
+        </IncludeController>
+        <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="性能测试" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="性能测试" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="循环控制器" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -1129,11 +1133,11 @@ ${__setProperty(demo2,${demo2},False)};
         <hashTree/>
         <com.blazemeter.jmeter.control.WeightedSwitchController guiclass="com.blazemeter.jmeter.control.WeightedSwitchControllerGui" testclass="com.blazemeter.jmeter.control.WeightedSwitchController" testname="权重控制器" enabled="true">
           <collectionProp name="Weights">
-            <collectionProp name="-230996324">
+            <collectionProp name="-1227355309">
               <stringProp name="-977282852">调试取样器1</stringProp>
               <stringProp name="55">7</stringProp>
             </collectionProp>
-            <collectionProp name="-230996297">
+            <collectionProp name="-1227356577">
               <stringProp name="-977282851">调试取样器2</stringProp>
               <stringProp name="51">3</stringProp>
             </collectionProp>

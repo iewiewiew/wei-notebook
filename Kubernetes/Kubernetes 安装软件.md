@@ -342,6 +342,12 @@ kubectl get pod redis -o jsonpath="{.spec['containers','initContainers'][*].name
 
 4、进入容器
 kubectl exec -it pod/redis -n my-space -- bash
+需要密码
+kubectl --insecure-skip-tls-verify exec -it -n my-space redis --container redis -- bash
+redis-cli -a <password> <command>  # <command> 为 INFO、KEYS * ...
+合并为一行
+kubectl --insecure-skip-tls-verify exec -it -n my-space redis --container redis -- redis-cli -a <password>
+
 
 5、验证
 redis-cli
@@ -539,6 +545,15 @@ kubectl delete -f PersistentVolumeClaim.yml
 kubectl delete -f Service.yml
 kubectl delete -f Deployment.yml
 kubectl delete -f PostgrepSQL.yml
+
+进入容器
+kubectl --insecure-skip-tls-verify exec -it -n <namespace> <pod-name> --container <container-name> -- bash
+
+获取 PostgreSQL 服务的集群 IP 地址和端口号
+kubectl get svc <postgresql-service-name> -n <namespace>
+
+使用 psql 命令连接到 PostgreSQL 数据库，执行命令后输入密码
+psql -h <postgresql-service-ip> -p <postgresql-service-port> -d <database-name> -U <username> -W
 ```
 
 

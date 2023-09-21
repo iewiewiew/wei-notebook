@@ -2,8 +2,8 @@
 
 <h1 align="center">Elasticsearch 全文检索引擎</h1>
 
-> By：weimenghua
-> Date：2023.09.02
+> By：weimenghua  
+> Date：2023.09.02  
 > Description：
 
 
@@ -27,6 +27,10 @@ The Elastic Stack, 包括 Elasticsearch、Kibana、Beats和Logstash（也称为 
 | document | 类似于rdbms的 row、面向对象里的object                        |
 | field    | 相当于字段、属性                                             |
 
+Elasticsearch比传统关系型数据库如下：
+> Relational DB ‐> Databases ‐> Tables ‐> Rows ‐> Columns
+> Elasticsearch ‐> Indices ‐> Types ‐> Documents ‐> Fields
+
 
 
 ## 二、Elasticsearch 环境搭建
@@ -37,8 +41,11 @@ The Elastic Stack, 包括 Elasticsearch、Kibana、Beats和Logstash（也称为 
 
 启动 Elasticsearch 容器
 ```
+docker network create my-network
+
 docker run -d \
 --name elasticsearch \
+--network my-network \
 -p 9200:9200 \
 -e "discovery.type=single-node" \
 elasticsearch:7.6.2
@@ -61,6 +68,25 @@ mobz/elasticsearch-head:5
 `http://127.0.0.1:9200/`
 
 ![](./img/ES_HEAD_9100.png)
+
+修改 conf\jvm.option 文件
+将#-Xms2g                                  
+#-Xmx2g修改成为：
+```
+-Xms340m
+-Xmx340m
+```
+否则因为虚拟机内存不够无法启动
+
+config\elasticsearch.yml 中末尾加入：
+```
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+network.host: 127.0.0.1
+```
+目的是使ES支持跨域请求
+
+
 
 ## 三、Elasticsearch 基本操作
 
@@ -152,7 +178,7 @@ number_of_replicas 备份
    "age":30
 }
 ```
-响应：
+响应：  
 ```
 {'_index': 'person', '_type': '_doc', '_id': '1', '_version': 1, 'result': 'created', '_shards': {'total': 2, 'successful': 1, 'failed': 0}, '_seq_no': 0, '_primary_term': 1}
 ```
@@ -185,7 +211,7 @@ number_of_replicas 备份
 "name":"weiwei",
 "age":18
 }
-响应：
+响应：  
 ```
 {'_index': 'person', '_type': '_doc', '_id': '1', '_version': 2, 'result': 'updated', '_shards': {'total': 2, 'successful': 1, 'failed': 0}, '_seq_no': 1, '_primary_term': 1}
 ```
@@ -194,7 +220,7 @@ number_of_replicas 备份
 5. 删除文档
 方法：delete
 请求：http://127.0.0.1:9200/person/_doc/1
-响应：
+响应：  
 ```
 {'_index': 'person', '_type': '_doc', '_id': '1', '_version': 3, 'result': 'deleted', '_shards': {'total': 2, 'successful': 1, 'failed': 0}, '_seq_no': 2, '_primary_term': 1}
 ```
@@ -213,25 +239,25 @@ curl -XGET "http://127.0.0.1:9200/_cat/indices/?v&pretty&h=index,pri,rep,docs.co
 curl -XGET "http://127.0.0.1:9200/<index_name>/_search?size=10"
 
 删除索引
-curl -X DELETE "http://127.0.0.1:9200/<index_name>"
+curl -XDELETE "http://127.0.0.1:9200/<index_name>"
 
 创建文档
-curl -X PUT "http://127.0.0.1:9200/<index_name>/_doc/<document_id>" -d '{"field1": "value1", "field2": "value2"}'
+curl -XPUT "http://127.0.0.1:9200/<index_name>/_doc/<document_id>" -d '{"field1": "value1", "field2": "value2"}'
 
 更新文档
-curl -X POST "http://127.0.0.1:9200/<index_name>/_update/<document_id>" -d '{"doc": {"field1": "new_value"}}'
+curl -XPOST "http://127.0.0.1:9200/<index_name>/_update/<document_id>" -d '{"doc": {"field1": "new_value"}}'
 
 查看单个文档(文档id根据 <查看索引内的前 n 个文档> 接口获取)
 curl -XGET "http://127.0.0.1:9200/<index_name>/_doc/<document_id>"
 
 搜索文档
-curl -X POST "http://127.0.0.1:9200/<index_name>/_search" -d '{"query": {"match": {"field": "value"}}}'
+curl -XPOST "http://127.0.0.1:9200/<index_name>/_search" -d '{"query": {"match": {"field": "value"}}}'
 
 聚合查询
-curl -X POST "http://127.0.0.1:9200/<index_name>/_search" -d '{"aggs": {"agg_name": {"aggregation_type": {"field": "field_name"}}}}'
+curl -XPOST "http://127.0.0.1:9200/<index_name>/_search" -d '{"aggs": {"agg_name": {"aggregation_type": {"field": "field_name"}}}}'
 
 删除文档
-curl -X DELETE "http://127.0.0.1:9200/<index_name>/_doc/<document_id>"
+curl -XDELETE "http://127.0.0.1:9200/<index_name>/_doc/<document_id>"
 ```
 
 

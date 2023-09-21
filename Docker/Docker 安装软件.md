@@ -65,6 +65,7 @@ docker run -d \
 --restart always \
 -p 3306:3306 \
 -v /var/lib/mysql:/var/lib/mysql \
+-v /etc/my.conf:/etc/my.conf \
 -e MYSQL_ROOT_PASSWORD=root \
 mysql:8.0
 
