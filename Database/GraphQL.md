@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">GraphQL</h1>
 
 > By：weimenghua  
@@ -33,7 +31,6 @@
 如果一次查询多个相同对象，但是值不同，这个时候就需要起别名了，否则 json 的语法就不能通过了。
 - 片段（Fragments）
 片段使你能够组织一组字段，然后在需要它们的地方引入。
-- [Schema 和类型](https://graphql.cn/learn/schema/)
-[Schema](https://so.csdn.net/so/search?q=Schema&spm=1001.2101.3001.7020)是用于定义数据结构的，比如说，User 对象中有哪些属性，对象与对象之间是什么关系等。
+- [Schema 和类型](https://graphql.cn/learn/schema/)[Schema](https://so.csdn.net/so/search?q=Schema&spm=1001.2101.3001.7020) 是用于定义数据结构的，比如说，User 对象中有哪些属性，对象与对象之间是什么关系等。
 - 接口（Interfaces）
 跟许多类型系统一样，GraphQL 支持接口。一个接口是一个抽象类型，它包含某些字段，而对象类型必须包含这些字段，才能算实现了这个接口。

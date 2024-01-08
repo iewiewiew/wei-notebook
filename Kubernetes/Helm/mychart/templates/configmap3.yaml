@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-configmap3
+  namespace: {{ .Release.Namespace }}
+data:
+  helm-configmap-example.conf: |+
+{{ include "example-config" . | indent 4 }}

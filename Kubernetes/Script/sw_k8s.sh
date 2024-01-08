@@ -11,13 +11,13 @@
 # 5、验证：kubectl --insecure-skip-tls-verify get ns
 #
 # 方式二（推荐）
-# alias k8s="/Users/menghuawei/IdeaProjects/my-project/wei-notebook/.gitee/k8s_util/sw_k8s.sh"
+# alias k8s="/Users/menghuawei/IdeaProjects/my-project/gitee-work/02.测试脚本/Shell/sw_k8s.sh"
 #-----------------------------------------------------------------------------
 
 
 
 function sw_config() {
-    echo "切换到 $1 环境，已有环境：1. pci 2. sci 3.wei"
+    echo "切换到 $1 环境，1. k8s pci 2. k8s sci 3. k8s wei"
     cat ~/.kube/config.$1 > ~/.kube/config
 }
 

@@ -1,0 +1,14 @@
+version: '1.0'
+services:
+  nginx:
+    restart: always
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - 9999:80
+      - 443:443
+    volumes:
+      - /root/nginx/html:/usr/share/nginx/html
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true

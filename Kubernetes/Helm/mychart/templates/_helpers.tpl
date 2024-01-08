@@ -34,6 +34,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "mychart.labels" -}}
+date: {{ now | htmlDate }}
 helm.sh/chart: {{ include "mychart.chart" . }}
 {{ include "mychart.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
@@ -59,4 +60,24 @@ Create the name of the service account to use
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
+{{- end }}
+
+{{- define "example-app.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "example-app.configmap" -}}
+{{- printf "%s-configmap-self-defined-123" .Release.Name -}}
+{{- end -}}
+
+{{- define "example-app.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "example-config" }}
+[example]
+key1 = {{ .Values.exampleConfig.key1 }}
+key2 = {{ .Values.exampleConfig.key2 }}
+key3 = {{ .Values.exampleConfig.key3 }}
+key4 = {{ .Values.exampleConfig.key4 }}
 {{- end }}
