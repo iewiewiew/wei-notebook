@@ -1,0 +1,7 @@
+# example.toml
+[Database]
+Host = "localhost"
+Port = 5432
+User = "admin"
+Password = "secret"
+DBName = "exampledb"

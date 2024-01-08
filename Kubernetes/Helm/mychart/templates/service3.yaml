@@ -1,0 +1,16 @@
+{{- $root := . }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mychart.fullname" $root }}-tmp
+  labels:
+    {{- include "mychart.labels" $root | nindent 4 }}
+spec:
+  type: {{ $root.Values.service.type }}
+  ports:
+    - port: {{ if $root.Values.enableFeature }}8888{{ else }}{{ $root.Values.service.port }}{{ end }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "mychart.selectorLabels" $root | nindent 4 }}

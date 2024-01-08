@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-configmap
+  labels: {{- include "mychart.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+data:
+  helm-configmap-example.conf: |+
+    [example]
+    key1 = {{ .Values.exampleConfig.key0 }}
+    key1 = {{ .Values.exampleConfig.key1 | upper }}
+    key2 = {{ .Values.exampleConfig.key2 | upper | quote }}
+    key3 = {{ .Values.exampleConfig.key3 | repeat 5 | quote }}
+    key4 = {{ .Values.exampleConfig.key4 | default "tea" | quote }}
+    key5 = {{ .Values.exampleConfig.key5 | default (printf "%s-tea" (include "mychart.fullname" .)) }}
+    key6 = {{ lookup "v1" "Namespace" "" "" }}
+{{/*    key7 = {{ (lookup "v1" "Namespace" "" "my-space").metadata.name }}*/}}
+    {{- if eq .Values.exampleConfig.key8 "value8" }}
+    key8 = "yes666"
+    {{- else }}
+    key8 = {{ .Values.exampleConfig.key8 }}
+    {{- end }}
+    {{- $relname := .Release.Name }}
+    key9 = {{ $relname }}
+    {{- range $key, $val := .Values.exampleConfig }}
+    {{ $key }} = {{ $val | quote }}
+    {{- end }}
+    key10 = |-
+    {{- range .Values.exampleConfig2 }}
+    - {{ . | title | quote }}
+    {{- end }}

@@ -261,6 +261,7 @@ docker ps                                    #查看正在运行的容器
 docker ps -a                                 #查看所有容器
 docker ps -n 5                               #列出最近创建的5个容器信息
 docker ps -a -q                              #列出所有创建的容器 ID
+docker ps --format "{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}" #显示 Docker 容器的 ID、名称、镜像和端口信息
 
 STATUS 容器状态,7种：
 created                                     （已创建）
@@ -272,7 +273,24 @@ exited                                      （停止）
 dead                                        （死亡）
 ```
 
+容器使用的最常见的退出码 参考资料：[Kubernetes 中容器的退出状态码参考指南](https://mp.weixin.qq.com/s/-nlrCZLBJZwrcUNIaQ_6UA)
+
+| 退出码 |         名称         |                           含义                            |
+| :----: | :------------------: | :-------------------------------------------------------: |
+|   0    |       正常退出       |               开发者用来表明容器是正常退出                |
+|   1    |       应用错误       |      容器因应用程序错误或镜像规范中的错误引用而停止       |
+|  125   |     容器未能运行     |                docker run 命令没有执行成功                |
+|  126   |     命令调用错误     |                 无法调用镜像中指定的命令                  |
+|  127   |   找不到文件或目录   |               找不到镜像中指定的文件或目录                |
+|  128   | 退出时使用的参数无效 | 退出是用无效的退出码触发的（有效代码是 0-255 之间的整数） |
+|  134   |  异常终止 (SIGABRT)  |               容器使用 abort() 函数自行中止               |
+|  137   |  立即终止 (SIGKILL)  |            容器被操作系统通过 SIGKILL 信号终止            |
+|  139   |  分段错误 (SIGSEGV)  |           容器试图访问未分配给它的内存并被终止            |
+|  143   |  优雅终止 (SIGTERM)  |             容器收到即将终止的警告，然后终止              |
+|  255   |   退出状态超出范围   | 容器退出，返回可接受范围之外的退出代码，表示错误原因未知  |
+
 ### 3、查看日志
+
 ```
 docker logs <容器名称>                         #获取<容器名称>的日志
 docker logs -f --tail=10 <容器 ID>             #获取<容器 ID>的日志
@@ -311,9 +329,11 @@ docker run -d -it --name demo --mount source=/tmp1, destination=/tmp2
 
 ### 7、知识碎片
 
-在 Docker 中，`entrypoint`是用于设置容器启动时要运行的默认命令或脚本的指令。它定义了一个可执行文件或脚本，并将其作为容器的入口点。当容器启动时，该脚本会被自动执行。
+在 Docker 中，`entrypoint` 是用于设置容器启动时要运行的默认命令或脚本的指令。它定义了一个可执行文件或脚本，并将其作为容器的入口点。当容器启动时，该脚本会被自动执行。
 `entrypoint` 指令通常用于设置容器的主要进程或服务。例如，如果你创建了一个基于 NodeJS 的应用程序，可以使用 `entrypoint` 指定启动 Node 进程的命令和参数。当容器启动时，Node 进程将自动启动并开始提供你的应用程序服务。
 另外，通过在 `docker run` 命令中指定参数，你可以覆盖 `entrypoint` 中定义的默认命令或脚本，从而在启动容器时运行不同的命令或脚本。
+
+
 
 ## 四、Docker 仓库
 
@@ -354,6 +374,8 @@ docker push registry.cn-hangzhou.aliyuncs.com/weimmmhhh/images_demo:v1.0.0
 
 3. 百度云仓库
 
+镜像地址：https://mirror.baidubce.com
+
 ```
 docker login --username=20fe83c825d94766815bfeae696cb954 --password=root registry.baidubce.com
 docker tag portainer/portainer registry.baidubce.com/wwweeeiii/images_demo:v1.0.0
@@ -380,7 +402,11 @@ docker push ccr.ccs.tencentyun.com/weimmmhhh/demo:[tag]
 
 [华为云镜像地址](https://mirrors.huaweicloud.com/home)
 
-6. Gitlab 仓库
+6. 南京大学镜像
+
+镜像地址：https://docker.nju.edu.cn
+
+7. Gitlab 仓库
 
 GitLab用户名和密码来进行身份认证
 ```
@@ -492,6 +518,16 @@ cd awesome-compose/nginx-golang-mysql
 
 docker-compose up -d
 ```
+
+[docker-compose 可视化页面](https://github.com/louislam/dockge)
+
+docker-compose 和 docker compose 的区别
+
+[官方文档解释](https://docs.docker.com/compose/install/linux/)
+
+"Docker Compose" 和 "docker-compose" 实际上是指同一个工具，用于定义和运行多个 Docker 容器的应用程序。
+
+在较早的版本中，使用的是名为 "docker-compose" 的命令来操作 Docker Compose 工具。然而，从 Docker Compose 1.27 版本开始，官方将其命令更改为 "docker compose"，并将其作为 Docker CLI 的子命令。
 
 
 

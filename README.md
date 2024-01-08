@@ -14,6 +14,8 @@ sidebar_position: 1
 
 业内业余爱好都喜欢做笔记，把学到 + 理解 + 实践记录下来，部分内容非原创，大部分有备注参考资料，或者来源 ChatGPT，最终目标是形成知识体系，详细可查看[博客地址](https://iewiewiew.github.io/docs/)。
 
+![](./Mixinfo/img/wei-notebook.png)
+
 
 
 ## :sunny: 1、项目简介
