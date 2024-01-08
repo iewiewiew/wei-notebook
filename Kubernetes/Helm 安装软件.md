@@ -12,7 +12,7 @@
 [Helm 官方文档](https://helm.sh/zh/docs/)  
 [Helm 仓库](https://artifacthub.io/)  
 [bitnami charts](https://charts.bitnami.com/)  
-[Helm 包管理器](./Helm 包管理器.md)  
+[Helm 包管理器](./Helm.md)  
 
 
 
@@ -176,6 +176,27 @@ primary:
 EOF
 
 helm upgrade --install postgresql postgresql -f values-pord.yaml
+```
+
+Chart 仓库地址：https://artifacthub.io/packages/helm/bitnami/postgresql
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+helm repo update
+
+拉取压缩包
+helm pull bitnami/postgresql
+
+拉取安装包
+helm pull bitnami/postgresql --untar
+
+helm upgrade --install postgresql bitnami/postgresql --namespace myspace --create-namespace
+helm upgrade --install postgresql bitnami/postgresql -f your-values.yaml --namespace myspace --create-namespace
+
+kubectl get secret --namespace myspace postgresql -o jsonpath="{.data.postgres-password}" | base64 -d
+密码：n13x9Eafwl
+kubectl exec -it pod/postgresql-0 -n myspace -- bash
+psql --host 127.0.0.1 -U postgres -d postgres -p 5432
 ```
 
 

@@ -22,68 +22,69 @@
 12. du
 13. echo
 14. find
-15. fallocate
-16. free
-17. grep
-18. groupadd
-19. gzip
-20. history
-21. ifconfig
-22. jar
-23. kill
-24. last
-25. less
-26. ln
-27. locale
-28. lsblk
-29. lscpu
-30. lsof
-31. md5sum
-32. mkdir
-33. more
-34. mv
-35. netstat
-36. nohup
-37. nmon
-38. nslookup
-39. ping
-40. ps
-41. realpath
-42. rm
-43. rpm
-44. rsync
-45. scp
-46. sed
-47. service
-48. set
-49. sftp
-50. source
-51. ss
-52. ssh
-53. sha256sum
-54. sshpass
-55. su
-56. systemctl
-57. tar
-58. tcpdump
-59. top
-60. traceroute
-61. tree
-62. uid
-63. uname
-64. unzip
-65. useradd
-66. uuidgen
-67. vim
-68. wc
-69. whereis
-70. whoami
-71. yum
-72. zcat
-73. zless
-74. zmore
-75. zip
-76. Linux 查看硬件资源命令
+15. file
+16. fallocate
+17. free
+18. grep
+19. groupadd
+20. gzip
+21. history
+22. ifconfig
+23. jar
+24. kill
+25. last
+26. less
+27. ln
+28. locale
+29. lsblk
+30. lscpu
+31. lsof
+32. md5sum
+33. mkdir
+34. more
+35. mv
+36. netstat
+37. nohup
+38. nmon
+39. nslookup
+40. ping
+41. ps
+42. realpath
+43. rm
+44. rpm
+45. rsync
+46. scp
+47. sed
+48. service
+49. set
+50. sftp
+51. source
+52. ss
+53. ssh
+54. sha256sum
+55. sshpass
+56. su
+57. systemctl
+58. tar
+59. tcpdump
+60. top
+61. traceroute
+62. tree
+63. uid
+64. uname
+65. unzip
+66. useradd
+67. uuidgen
+68. vim
+69. wc
+70. whereis
+71. whoami
+72. yum
+73. zcat
+74. zless
+75. zmore
+76. zip
+77. Linux 查看硬件资源命令
 
 ---
 
@@ -227,6 +228,12 @@ echo 3 > /proc/sys/vm/drop_caches
 - find /tmp \(-name 'aa*' -o --name 'bb*' \) –print   #从 /tmp 目录开始往下找, 找寻文件名是 aa 开头或者 bb 开头的文件
 - find /tmp -name '*bak' -exec rm {} \;               #从 /tmp 目录开始往下找, 找到凡是文件名结尾为 bak 的文件, 把它删除掉。-exec 选项是执行的意思, rm 是删除命令, { } 表示文件名, “\;”是规定的命令结尾
 
+### file
+- file example.txt  #查看文件类型
+- file * #批量查看文件类型
+- file -r /path/to/directory #递归查看文件类型
+- file -i file.pdf #输出详细信息 通过使用 -i 或 --mime 选项，可以输出更详细的文件类型信息，包括 MIME 类型
+
 ### fallocate
 fallocate 命令是一个用于在 Linux 操作系统中预分配文件空间的实用工具。在文件系统中为文件预先分配一定大小的空间，而无需实际写入数据。
 `fallocate [OPTIONS] FILENAME`  
@@ -299,6 +306,11 @@ jar -cvfM0 demo.war demo  #将 demo 压缩成 demo.war
 ### locale
 - locale -a         #查看系统支持的语言
 说明：系统编码设置为 UTF-8，并支持中文。/etc/sysconfig/i18n 的LANG=en_US.UTF-8，在不重启的情况下重新加载 i18n 文件：source /etc/sysconfig/i18n。
+
+### lsd
+lsd 类似于 ls
+- snap install lsd  #安装 lsd
+- lsd -l            #这个命令会列出当前目录下的所有文件和目录。每个文件或目录都会显示一个与其类型相关的图标，以及一个特定的颜色。
 
 ### lsblk
 - lsblk           #列出块设备
@@ -375,7 +387,9 @@ md5sum tmp.txt
 - command &         #后台运行, 关掉终端会停止运行。
 说明：nohup 的作用可以将程序以忽略挂起信号（SIGHUP）的方式运行。常见的用法是和 & 命令一同使用, 将命令放置到后台运行, 即使终端挂掉, 进程会忽略挂起信号, 继续运行。
 
-### nmon
+### nmon  
+[nmon 下载地址](https://nmon.sourceforge.io/pmwiki.php?n=Site.Download)  
+`http://sourceforge.net/projects/nmon/files/nmon16e_mpginc.tar.gz`  
 - nmon           #监控系统资源
 
 ### nslookup
@@ -678,4 +692,20 @@ ipcs
 监控各进程的网络流量
 nethogs
 ```
+
+### 硬件相关
+ifconfig
+
+查看网卡速率
+ethtool <网卡名称>
+ethtool eth0
+
+查看 mac 地址
+ethtool -P <网卡名称>
+ethtool -P 
+
+查看网卡信息
+ethtool -m <网卡名称>
+ethtool -m eth0
+
 

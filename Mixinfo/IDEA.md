@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">IDEA</h1>
 
 > By：weimenghua  
@@ -68,6 +66,7 @@ File > Settings > Editor > File and Code Templates > Files > 添加如下模板 
 - Rainbow Brackets：彩虹括号
 - Database Navigator：数据库管理系统。因为和 IDEA 2022.1.3 版本不兼容，使用 Fork 版本：DatabaseHelper，使用结论是不如 DataGrip
 - CSV Editor：CSV 插件
+- Cool Request：接口测试插件
 - [通义零码](https://tongyi.aliyun.com/lingma/)  
 - [Bito](https://bito.ai/)
 - [CodeGeeX](https://codegeex.cn/)
@@ -109,3 +108,10 @@ File > Settings > Editor > File and Code Templates > Files > 添加如下模板 
    点击视图上方 Edit Configurations，选择 Run on remote 机器
 
 ![](./img/IDEA_Remote_Run.png)
+
+10. 指定义 java_error_in_idea.hprof 路径
+Help > Edit Custom VM Options... > idea.vmoptions
+```
+-XX:ErrorFile=$USER_HOME/software/tmp/java_error_in_idea_%p.log
+-XX:HeapDumpPath=$USER_HOME/software/tmp/java_error_in_idea.hprof
+```

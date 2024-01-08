@@ -342,12 +342,15 @@ kubectl get pod redis -o jsonpath="{.spec['containers','initContainers'][*].name
 
 4、进入容器
 kubectl exec -it pod/redis -n my-space -- bash
+
 需要密码
 kubectl --insecure-skip-tls-verify exec -it -n my-space redis --container redis -- bash
 redis-cli -a <password> <command>  # <command> 为 INFO、KEYS * ...
+
 合并为一行
 kubectl --insecure-skip-tls-verify exec -it -n my-space redis --container redis -- redis-cli -a <password>
-
+KEYS *   # 在控制台查询所有 key
+FLUSHALL # 在控制台清空所有 key
 
 5、验证
 redis-cli
@@ -554,6 +557,11 @@ kubectl get svc <postgresql-service-name> -n <namespace>
 
 使用 psql 命令连接到 PostgreSQL 数据库，执行命令后输入密码
 psql -h <postgresql-service-ip> -p <postgresql-service-port> -d <database-name> -U <username> -W
+
+\l            # 查看数据库
+\c <数据库名>  # 进入数据库
+\d            # 查看当前数据库下的表
+ABORT         # 退出当前事务
 ```
 
 
@@ -774,3 +782,8 @@ http://127.0.0.1:32204
 kubectl exec <kafka_pod_name> --cd kafka-topics --zookeeper <zookeeper_host>:<zookeeper_port> --list
 ```
 
+
+### 知识碎片
+连接 MySQL
+kubectl --insecure-skip-tls-verify exec -it -n <namespace> <pod_name> -- mysql -u<username> -p<password>
+show databases; # 在控制台查询数据库

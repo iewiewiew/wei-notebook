@@ -7,7 +7,7 @@
 > Description：
 
 
-## 一、
+## 一、如何定位慢 SQL
 查看是否开启慢查询
 `show variables like '%slow%';`
 

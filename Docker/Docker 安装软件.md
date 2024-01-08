@@ -229,6 +229,64 @@ docker logs -f ch-server
 docker rm -f ch-server
 ```
 
+### Docker 安装 Hive (未实践成功)
+
+[下载 Hive 仓库](https://github.com/big-data-europe/docker-hive)
+
+[在线体验 SQL](https://gethue.com/)
+
+```
+git clone https://github.com/big-data-europe/docker-hive.git
+
+cd docker-hive
+
+启动容器
+docker-compose up -d
+
+指定文件路径启动容器
+docker-compose -f docker-compose-hive.yml up -d
+
+连接到 Hive 容器
+docker exec -it docker-hive-hive-server-1 bash
+
+删除容器
+docker-compose down
+
+查找 Docker 主机的 IP 地址
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' docker-hive-hive-server-1
+
+实际上用主机ip
+jdbc:hive2://<docker-host-ip>:10000/default
+```
+
+在 Hive 容器中，运行 Hive 查询、创建表、加载数据等操作
+```
+进入 hive
+hive
+
+-- 创建一个示例表
+CREATE TABLE example_table (id INT, name STRING);
+
+-- 插入数据
+INSERT INTO example_table VALUES (1, 'Alice'), (2, 'Bob');
+
+-- 查询数据
+SELECT * FROM example_table;
+
+-- 测试
+create table pokes(foo INT, bar STRING);
+load data local inpath '/opt/hive/examples/files/kv1.txt' overwrite into table pokes;
+select * from pokes limit 10;
+```
+
+http://127.0.0.1:50070/
+
+![Hadoop Web](./img/hadoop_web.png)
+
+http://127.0.0.1:8080/
+
+![Hadoop Cluster](./img/hadoop_cluster.png)
+
 
 
 ## 监控
@@ -670,6 +728,14 @@ docker run -d --name kafka-map \
 
 2、访问
 http://127.0.0.1:9001/#/
+
+3、运行 kafka 可视化容器
+docker run -d --name kafdrop \
+    -p 9000:9000 \
+    --network kafka-network \
+    -e KAFKA_BROKERCONNECT=your_kafka_broker_address:9092 \
+    -e JVM_OPTS="-Xms32M -Xmx256M" \
+    obsidiandynamics/kafdrop
 ```
 
 

@@ -127,3 +127,117 @@ select connection_id();
 -- show slave status;
 -- show slave status \G;
 
+
+-- ---------------------------------------------------
+
+
+-- 索引缓冲区命中率（InnoDB Buffer Pool Hit Rate）= Innodb_buffer_pool_reads/Innodb_buffer_pool_read_requests
+SHOW GLOBAL STATUS LIKE 'Innodb_buffer_pool_reads';
+SHOW GLOBAL STATUS LIKE 'Innodb_buffer_pool_read_requests';
+
+-- 线程缓存命中率（Thread Cache Hit Rate）= (1 - Threads_created / Connections) * 100
+SHOW GLOBAL STATUS LIKE 'Threads_created';
+SHOW GLOBAL STATUS LIKE 'Connections';
+
+-- 表缓存命中率（Table Cache Hit Rate）= (1 - Opened_tables / Open_tables) * 100
+SHOW GLOBAL STATUS LIKE 'Opened_tables';
+SHOW GLOBAL STATUS LIKE 'Open_tables';
+
+-- 查询缓存命中率（Query Cache Hit Rate）= Qcache_hits / Com_select * 100
+SHOW GLOBAL STATUS LIKE 'Qcache_hits';
+SHOW GLOBAL STATUS LIKE 'Com_select';
+
+
+-- ---------------------------------------------------
+
+
+-- 统计表中的缺失值数量
+SELECT COUNT(*) AS missing_count
+FROM your_table
+WHERE your_column IS NULL;
+
+-- 删除具有缺失值的行
+DELETE FROM your_table
+WHERE your_column IS NULL;
+
+-- 用平均值填充缺失值
+UPDATE your_table
+SET your_column = (SELECT AVG(your_column) FROM your_table WHERE your_column IS NOT NULL)
+WHERE your_column IS NULL;
+
+-- 统计重复行
+SELECT your_column, COUNT(*)
+FROM your_table
+GROUP BY your_column
+HAVING COUNT(*) > 1;
+
+-- 删除重复行
+WITH DuplicateCTE AS (
+    SELECT your_column, ROW_NUMBER() OVER (PARTITION BY your_column ORDER BY your_column) AS row_num
+    FROM your_table
+)
+DELETE FROM DuplicateCTE
+WHERE row_num > 1;
+
+-- 将列值转换为大写
+UPDATE your_table
+SET your_column = UPPER(your_column);
+
+-- 去除前导和尾随空格
+UPDATE your_table
+SET your_column = TRIM(your_column);
+
+-- 将字符串列转换为整数
+ALTER TABLE your_table
+ALTER COLUMN your_column TYPE INTEGER
+USING your_column::INTEGER;
+
+-- 将字符串日期列转换为日期类型
+ALTER TABLE your_table
+ALTER COLUMN your_date_column TYPE DATE
+USING TO_DATE(your_date_column, 'YYYY-MM-DD');
+
+
+-- ---------------------------------------------------
+
+
+-- 1 窗口函数 窗口函数是指在SQL查询中对一组相关行进行聚合或运算操作的函数。窗口函数可以在不改变基本表的情况下，为查询结果添加额外的计算列。举个例子，使用SUM()函数与OVER()子句计算销售额的运行总和。
+SELECT date, sales,
+       SUM(sales) OVER (ORDER BY date) AS running_total
+FROM sales_data;
+
+-- 2 公共表表达式（CTEs）CTE（Common Table Expressions，公共表表达式）是一种在SQL查询中创建临时结果集的方法，可以被多次引用，提高查询的可读性和可维护性。以下是如何使用CTE计算每个产品类别的总收入的示例。
+WITH category_revenue AS (
+    SELECT category, SUM(revenue) AS total_revenue
+    FROM sales
+    GROUP BY category
+)
+SELECT * FROM category_revenue;
+
+-- 3 递归查询 递归查询能够帮助分析师遍历层次化数据结构，如组织图或物料清单。假设这里有一个表示员工关系的表，想查找某个经理的所有下属：
+WITH RECURSIVE subordinates AS (
+    SELECT employee_id, name, manager_id
+    FROM employees
+    WHERE manager_id = 'manager_id_of_interest'
+    UNION ALL
+    SELECT e.employee_id, e.name, e.manager_id
+    FROM employees e
+    JOIN subordinates s ON e.manager_id = s.employee_id
+)
+SELECT * FROM subordinates;
+
+-- 4 透视表 透视表将行转换为列，以表格形式汇总数据。比如，有一个包含销售数据的表格，想通过数据透视来显示每个产品在不同月份的总销售额：
+SELECT *
+FROM (
+         SELECT product, month, sales
+         FROM sales_data
+     ) AS source_table
+    PIVOT (
+              SUM(sales)
+              FOR month IN ('Jan', 'Feb', 'Mar', 'Apr', 'May')
+          ) AS pivot_table;
+
+-- 5 分析函数 分析函数根据一组记录计算汇总值。例如，可以使用 ROW_NUMBER() 函数为数据集中的每条记录分配唯一的行号。
+SELECT customer_id, order_id,
+       ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_rank
+FROM orders;
