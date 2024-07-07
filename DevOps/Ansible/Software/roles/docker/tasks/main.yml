@@ -1,0 +1,17 @@
+---
+
+- name: Detect docker
+  stat:
+    path: /var/run/docker.sock
+  register: docker_sock
+
+- name: Check docker
+  debug:
+    msg: "Docker exsits: {{ docker_sock.stat.exists }}"
+
+- include_tasks: install.yml
+  when: not docker_sock.stat.exists # 检测docker是否已安装
+
+
+
+

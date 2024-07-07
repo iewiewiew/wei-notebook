@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">Sonar</h1>
 
 > By：weimenghua  
@@ -14,7 +12,7 @@
 
 
 
-### 一、Sonar 搭建
+### 1. Sonar 搭建
 
 Docker 安装 Sonar  
 [sonarqube](https://hub.docker.com/_/sonarqube)
@@ -39,19 +37,19 @@ http://127.0.0.1:9100/
 
 
 
-### 二、Sonar 使用
+### 2. Sonar 使用
 
 安装中文插件
 
-![](img/Sonar%20插件.png)
+![](images/Sonar%20插件.png)
 
 新增项目
 
-![](img/新增项目.png)
+![](images/新增项目.png)
 
 在项目下创建令牌
 
-![](img/创建令牌.png)
+![](images/创建令牌.png)
 
 扫描 Java 项目的 Sonar 命令
 
@@ -64,22 +62,22 @@ mvn sonar:sonar \
 
 扫描结果
 
-![](img/扫描结果.png)
+![](images/扫描结果.png)
 
 
 
-### 三、Sonar 集成 Jenkins
+### 3. Sonar 集成 Jenkins
 
 1、安装 [SonarQube Scanner](https://plugins.jenkins.io/sonar) 插件
 
 2、系统管理 > 系统 > SonarQube servers ，添加 Server URL 和 Server authotication token，Server authotication token 类型选择 Secret text，其中 token 获取参考【在项目下创建令牌】
 
-![](img/SonarQube%20server%20配置.png)
+![](images/SonarQube%20server%20配置.png)
 
 
 
 3、系统管理 > 全局工具配置 > SonarQube Scanner，选择 SonarQube Scanner 版本
 
-![](img/SonarQube%20Scanner.png)
+![](images/SonarQube%20Scanner.png)
 
 4、job 编译时增加：clean compile -U $SONAR_MAVEN_GOAL（待补充）

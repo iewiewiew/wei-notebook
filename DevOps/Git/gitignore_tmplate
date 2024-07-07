@@ -1,0 +1,14 @@
+
+# IDE
+.cursor
+.idea
+.trae
+.qoder
+.vscode
+
+.DS_Store
+.venv
+.vercel
+.obsidian
+
+**__pycache__

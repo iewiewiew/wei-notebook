@@ -1,0 +1,3 @@
+jdk_dir: /root/jdk
+jdk_file_name: jdk-8u202-linux-x64.tar.gz
+java_home: /root/jdk/jdk1.8.0_202

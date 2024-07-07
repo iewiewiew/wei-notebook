@@ -1,0 +1,18 @@
+---
+
+- hosts: master
+  remote_user: root
+  roles:
+  #  - ant
+  #  - docker
+  #  - git
+  #  - jdk
+  # - jmeter
+    - python3
+
+
+# - hosts: node
+#  remote_user: root
+#  roles:
+  #  - ant
+

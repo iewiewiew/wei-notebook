@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">Zookeeper</h1>
 
 > By：weimenghua  
@@ -10,9 +8,9 @@
 
  
 
-## 一、环境搭建
+## 1. 环境搭建
 
-**1、下载并解压 zookeeper**
+1、下载并解压 zookeeper   
 1.1、下载 zookeeper
 
 ```
@@ -23,8 +21,8 @@ wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.5.6/apache-zookeeper-
 1.2、解压 tar 包到/usr/local/zookeeper/
 tar -zxvf zookeeper-3.5.6.tar.gz  -C /usr/local/zookeeper/
 
-**2、配置 zoo.cfg**
-2.1、进入 conf 目录，复制 zoo_sample.cfg 并命名为 zoo.cfg
+2、配置 zoo.cfg  
+2.1、进入 conf 目录，复制 zoo_sample.cfg 并命名为 zoo.cfg  
 cd /usr/local/zookeeper/zookeeper-3.5.6/conf/ && cp zoo_sample.cfg zoo.cfg
 
 2.2、创建 dataDir 和 logDir
@@ -57,7 +55,7 @@ vim myid，在对应的 IP 的机器上输入对应的编号，如在127.0.0.1�
 2.5、连接数设置
 maxClientCnxns=60   #注意：设置最大连接数为1024,如果服务大于连接数则会导致部分服务连不上 zk        
 
-**3、配置环境变量（可选）**
+3、配置环境变量（可选）  
 vim /etc/profile，添加如下配置： 
 export ZOOKEEPER=/usr/local/zookeeper  
 export PATH=$PATH:$ZOOKEEPER/bin  
@@ -65,7 +63,7 @@ export PATH=$PATH:$ZOOKEEPER/bin
 使用 source 命令立即生效，刷新环境变量：  
 source /etc/profile
 
-**4、启动 zookeeper**
+4、启动 zookeeper  
 因为配置了环境变量，所以在任意目录下都可以运行以下启动命令启动 Zookeeper
 zkServer.sh start  
 zkServer.sh status  
@@ -79,19 +77,19 @@ cd /usr/local/zookeeper/bin
 如果是连接多个不同的主机节点，可以使用如下命令：  
 ./zkCli.sh -server 127.0.0.1:2888
 
-**5、启动 zookeeper 客户端**
+5、启动 zookeeper 客户端  
 ./zkCli.sh   //启动客户端  
 ls /             //查看 zookeeper 节点
 
 
 
+## 2. 常用命令
 
-## 二、常用命令
-**2.1、连接 zookeeper 服务**
+2.1、连接 zookeeper 服务  
 连接本机 zookeeper 服务：`./zkCli.sh`  
 连接远程 zookeeper 服务：`./zkCli.sh -server ip:port （./zkCli.sh -server 127.0.0.1:2181）`
 
-**2.2、zookeeper 常用命令**
+2.2、zookeeper 常用命令  
 列出 zookeeper 根节点：`ls /`  
 列出 zookeeper dubbo 节点：`ls /dubbo`  
 获取节点信息：`get /dubbo`  
@@ -100,7 +98,7 @@ ls /             //查看 zookeeper 节点
 创建节点：`create /tmp 123` （注：节点后面得有值，如：123，节点值就是123，可设置""）  
 退出 zkCli：`quit`
 
-**znode 的状态信息**
+znode 的状态信息  
 每个 znode 的状态信息包含以下内容：  
 
 - czxid，创建（create）该 znode 的 zxid  
@@ -117,7 +115,8 @@ ls /             //查看 zookeeper 节点
 
 
 
-## 三、调用过程
+## 3. 调用过程
+
 注册中心的调用过程
 1. 服务提供者启动时，会将自己的服务信息(服务名称/IP 地址/端口号等)写入注册中心。
 2. 当注册中心接收提供者数据时，会动态的维护服务列表数据。

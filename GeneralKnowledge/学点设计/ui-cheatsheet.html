@@ -1,0 +1,2186 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>组件速查 · 新人设计师教学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:#FFFFFF;
+    --card:#F2F7F6;
+    --card-line:#DEEBE8;
+    --ink:#132420;
+    --ink-2:#5E7570;
+    --ink-3:#9DB2AC;
+    --accent:#0FA968;
+    --accent-dark:#0B8A55;
+    --accent-soft:#DEF5E9;
+    --accent-blue:#2F7DE0;
+    --accent-blue-soft:#E1EDFD;
+    --pill-bg:#FFFFFF;
+    --pill-line:#DCE9E5;
+    --radius-card:16px;
+    --radius-s:8px;
+    --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --sans:'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--page);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+
+  .topbar{
+    display:flex;align-items:center;gap:16px;
+    padding:22px 40px;border-bottom:1px solid var(--card-line);
+  }
+  .logo{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;}
+  .brand{font-weight:700;font-size:15px;}
+  .brand small{display:block;font-weight:400;font-size:11.5px;color:var(--ink-2);font-family:var(--mono);}
+
+  .hero{padding:40px 40px 8px;max-width:760px;}
+  .hero h1{font-size:26px;margin:0 0 10px;font-weight:700;}
+  .hero p{font-size:14px;line-height:1.8;color:var(--ink-2);margin:0;}
+
+  .filters{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:24px 40px;
+  }
+  .pill{
+    font-family:var(--sans);font-size:13.5px;font-weight:500;
+    background:var(--pill-bg);border:1px solid var(--pill-line);color:var(--ink-2);
+    padding:8px 16px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .pill .n{font-size:12px;opacity:.8;}
+  .pill:hover{border-color:var(--accent);color:var(--ink);}
+  .pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .pill.active .n{opacity:.85;}
+
+  .count-line{padding:0 40px 4px;font-family:var(--mono);font-size:12px;color:var(--ink-3);}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(232px, 1fr));
+    gap:16px;
+    padding:16px 40px 100px;
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius-card);
+    overflow:hidden;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:border-color .15s;
+  }
+  .card:hover{border-color:var(--accent);}
+  .card.expanded{border-color:var(--accent);}
+  .card[hidden]{display:none;}
+
+  .demo{
+    height:150px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding:16px;
+  }
+
+  .info{
+    padding:14px 16px 16px;border-top:1px solid var(--card-line);position:relative;
+  }
+  .info .row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+  .info .name{font-weight:700;font-size:14.5px;}
+  .info .en{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);}
+  .tag{
+    margin-left:auto;font-family:var(--sans);font-size:11px;color:var(--ink-2);
+    background:#fff;border:1px solid var(--card-line);padding:2px 8px;border-radius:999px;
+  }
+  .desc{font-size:12.5px;color:var(--ink-2);line-height:1.6;margin:0;}
+
+  .detail{
+    max-height:0;overflow:hidden;transition:max-height .25s ease;
+    background:#fff;
+  }
+  .card.expanded .detail{max-height:600px;}
+  .detail-inner{padding:16px;border-top:1px solid var(--card-line);}
+  .detail .label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-dark);margin-bottom:5px;}
+  .detail p{font-size:12.5px;line-height:1.75;color:var(--ink-2);margin:0 0 12px;}
+  .detail p:last-of-type{margin-bottom:12px;}
+  .detail pre{
+    margin:0;background:var(--card);border-radius:10px;padding:12px 14px;
+    font-family:var(--mono);font-size:11.5px;line-height:1.7;color:#3A3A34;overflow-x:auto;white-space:pre;
+  }
+  .hint{padding:0 16px 14px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);}
+
+  /* ---------- demo widgets ---------- */
+  .btn{font-family:var(--sans);font-size:13px;font-weight:600;border-radius:9px;padding:9px 16px;border:1px solid transparent;cursor:pointer;transition:transform .12s ease-out;}
+  .btn:active{transform:scale(.96);}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-secondary{background:#fff;color:var(--ink);border-color:var(--card-line);}
+  .btn-ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent);}
+  .icon-btn{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid var(--card-line);background:#fff;color:var(--ink-2);cursor:pointer;}
+  .icon-btn.filled{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  .tabs-demo{display:flex;gap:16px;position:relative;font-size:13px;}
+  .tab-btn{background:none;border:none;font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink-3);padding:0 0 8px;cursor:pointer;position:relative;}
+  .tab-btn.active{color:var(--ink);}
+  .tab-btn.active::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--accent);}
+
+  .crumb{font-size:13px;color:var(--ink-3);}
+  .crumb b{color:var(--ink);font-weight:600;}
+
+  .dropdown{position:relative;}
+  .dropdown-btn{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--card-line);border-radius:9px;padding:8px 14px;font-size:13px;cursor:pointer;}
+  .dropdown-menu{position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1px solid var(--card-line);border-radius:10px;padding:6px;width:120px;box-shadow:0 8px 20px rgba(0,0,0,.08);display:none;}
+  .dropdown.open .dropdown-menu{display:block;}
+  .dropdown-item{padding:7px 10px;font-size:12.5px;border-radius:6px;color:var(--ink-2);}
+  .dropdown-item:hover{background:var(--accent-soft);color:var(--accent-dark);}
+
+  .pagination{display:flex;gap:6px;}
+  .page-btn{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12.5px;background:#fff;border:1px solid var(--card-line);color:var(--ink-2);cursor:pointer;}
+  .page-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  .menu-demo{background:#fff;border:1px solid var(--card-line);border-radius:10px;padding:6px;width:150px;}
+  .menu-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;font-size:12.5px;color:var(--ink-2);}
+  .menu-item.active{background:var(--accent);color:#fff;}
+  .menu-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+  .steps-demo{display:flex;align-items:center;}
+  .step-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:#fff;border:2px solid var(--card-line);color:var(--ink-3);}
+  .step-dot.done{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .step-dot.now{border-color:var(--accent);color:var(--accent);}
+  .step-line{width:34px;height:2px;background:var(--card-line);}
+  .step-line.done{background:var(--accent);}
+
+  .pagehead-demo{background:#fff;border:1px solid var(--card-line);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;width:210px;}
+  .pagehead-demo .t{font-size:13px;font-weight:600;flex:1;}
+
+  .input-wrap{display:flex;flex-direction:column;gap:6px;width:190px;}
+  .input-wrap label{font-size:11.5px;color:var(--ink-2);font-weight:500;}
+  .input-el{font-family:var(--sans);font-size:13px;padding:9px 11px;border:1.5px solid var(--card-line);border-radius:8px;outline:none;background:#fff;transition:border-color .15s, box-shadow .15s;}
+  .input-el:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+
+  .select-el{font-family:var(--sans);font-size:13px;padding:9px 11px;border:1.5px solid var(--card-line);border-radius:8px;background:#fff;width:170px;display:flex;justify-content:space-between;color:var(--ink-2);}
+
+  .radio-row{display:flex;flex-direction:column;gap:10px;}
+  .radio-opt{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);}
+  .radio-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--card-line);display:flex;align-items:center;justify-content:center;background:#fff;}
+  .radio-dot.sel{border-color:var(--accent);}
+  .radio-dot.sel::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);}
+
+  .check-row{display:flex;flex-direction:column;gap:10px;}
+  .check-opt{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);}
+  .check-box{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--card-line);display:flex;align-items:center;justify-content:center;background:#fff;font-size:11px;color:#fff;}
+  .check-box.sel{background:var(--accent);border-color:var(--accent);}
+
+  .tag-pill{font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;}
+  .tag-success{background:var(--accent-soft);color:var(--accent-dark);}
+  .tag-neutral{background:#fff;color:var(--ink-2);border:1px solid var(--card-line);}
+
+  .toggle{width:38px;height:22px;border-radius:999px;background:#DEDCD4;position:relative;cursor:pointer;transition:background .18s;}
+  .toggle .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .18s;}
+  .toggle.on{background:var(--accent);}
+  .toggle.on .knob{transform:translateX(16px);}
+
+  .demo-card{width:150px;background:#fff;border:1px solid var(--card-line);border-radius:12px;padding:14px;transition:transform .18s ease-out, box-shadow .18s ease-out, border-color .18s ease-out;}
+  .demo-card:hover{transform:translateY(-4px);box-shadow:0 14px 26px rgba(20,20,15,.10);border-color:var(--accent);}
+  .demo-card .t{font-weight:600;font-size:12.5px;margin-bottom:3px;}
+  .demo-card .s{font-size:11px;color:var(--ink-2);}
+
+  .sk-line{height:10px;border-radius:6px;background:linear-gradient(90deg,#E7E6E2 25%,#F6F6F4 37%,#E7E6E2 63%);background-size:400% 100%;animation:shimmer 1.4s ease-in-out infinite;margin-bottom:7px;}
+  @keyframes shimmer{0%{background-position:100% 0;}100%{background-position:-100% 0;}}
+
+  .stagger-item{height:22px;border-radius:6px;background:var(--accent-soft);opacity:0;transform:translateY(8px);transition:opacity .4s ease-out, transform .4s ease-out;margin-bottom:6px;width:150px;}
+  .stagger-item.in{opacity:1;transform:translateY(0);}
+  .reveal-item.in{ opacity:1 !important; transform:translateY(0) scale(1) !important; }
+
+  .ripple-btn{position:relative;overflow:hidden;background:var(--ink);color:#fff;border:none;font-family:var(--sans);font-size:13px;font-weight:600;padding:10px 20px;border-radius:9px;cursor:pointer;}
+  .ripple-span{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:ripple .5s ease-out forwards;pointer-events:none;}
+  @keyframes ripple{to{transform:scale(2.6);opacity:0;}}
+
+  .grid12-demo{width:100%;max-width:210px;display:grid;grid-template-columns:repeat(12,1fr);gap:4px;}
+  .grid12-demo div{height:16px;background:var(--accent-soft);border-radius:3px;}
+
+  .sidebar-demo{width:200px;height:100px;display:grid;grid-template-columns:54px 1fr;border:1px solid var(--card-line);border-radius:10px;overflow:hidden;}
+  .sidebar-demo .sb{background:#EDECE8;padding:8px 5px;display:flex;flex-direction:column;gap:5px;}
+  .sidebar-demo .sb div{height:5px;border-radius:3px;background:var(--ink-3);}
+  .sidebar-demo .main{background:#fff;padding:8px;display:flex;flex-direction:column;gap:5px;}
+  .sidebar-demo .main div{height:6px;border-radius:3px;background:var(--accent-soft);}
+  .sidebar-demo .main div:first-child{width:50%;background:var(--accent);}
+
+  .bento-demo{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,34px);gap:5px;width:200px;}
+  .bento-demo .b1{grid-column:span 2;grid-row:span 2;background:var(--accent);}
+  .bento-demo .b2{grid-column:span 2;background:#F3C7B7;}
+  .bento-demo .b3,.bento-demo .b4{background:var(--accent-soft);}
+  .bento-demo > div{border-radius:7px;}
+
+  .elev-row{display:flex;gap:16px;}
+  .elev-box{width:48px;height:48px;background:#fff;border-radius:10px;}
+  .elev-sm{box-shadow:0 1px 2px rgba(20,20,15,.10);}
+  .elev-md{box-shadow:0 4px 10px rgba(20,20,15,.12);}
+  .elev-lg{box-shadow:0 10px 22px rgba(20,20,15,.14);}
+
+  .radius-row{display:flex;gap:12px;align-items:center;}
+  .radius-box{width:38px;height:38px;background:var(--accent-soft);}
+
+  .spacing-col{display:flex;flex-direction:column;gap:6px;}
+  .spacing-bar-row{display:flex;align-items:center;gap:8px;}
+  .spacing-bar{height:8px;background:var(--accent);border-radius:3px;}
+  .spacing-num{font-family:var(--mono);font-size:10px;color:var(--ink-3);width:24px;}
+
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  @keyframes breathe{
+    0%,100%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.4); opacity:.5; }
+  }
+  @keyframes scalein{
+    0%{ transform:scale(.85); opacity:.6; }
+    50%{ transform:scale(1); opacity:1; }
+  }
+  @keyframes bounce{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-10px); }
+  }
+  @keyframes pulseglow{
+    to{ box-shadow:0 0 0 10px rgba(15,169,104,0); }
+  }
+  @keyframes flash{ 50%{ opacity:.45; } }
+  @keyframes marquee{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  @keyframes blink{ 50%{ border-color:transparent; } }
+  @keyframes gradientmove{ to{ background-position:200% 0; } }
+  @keyframes signal{ 50%{ transform:scaleY(.4); } }
+  @keyframes parallaxback{ 50%{ transform:translateX(6px); } }
+  @keyframes parallaxfront{ 50%{ transform:translateX(-10px); } }
+  @keyframes shine{ to{ left:130%; } }
+  @keyframes dotbounce{ 0%,80%,100%{transform:translateY(0);} 40%{transform:translateY(-6px);} }
+  @keyframes dividershine{ from{left:-10%;} to{left:110%;} }
+  @keyframes floaty{ 50%{ transform:translateY(-10px); } }
+  @keyframes wiggle{
+    0%,92%,100%{ transform:rotate(0); }
+    94%{ transform:rotate(-12deg); } 96%{ transform:rotate(10deg); } 98%{ transform:rotate(-6deg); }
+  }
+  @keyframes logoscroll{ to{ transform:translateX(-50%); } }
+  @keyframes danmu{ from{ left:100%; } to{ left:-60%; } }
+  .fade-box.fade-show{ opacity:1 !important; transform:translateY(0) !important; }
+
+  @media (max-width:640px){
+    .topbar,.hero,.filters,.count-line,.grid{padding-left:20px;padding-right:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">D</div>
+  <div class="brand">组件速查<small>UI DICTIONARY FOR JUNIOR DESIGNERS</small></div>
+</div>
+
+<div class="hero">
+  <h1>组件、动画与布局，一屏速览</h1>
+  <p>点击任意卡片展开教学说明——适用场景、关键数值细节、可复制的代码片段。新人可以先模仿一个具体组件，再逐渐建立起对间距、圆角、动效节奏的判断力。主题色采用清新的蓝绿双色系，绿色作主操作色，蓝色作辅助点缀。</p>
+</div>
+
+<div class="filters" id="filters">
+  <button class="pill active" data-cat="all">全部 <span class="n">100</span></button>
+  <button class="pill" data-cat="component">组件 <span class="n">48</span></button>
+  <button class="pill" data-cat="animation">动画 <span class="n">38</span></button>
+  <button class="pill" data-cat="layout">布局 <span class="n">10</span></button>
+  <button class="pill" data-cat="token">设计令牌 <span class="n">4</span></button>
+</div>
+
+<div class="grid" id="grid">
+
+  <!-- 按钮 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <button class="btn btn-primary">主按钮</button>
+      <button class="btn btn-secondary">次按钮</button>
+      <button class="btn btn-ghost">幽灵</button>
+    </div>
+    <div class="info"><div class="row"><span class="name">按钮</span><span class="en">Button</span><span class="tag">组件</span></div><p class="desc">用于开始一个即时操作</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>一个区域内通常只有一个主按钮，其余用次按钮或幽灵按钮承载优先级更低的操作。</p>
+      <div class="label">关键细节</div>
+      <p>五态齐全：默认/hover/active/focus/disabled；点击态用 scale(.96) 而不仅是变色。</p>
+      <div class="label">代码</div>
+      <pre>.btn-primary{
+  background: var(--accent);
+  transition: transform .12s ease-out;
+}
+.btn-primary:active{ transform: scale(.96); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 图标按钮 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="icon-btn filled">＋</div>
+      <div class="icon-btn">✎</div>
+      <div class="icon-btn">🗑</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">图标按钮</span><span class="en">Icon Button</span><span class="tag">组件</span></div><p class="desc">仅用图标表达的紧凑操作</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>工具栏、表格行内操作等空间紧张、语义足够通用（增/删/改）的场景。</p>
+      <div class="label">关键细节</div>
+      <p>点击区域不小于 36×36px，即使图标本身更小；仅一个"强调操作"用填充色，其余用描边或纯图标。</p>
+      <div class="label">代码</div>
+      <pre>.icon-btn{
+  width:36px;height:36px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+.icon-btn.filled{ background:var(--accent); color:#fff; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 标签页 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="tabs-demo">
+        <button class="tab-btn active">概览</button>
+        <button class="tab-btn">详情</button>
+        <button class="tab-btn">评论</button>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">标签页</span><span class="en">Tabs</span><span class="tag">组件</span></div><p class="desc">在同一区域内切换不同视图</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>同一层级、少量（2-5个）视图之间切换，切换后内容整体替换而非叠加。</p>
+      <div class="label">关键细节</div>
+      <p>选中态的下划线从上一个位置滑动过去，而非瞬间跳变，提升高级感。</p>
+      <div class="label">代码</div>
+      <pre>.tab-btn.active::after{
+  content:''; position:absolute; left:0; right:0; bottom:0;
+  height:2px; background:var(--accent);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 面包屑 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <span class="crumb">首页 / 组件 / <b>导航</b></span>
+    </div>
+    <div class="info"><div class="row"><span class="name">面包屑</span><span class="en">Breadcrumb</span><span class="tag">组件</span></div><p class="desc">显示当前页面所在路径</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>层级较深（3层以上）的信息结构里，帮助用户理解自己的位置并快速返回上级。</p>
+      <div class="label">关键细节</div>
+      <p>只有最后一项（当前页）加粗且不可点击，其余项都是可点击的浅色文字。</p>
+      <div class="label">代码</div>
+      <pre>.crumb b{ color:var(--ink); font-weight:600; }
+.crumb a{ color:var(--ink-3); cursor:pointer; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 下拉菜单 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="dropdown" onclick="event.stopPropagation(); this.classList.toggle('open')">
+        <div class="dropdown-btn">菜单 ⌄</div>
+        <div class="dropdown-menu">
+          <div class="dropdown-item">编辑</div>
+          <div class="dropdown-item">复制</div>
+          <div class="dropdown-item">删除</div>
+        </div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">下拉菜单</span><span class="en">Dropdown</span><span class="tag">组件</span></div><p class="desc">收纳更多操作的下拉菜单</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>把 3 个以上不常用、优先级低的操作收进一个入口，避免按钮堆满整行。</p>
+      <div class="label">关键细节</div>
+      <p>菜单展开方向要检测视口边界；选中/hover 项用浅色背景块而不是仅变色文字。</p>
+      <div class="label">代码</div>
+      <pre>.dropdown-menu{
+  position:absolute; top:calc(100% + 6px);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 分页 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="pagination">
+        <div class="page-btn">‹</div>
+        <div class="page-btn">1</div>
+        <div class="page-btn active">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">…</div>
+        <div class="page-btn">›</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">分页</span><span class="en">Pagination</span><span class="tag">组件</span></div><p class="desc">分隔长列表并按页加载</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>数据量大、用户有明确"翻页"心智的列表（订单、日志），区别于无限滚动。</p>
+      <div class="label">关键细节</div>
+      <p>页码超过 7 个时用省略号折叠中间页码，只保留首页、尾页和当前页附近。</p>
+      <div class="label">代码</div>
+      <pre>.page-btn.active{
+  background:var(--accent); color:#fff;
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 导航菜单 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="menu-demo">
+        <div class="menu-item active"><span class="menu-dot"></span>仪表盘</div>
+        <div class="menu-item"><span class="menu-dot"></span>订单</div>
+        <div class="menu-item"><span class="menu-dot"></span>设置</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">导航菜单</span><span class="en">Menu</span><span class="tag">组件</span></div><p class="desc">为页面提供导航的菜单</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>侧边栏一级/二级导航，帮助用户在多个功能模块间切换。</p>
+      <div class="label">关键细节</div>
+      <p>当前项用整块背景色而不仅是文字变色，命中区域覆盖整行，方便点击。</p>
+      <div class="label">代码</div>
+      <pre>.menu-item.active{
+  background:var(--accent); color:#fff; border-radius:7px;
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 步骤条 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="steps-demo">
+        <div class="step-dot done">✓</div>
+        <div class="step-line done"></div>
+        <div class="step-dot now">2</div>
+        <div class="step-line"></div>
+        <div class="step-dot">3</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">步骤条</span><span class="en">Steps</span><span class="tag">组件</span></div><p class="desc">引导用户按流程逐步完成</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>多步骤表单（下单、入驻申请）中，让用户知道"现在第几步、还剩几步"。</p>
+      <div class="label">关键细节</div>
+      <p>已完成用实心+对勾，当前用描边高亮，未来用纯灰，连接线随进度变色。</p>
+      <div class="label">代码</div>
+      <pre>.step-dot.done{ background:var(--accent); color:#fff; }
+.step-dot.now{ border-color:var(--accent); color:var(--accent); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 页头 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="pagehead-demo">
+        <span>‹</span>
+        <span class="t">订单详情</span>
+        <button class="btn btn-primary" style="padding:6px 12px;font-size:12px;">保存</button>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">页头</span><span class="en">Page Header</span><span class="tag">组件</span></div><p class="desc">介绍页面信息并承载操作</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>详情页、编辑页顶部，承载返回、标题和该页面最主要的一个操作。</p>
+      <div class="label">关键细节</div>
+      <p>只放一个主操作按钮，其余次要操作收进右上角的更多菜单，避免头部拥挤。</p>
+      <div class="label">代码</div>
+      <pre>.page-header{
+  display:flex; align-items:center; gap:10px;
+}
+.page-header .title{ flex:1; font-weight:600; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 输入框 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="input-wrap">
+        <label>邮箱</label>
+        <input class="input-el" value="you@vibe.com" />
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">输入框</span><span class="en">Input</span><span class="tag">组件</span></div><p class="desc">接收用户的文本输入</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>需要清楚传达"可以输入""正在输入""输入错了"三种状态的表单场景。</p>
+      <div class="label">关键细节</div>
+      <p>focus 态用描边+浅色外发光，而不仅是变色；label 常驻在框上方而非消失型 placeholder。</p>
+      <div class="label">代码</div>
+      <pre>.input-el:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 选择器 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="select-el"><span>选择城市</span><span>⌄</span></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">选择器</span><span class="en">Select</span><span class="tag">组件</span></div><p class="desc">从预设选项中选择一项</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>选项数量较多（5个以上）、不适合用单选按钮平铺展示的场景。</p>
+      <div class="label">关键细节</div>
+      <p>未选择时用浅灰占位文字，已选择后颜色变深，和输入框的视觉分量保持一致。</p>
+      <div class="label">代码</div>
+      <pre>.select{
+  display:flex; justify-content:space-between;
+  border:1.5px solid var(--line);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 单选框 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="radio-row">
+        <div class="radio-opt"><span class="radio-dot sel"></span>选项 A</div>
+        <div class="radio-opt"><span class="radio-dot"></span>选项 B</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">单选框</span><span class="en">Radio</span><span class="tag">组件</span></div><p class="desc">互斥选项中选择唯一一项</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>选项数量少（2-5个）且互斥，需要让用户一眼看到全部选项再决策。</p>
+      <div class="label">关键细节</div>
+      <p>整行文字都应可点击，命中区域不要只局限在圆点本身，方便触屏点击。</p>
+      <div class="label">代码</div>
+      <pre>.radio-dot.sel::after{
+  content:''; width:8px; height:8px;
+  border-radius:50%; background:var(--accent);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 复选框 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="check-row">
+        <div class="check-opt"><span class="check-box sel">✓</span>已选中</div>
+        <div class="check-opt"><span class="check-box"></span>未选中</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">复选框</span><span class="en">Checkbox</span><span class="tag">组件</span></div><p class="desc">在多个选项中选择任意数量</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>可以多选、或需要一个独立"是/否"确认项（如同意协议）的场景。</p>
+      <div class="label">关键细节</div>
+      <p>选中态用实心背景+对勾图标，圆角比单选框更方（4-6px），和圆形单选做出区分。</p>
+      <div class="label">代码</div>
+      <pre>.check-box.sel{
+  background:var(--accent); border-color:var(--accent);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 标签/徽标 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <span class="tag-pill tag-success">已完成</span>
+      <span class="tag-pill tag-neutral">草稿</span>
+    </div>
+    <div class="info"><div class="row"><span class="name">标签 / 徽标</span><span class="en">Tag &amp; Badge</span><span class="tag">组件</span></div><p class="desc">用最省视觉成本的方式传达状态</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>列表行内标注分类或状态，颜色语义要在产品里全局一致。</p>
+      <div class="label">关键细节</div>
+      <p>背景取主色 10-15% 透明度的浅色，避免高饱和背景配黑字的"警示牌"既视感。</p>
+      <div class="label">代码</div>
+      <pre>.tag-success{
+  background: var(--accent-soft); color: var(--accent-dark);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 开关 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="toggle" onclick="event.stopPropagation(); this.classList.toggle('on')"><div class="knob"></div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">开关</span><span class="en">Toggle Switch</span><span class="tag">组件</span></div><p class="desc">立即生效的二元状态切换</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>切换后立刻生效、无需提交按钮确认的设置项，和需要提交的 checkbox 不同。</p>
+      <div class="label">关键细节</div>
+      <p>滑块位移用 transform 而非改 left，关闭态用中性灰而不是纯白以保证轮廓可见。</p>
+      <div class="label">代码</div>
+      <pre>.toggle.on .knob{ transform: translateX(16px); }
+.toggle.on{ background: var(--accent); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 卡片 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="demo-card"><div class="t">卡片标题</div><div class="s">悬浮上升 + 阴影加深</div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">卡片</span><span class="en">Card</span><span class="tag">组件</span></div><p class="desc">给一组相关内容画出边界</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>展示一组同构的信息（列表项、商品、文章），需要清晰的视觉分组。</p>
+      <div class="label">关键细节</div>
+      <p>阴影和描边二选一，避免同时使用；卡片内边距要比卡片间距小才有群组感。</p>
+      <div class="label">代码</div>
+      <pre>.card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 14px 26px rgba(0,0,0,.10);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 颜色选择器 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="display:flex;gap:8px;">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent);"></div>
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--accent-blue);"></div>
+        <div style="width:22px;height:22px;border-radius:50%;background:#F2A93B;"></div>
+        <div style="width:22px;height:22px;border-radius:50%;background:#E4573D;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">颜色选择器</span><span class="en">Color Picker</span><span class="tag">组件</span></div><p class="desc">从预设或自定义色板选颜色</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>主题定制、标签配色等允许用户表达个性的场景。</p>
+      <div class="label">关键细节</div>
+      <p>常用色放前排作快捷选项，自定义色板置后；选中色用外描边圈标注，而不仅是变亮或打勾。</p>
+      <div class="label">代码</div>
+      <pre>.swatch.selected{
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--accent);
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 时间选择器 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="select-el" style="width:120px;"><span>🕐 14:30</span></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">时间选择器</span><span class="en">Time Picker</span><span class="tag">组件</span></div><p class="desc">选择精确到时分的时间</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>需要精确到时分秒的预约、提醒类表单。</p>
+      <div class="label">关键细节</div>
+      <p>展开面板用滚轮或分栏选择，避免纯文本手输；默认展示当前时间或明显的空占位。</p>
+      <div class="label">代码</div>
+      <pre>.time-picker{ display:flex; gap:6px; align-items:center; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 日期选择器 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="select-el" style="width:130px;"><span>📅 2026-06-17</span></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">日期选择器</span><span class="en">Date Picker</span><span class="tag">组件</span></div><p class="desc">从日历面板中选择日期</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>预定、账单周期等需要选择具体日期的场景。</p>
+      <div class="label">关键细节</div>
+      <p>展开面板里「今天」用描边标注，「选中日」用实心高亮，两者要能明显区分。</p>
+      <div class="label">代码</div>
+      <pre>.day.today{ border:1.5px solid var(--accent); }
+.day.selected{ background:var(--accent); color:#fff; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 评分 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <span style="color:var(--accent);font-size:18px;letter-spacing:2px;">★★★<span style="color:var(--card-line);">★★</span></span>
+    </div>
+    <div class="info"><div class="row"><span class="name">评分</span><span class="en">Rate</span><span class="tag">组件</span></div><p class="desc">用户对内容给出满意度反馈</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>商品、服务、内容的星级评价场景。</p>
+      <div class="label">关键细节</div>
+      <p>hover 时逐颗预览高亮，不要整体一次性点亮；星形要比普通图标按钮大一些，方便点击。</p>
+      <div class="label">代码</div>
+      <pre>.star.active{ color:var(--accent); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 头像 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="position:relative;width:44px;height:44px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--accent-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;">WY</div>
+        <div style="position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:var(--accent);border:2px solid #fff;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">头像</span><span class="en">Avatar</span><span class="tag">组件</span></div><p class="desc">标识用户身份，常带在线状态</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>评论区、成员列表、导航栏个人入口等需要标识"这是谁"的地方。</p>
+      <div class="label">关键细节</div>
+      <p>状态点要加白色描边，避免和头像颜色融在一起；无头像图时用姓名首字母+固定背景色兜底。</p>
+      <div class="label">代码</div>
+      <pre>.avatar-status{
+  border:2px solid #fff; /* 与头像分离 */
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 文字提示 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="position:relative;">
+        <div style="background:var(--ink);color:#fff;font-size:11.5px;padding:6px 10px;border-radius:7px;">这里可以设置隐私范围</div>
+        <div style="width:8px;height:8px;background:var(--ink);transform:rotate(45deg);margin:-4px auto 0;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">文字提示</span><span class="en">Tooltip</span><span class="tag">组件</span></div><p class="desc">给控件补充一行说明文字</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>给图标按钮等含义不够直观的控件，补充一句简短说明。</p>
+      <div class="label">关键细节</div>
+      <p>延迟 300-500ms 出现，避免鼠标划过时反复闪烁；文字尽量一行说完，不要写成说明书。</p>
+      <div class="label">代码</div>
+      <pre>.tooltip{ transition-delay: .35s; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 空状态 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;gap:6px;">
+      <div style="width:52px;height:38px;border:2px dashed var(--card-line);border-radius:8px;"></div>
+      <span style="font-size:11.5px;color:var(--ink-3);">暂无数据</span>
+    </div>
+    <div class="info"><div class="row"><span class="name">空状态</span><span class="en">Empty</span><span class="tag">组件</span></div><p class="desc">列表/搜索结果为空时的占位</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>列表、搜索结果为空时，避免用户误以为页面出错或还在加载。</p>
+      <div class="label">关键细节</div>
+      <p>给出下一步行动建议（新建、清空筛选条件），而不只是甩一句「没有数据」。</p>
+      <div class="label">代码</div>
+      <pre>.empty-icon{ border:2px dashed var(--line); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 对话框 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="background:#fff;border:1px solid var(--card-line);border-radius:10px;padding:12px;width:150px;box-shadow:0 8px 20px rgba(0,0,0,.08);">
+        <div style="font-size:12.5px;font-weight:600;margin-bottom:8px;">确认删除？</div>
+        <div style="display:flex;gap:6px;justify-content:flex-end;">
+          <span style="font-size:11px;padding:4px 8px;border:1px solid var(--card-line);border-radius:6px;color:var(--ink-2);">取消</span>
+          <span style="font-size:11px;padding:4px 8px;background:#E4573D;color:#fff;border-radius:6px;">删除</span>
+        </div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">对话框</span><span class="en">Modal</span><span class="tag">组件</span></div><p class="desc">中断式操作前的明确确认</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>需要用户在继续前明确确认或输入的重要操作。</p>
+      <div class="label">关键细节</div>
+      <p>遮罩层要能感知点击外部关闭；破坏性操作的确认按钮用警示色，而不是产品主色。</p>
+      <div class="label">代码</div>
+      <pre>.modal-mask{ position:fixed; inset:0; background:rgba(0,0,0,.4); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 折叠面板 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;align-items:stretch;">
+      <div style="background:#fff;border:1px solid var(--card-line);border-radius:9px;padding:10px 12px;width:160px;display:flex;justify-content:space-between;font-size:12.5px;">
+        <span>常见问题一</span><span style="color:var(--accent);">⌄</span>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">折叠面板</span><span class="en">Collapse</span><span class="tag">组件</span></div><p class="desc">长内容分组折叠展示</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>FAQ、设置分类等内容较长、需要分组折叠的场景。</p>
+      <div class="label">关键细节</div>
+      <p>展开图标旋转 180 度，配合内容高度过渡，让「折叠/展开」这个动作本身可被感知。</p>
+      <div class="label">代码</div>
+      <pre>.collapse-icon{ transition: transform .2s; }
+.collapse.open .collapse-icon{ transform: rotate(180deg); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 进度条 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="width:160px;height:8px;background:var(--card-line);border-radius:999px;overflow:hidden;">
+        <div style="width:65%;height:100%;background:var(--accent);border-radius:999px;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">进度条</span><span class="en">Progress Bar</span><span class="tag">组件</span></div><p class="desc">展示任务/上传的完成程度</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>上传、任务处理、多步表单等有明确完成度的场景。</p>
+      <div class="label">关键细节</div>
+      <p>有精确数值就显示百分比文字；不确定进度时用条纹动画的不确定态，而不是伪造一个假进度。</p>
+      <div class="label">代码</div>
+      <pre>.progress-fill{
+  width:65%; transition: width .3s ease-out;
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 动画类 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div class="demo-card"><div class="t">把鼠标移上来</div><div class="s">上升 4px</div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">悬浮上升</span><span class="en">Hover Lift</span><span class="tag">动画</span></div><p class="desc">暗示"这个东西可以点"</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>最基础的可交互反馈，用于任意可点击的卡片、列表项。</p>
+      <div class="label">关键细节</div>
+      <p>只变位移+阴影两个维度，不要同时再加缩放和变色，避免杂乱。</p>
+      <div class="label">代码</div>
+      <pre>.card{ transition: transform .18s ease-out; }
+.card:hover{ transform: translateY(-4px); }</pre>
+    </div></div>
+  </article>
+
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div><div class="sk-line" style="width:120px"></div><div class="sk-line" style="width:150px"></div><div class="sk-line" style="width:90px"></div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">骨架屏</span><span class="en">Skeleton</span><span class="tag">动画</span></div><p class="desc">数据未返回时的占位反馈</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>接口请求耗时较长时，用和真实内容形状相近的占位块代替空白。</p>
+      <div class="label">关键细节</div>
+      <p>45度渐变高光左右扫过，周期 1.2-1.6 秒，太快会显得焦躁。</p>
+      <div class="label">代码</div>
+      <pre>.skeleton{
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}</pre>
+    </div></div>
+  </article>
+
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div id="staggerWrap"><div class="stagger-item"></div><div class="stagger-item"></div><div class="stagger-item"></div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">交错入场</span><span class="en">Stagger</span><span class="tag">动画</span></div><p class="desc">依次出现，引导视线顺序</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>一组内容（列表、卡片网格）在首屏或滚入视口时的入场动效。</p>
+      <div class="label">关键细节</div>
+      <p>每项延迟 40-80ms，超过 120ms 会显得拖沓；位移幅度要小（8-16px）。</p>
+      <div class="label">代码</div>
+      <pre>/* 逐项设置 transition-delay: i * 60ms */
+.item{ opacity:0; transform: translateY(8px); }
+.item.in{ opacity:1; transform: translateY(0); }</pre>
+    </div></div>
+  </article>
+
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <button class="ripple-btn" onclick="event.stopPropagation(); createRipple(event, this)">点击试试</button>
+    </div>
+    <div class="info"><div class="row"><span class="name">涟漪点击</span><span class="en">Ripple</span><span class="tag">动画</span></div><p class="desc">强化"点击已被接收"的反馈</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>Material 风格的按钮点击反馈，强调即时性。</p>
+      <div class="label">关键细节</div>
+      <p>涟漪中心取实际点击坐标；扩散 300-450ms；严肃/密集型产品需克制使用。</p>
+      <div class="label">代码</div>
+      <pre>r.style.left = (e.clientX - rect.left) + 'px';
+r.style.top  = (e.clientY - rect.top)  + 'px';</pre>
+    </div></div>
+  </article>
+
+  <!-- 淡入淡出 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <button class="btn btn-secondary" onclick="event.stopPropagation(); this.nextElementSibling.classList.toggle('fade-show')">点击切换</button>
+      <div class="fade-box" style="width:60px;height:36px;border-radius:8px;background:var(--accent-blue);opacity:0;transition:opacity .2s ease-out, transform .2s ease-out;transform:translateY(6px);"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">淡入淡出</span><span class="en">Fade</span><span class="tag">动画</span></div><p class="desc">内容切换最基础的过渡</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>内容切换、弹层出现/消失时最基础、最通用的过渡方式。</p>
+      <div class="label">关键细节</div>
+      <p>时长 150-250ms；配合 8px 内的轻微位移，比纯透明度变化看起来更自然、不生硬。</p>
+      <div class="label">代码</div>
+      <pre>.fade{ opacity:0; transform:translateY(6px); }
+.fade.show{ opacity:1; transform:translateY(0); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 旋转加载 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="width:28px;height:28px;border-radius:50%;border:3px solid var(--card-line);border-top-color:var(--accent);animation:spin .8s linear infinite;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">旋转加载</span><span class="en">Spinner</span><span class="tag">动画</span></div><p class="desc">局部区域加载中的兜底方案</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>局部区域数据加载中、且不方便用骨架屏占位时的通用方案。</p>
+      <div class="label">关键细节</div>
+      <p>旋转周期 0.8-1s、用 linear 而非 ease，匀速旋转才不会有忽快忽慢的诡异感。</p>
+      <div class="label">代码</div>
+      <pre>@keyframes spin{ to{ transform:rotate(360deg); } }
+.spinner{ animation: spin .8s linear infinite; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 摇晃 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <input class="input-el shake-target" style="width:130px;border-color:#E4573D;" value="点击我试试" onclick="event.stopPropagation(); this.style.animation='none'; void this.offsetWidth; this.style.animation='shake .35s ease-in-out';"/>
+    </div>
+    <div class="info"><div class="row"><span class="name">摇晃</span><span class="en">Shake</span><span class="tag">动画</span></div><p class="desc">表单校验失败时的强反馈</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>表单校验失败时的反馈，比单纯把边框变红更抓眼球、更容易被注意到。</p>
+      <div class="label">关键细节</div>
+      <p>水平位移控制在 ±6px 内，时长 300-400ms；幅度太大会显得滑稽而不是"提醒"。</p>
+      <div class="label">代码</div>
+      <pre>@keyframes shake{
+  25%{ transform:translateX(-6px); }
+  75%{ transform:translateX(6px); }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 呼吸律动 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);animation:breathe 1.8s ease-in-out infinite;"></div>
+        <span style="font-size:12.5px;color:var(--ink-2);">直播中</span>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">呼吸律动</span><span class="en">Breathing</span><span class="tag">动画</span></div><p class="desc">标注"进行中"的持续状态</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>标注"进行中"的状态指示点，例如直播中、录音中、监听中。</p>
+      <div class="label">关键细节</div>
+      <p>周期 1.5-2s，缩放和透明度同时缓慢变化；太快会显得紧张而不是"平稳运行"。</p>
+      <div class="label">代码</div>
+      <pre>@keyframes breathe{
+  0%,100%{ transform:scale(1); opacity:1; }
+  50%{ transform:scale(1.4); opacity:.5; }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 布局类 -->
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div class="grid12-demo">
+        <div style="grid-column:span 12"></div>
+        <div style="grid-column:span 6"></div><div style="grid-column:span 6"></div>
+        <div style="grid-column:span 4"></div><div style="grid-column:span 4"></div><div style="grid-column:span 4"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">十二栏网格</span><span class="en">12-Col Grid</span><span class="tag">布局</span></div><p class="desc">网页设计的基础骨架</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>把宽度切成 12 份，方便 2/3/4/6 等分组合（12 能被这些数整除）。</p>
+      <div class="label">关键细节</div>
+      <p>移动端退化为 4 栏或单栏；gutter 要和间距阶梯对齐，常见 16-24px。</p>
+      <div class="label">代码</div>
+      <pre>.grid{
+  grid-template-columns: repeat(12, 1fr);
+}</pre>
+    </div></div>
+  </article>
+
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div class="sidebar-demo">
+        <div class="sb"><div style="width:70%"></div><div style="width:50%"></div><div style="width:60%"></div></div>
+        <div class="main"><div style="width:40%"></div><div style="width:90%"></div><div style="width:75%"></div></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">侧栏 + 内容</span><span class="en">Sidebar</span><span class="tag">布局</span></div><p class="desc">后台管理类产品的常见骨架</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>侧栏承载导航和层级，主内容区承载当前任务，多用于后台/工作台。</p>
+      <div class="label">关键细节</div>
+      <p>侧栏宽度通常固定（200-280px）；折叠用宽度过渡+图标旋转组合。</p>
+      <div class="label">代码</div>
+      <pre>.layout{
+  grid-template-columns: 240px 1fr;
+}</pre>
+    </div></div>
+  </article>
+
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div class="bento-demo"><div class="b1"></div><div class="b2"></div><div class="b3"></div><div class="b4"></div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">Bento 网格</span><span class="en">Bento Grid</span><span class="tag">布局</span></div><p class="desc">用面积大小表达内容重要程度</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>官网首屏、能力展示页，把不同重要程度的内容排成不规则网格。</p>
+      <div class="label">关键细节</div>
+      <p>用 grid-template-areas 手动指定每块位置；尺寸档位不要超过 4 种。</p>
+      <div class="label">代码</div>
+      <pre>.feature{ grid-column: span 2; grid-row: span 2; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 粘性固定 -->
+  <article class="card" data-cat="layout">
+    <div class="demo" style="flex-direction:column;align-items:stretch;gap:6px;">
+      <div style="background:var(--accent-soft);border:1px dashed var(--accent);border-radius:6px;padding:5px 8px;font-size:10.5px;color:var(--accent-dark);text-align:center;">表头（滚动时固定）</div>
+      <div style="height:6px;background:#fff;border-radius:3px;"></div>
+      <div style="height:6px;background:#fff;border-radius:3px;"></div>
+      <div style="height:6px;background:#fff;border-radius:3px;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">粘性固定</span><span class="en">Sticky Pin</span><span class="tag">布局</span></div><p class="desc">滚动时局部内容保持可见</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>表格表头、页面顶部操作栏等需要在滚动过程中始终可见的元素。</p>
+      <div class="label">关键细节</div>
+      <p>position: sticky 搭配 top: 0；注意父级元素不能设置 overflow: hidden，否则会导致粘性失效。</p>
+      <div class="label">代码</div>
+      <pre>.table-head{ position:sticky; top:0; z-index:2; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 横向滚动 -->
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div style="display:flex;gap:6px;width:200px;overflow:hidden;">
+        <div style="width:50px;height:50px;flex-shrink:0;background:var(--accent-soft);border-radius:8px;"></div>
+        <div style="width:50px;height:50px;flex-shrink:0;background:var(--accent-blue-soft);border-radius:8px;"></div>
+        <div style="width:50px;height:50px;flex-shrink:0;background:var(--accent-soft);border-radius:8px;"></div>
+        <div style="width:26px;height:50px;flex-shrink:0;background:var(--accent-blue-soft);border-radius:8px;opacity:.5;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">横向滚动</span><span class="en">Horizontal Scroll</span><span class="tag">布局</span></div><p class="desc">同类目卡片的紧凑陈列方式</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>移动端展示同类目卡片（分类、推荐位），又不想占用过多垂直空间。</p>
+      <div class="label">关键细节</div>
+      <p>首尾露出"半张卡片"暗示可以继续滑动；配合 scroll-snap 让停靠位置对齐卡片边缘。</p>
+      <div class="label">代码</div>
+      <pre>.rail{
+  display:flex; overflow-x:auto;
+  scroll-snap-type: x mandatory;
+}
+.rail > *{ scroll-snap-align: start; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 设计令牌 -->
+  <article class="card" data-cat="token">
+    <div class="demo">
+      <div class="spacing-col">
+        <div class="spacing-bar-row"><span class="spacing-num">8</span><div class="spacing-bar" style="width:8px"></div></div>
+        <div class="spacing-bar-row"><span class="spacing-num">16</span><div class="spacing-bar" style="width:16px"></div></div>
+        <div class="spacing-bar-row"><span class="spacing-num">24</span><div class="spacing-bar" style="width:24px"></div></div>
+        <div class="spacing-bar-row"><span class="spacing-num">32</span><div class="spacing-bar" style="width:32px"></div></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">间距阶梯</span><span class="en">Spacing</span><span class="tag">令牌</span></div><p class="desc">固定阶梯而非任意数值</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>所有 padding / margin / gap 的取值依据，让界面在视觉上呼吸得一致。</p>
+      <div class="label">关键细节</div>
+      <p>基础单位 4 或 8px；避免 13px、19px 这类不在阶梯上的孤儿数值。</p>
+      <div class="label">代码</div>
+      <pre>--space-2:8px; --space-4:16px;
+--space-5:24px; --space-6:32px;</pre>
+    </div></div>
+  </article>
+
+  <article class="card" data-cat="token">
+    <div class="demo">
+      <div class="radius-row">
+        <div class="radius-box" style="border-radius:0"></div>
+        <div class="radius-box" style="border-radius:8px"></div>
+        <div class="radius-box" style="border-radius:14px"></div>
+        <div class="radius-box" style="border-radius:19px"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">圆角阶梯</span><span class="en">Radius</span><span class="tag">令牌</span></div><p class="desc">圆角要和元素尺寸成比例</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>按钮/输入框用小圆角，卡片用中圆角，头像/胶囊用全圆角。</p>
+      <div class="label">关键细节</div>
+      <p>同一产品只保留 3-4 档；避免直角和大圆角混用显得不统一。</p>
+      <div class="label">代码</div>
+      <pre>--radius-s:8px; --radius-m:14px; --radius-full:999px;</pre>
+    </div></div>
+  </article>
+
+  <article class="card" data-cat="token">
+    <div class="demo">
+      <div class="elev-row">
+        <div class="elev-box elev-sm"></div>
+        <div class="elev-box elev-md"></div>
+        <div class="elev-box elev-lg"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">阴影阶梯</span><span class="en">Elevation</span><span class="tag">令牌</span></div><p class="desc">阴影表达层级，而非装饰</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>弹窗 > 下拉菜单 > 卡片，层级越高阴影越大、越虚、偏移越明显。</p>
+      <div class="label">关键细节</div>
+      <p>紧阴影+环境阴影两层叠加效果更干净；深色背景改用描边表达层级。</p>
+      <div class="label">代码</div>
+      <pre>box-shadow: 0 1px 2px rgba(0,0,0,.06),
+            0 4px 10px rgba(0,0,0,.12);</pre>
+    </div></div>
+  </article>
+
+  <!-- 颜色阶梯 -->
+  <article class="card" data-cat="token">
+    <div class="demo" style="gap:3px;">
+      <div style="width:22px;height:44px;background:#E3F6EC;"></div>
+      <div style="width:22px;height:44px;background:#AEE9C8;"></div>
+      <div style="width:22px;height:44px;background:#5BD394;"></div>
+      <div style="width:22px;height:44px;background:var(--accent);"></div>
+      <div style="width:22px;height:44px;background:var(--accent-dark);"></div>
+      <div style="width:22px;height:44px;background:#065F3E;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">颜色阶梯</span><span class="en">Color Scale</span><span class="tag">令牌</span></div><p class="desc">主色的完整深浅阶梯</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div>
+      <p>给主色配一整套深浅阶梯（50-900），用于 hover / active / 背景等不同强调层级。</p>
+      <div class="label">关键细节</div>
+      <p>50-100 用作浅色背景，500-600 用作主操作色（按钮、链接），700+ 用作深色文字或深色模式下的主色。</p>
+      <div class="label">代码</div>
+      <pre>--accent-50:#E3F6EC;  --accent-500:#0FA968;
+--accent-700:#0B8A55; --accent-900:#065F3E;</pre>
+    </div></div>
+  </article>
+
+  <!-- 表单 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;align-items:stretch;gap:8px;width:170px;">
+      <div class="input-wrap" style="width:100%;"><label>姓名</label><input class="input-el" placeholder="Lily"/></div>
+      <div class="input-wrap" style="width:100%;"><label>邮箱</label><input class="input-el" placeholder="lily@vibe.com"/></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">表单</span><span class="en">Form</span><span class="tag">组件</span></div><p class="desc">一组字段的结构化输入</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>注册、编辑资料等需要收集多个字段的场景。</p>
+      <div class="label">关键细节</div><p>label 对齐方式全表单统一；必填项用星号标记而不是靠占位文字暗示；错误信息紧贴对应字段下方。</p>
+      <div class="label">代码</div><pre>.form-item{ display:flex; flex-direction:column; gap:6px; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 自动补全 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;align-items:flex-start;">
+      <input class="input-el" style="width:150px;" value="王曼" onclick="event.stopPropagation()"/>
+      <div style="background:#fff;border:1px solid var(--card-line);border-radius:8px;margin-top:4px;width:150px;">
+        <div class="dropdown-item">王曼昱</div><div class="dropdown-item">王曼</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">自动补全</span><span class="en">AutoComplete</span><span class="tag">组件</span></div><p class="desc">输入过程中提示补全项</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>搜索框、地址输入等有历史记录或候选词库可以匹配的场景。</p>
+      <div class="label">关键细节</div><p>命中的关键字建议加粗高亮；候选项不超过 5-8 条，太多反而干扰输入。</p>
+      <div class="label">代码</div><pre>.suggest mark{ font-weight:600; color:var(--accent); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 级联选择 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div class="select-el" style="width:170px;"><span>广东 / 深圳 / 南山</span><span>⌄</span></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">级联选择</span><span class="en">Cascader</span><span class="tag">组件</span></div><p class="desc">逐级选择有层级关系的数据</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>省市区、组织架构这类天然带层级关系的数据选择。</p>
+      <div class="label">关键细节</div><p>面板多列并排展开而不是逐级返回上一层，方便回看已选路径。</p>
+      <div class="label">代码</div><pre>.cascader-panel{ display:flex; }
+.cascader-col{ border-right:1px solid var(--line); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 穿梭框 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="background:#fff;border:1px solid var(--card-line);border-radius:8px;width:66px;height:60px;padding:5px;font-size:9px;color:var(--ink-3);">全部<br>· · ·</div>
+      <span style="color:var(--accent);">⇄</span>
+      <div style="background:#fff;border:1px solid var(--card-line);border-radius:8px;width:66px;height:60px;padding:5px;font-size:9px;color:var(--ink-3);">已选<br>· ·</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">穿梭框</span><span class="en">Transfer</span><span class="tag">组件</span></div><p class="desc">两栏之间移动条目做多选</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>从大量候选项中挑选子集，且需要清楚看到"已选了哪些"。</p>
+      <div class="label">关键细节</div><p>两栏都支持搜索；支持双击单项移动，不必非要先勾选再点箭头。</p>
+      <div class="label">代码</div><pre>.transfer{ display:flex; align-items:center; gap:10px; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 分段控制器 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="display:flex;background:#fff;border:1px solid var(--card-line);border-radius:9px;padding:3px;">
+        <span style="background:var(--accent);color:#fff;padding:5px 12px;border-radius:6px;font-size:12px;">日</span>
+        <span style="padding:5px 12px;font-size:12px;color:var(--ink-2);">周</span>
+        <span style="padding:5px 12px;font-size:12px;color:var(--ink-2);">月</span>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">分段控制器</span><span class="en">Segmented</span><span class="tag">组件</span></div><p class="desc">少量选项间的紧凑单选</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>2-4个互斥视图切换（日/周/月），比 Tabs 更紧凑、更适合嵌入工具栏。</p>
+      <div class="label">关键细节</div><p>选中块要有实体背景色和轻微阴影，和标签页的"下划线式"选中要做出区分。</p>
+      <div class="label">代码</div><pre>.segment.active{ background:var(--accent); color:#fff; border-radius:6px; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 上传 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="width:70px;height:60px;border:2px dashed var(--card-line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--ink-3);">
+        <span style="font-size:16px;">＋</span><span style="font-size:9px;">点击上传</span>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">上传</span><span class="en">Upload</span><span class="tag">组件</span></div><p class="desc">选择或拖拽文件上传</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>头像、附件、素材上传，支持点击选择或拖拽两种方式。</p>
+      <div class="label">关键细节</div><p>拖拽悬停时边框变实色并轻微放大提示"可以放开了"；上传中显示进度而不是让用户干等。</p>
+      <div class="label">代码</div><pre>.upload-zone.dragover{ border-style:solid; border-color:var(--accent); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 表格 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;align-items:stretch;gap:0;">
+      <div style="display:flex;gap:4px;font-size:9.5px;color:var(--ink-3);font-weight:600;padding:4px 0;border-bottom:1px solid var(--card-line);"><span style="width:60px;">姓名</span><span style="width:50px;">状态</span></div>
+      <div style="display:flex;gap:4px;font-size:9.5px;padding:5px 0;border-bottom:1px solid var(--card-line);"><span style="width:60px;">周琳</span><span style="width:50px;color:var(--accent);">已完成</span></div>
+      <div style="display:flex;gap:4px;font-size:9.5px;padding:5px 0;"><span style="width:60px;">陈晨</span><span style="width:50px;color:var(--ink-3);">待处理</span></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">表格</span><span class="en">Table</span><span class="tag">组件</span></div><p class="desc">结构化展示多行多列数据</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>订单、用户等需要横向对比多个字段的批量数据。</p>
+      <div class="label">关键细节</div><p>斑马纹或悬浮行高亮帮助横向对齐视线；表头常配合粘性固定使用。</p>
+      <div class="label">代码</div><pre>tr:hover{ background:var(--card); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 描述列表 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;width:170px;">
+      <div><div style="font-size:9.5px;color:var(--ink-3);">订单号</div><div style="font-size:11px;">CN2026061</div></div>
+      <div><div style="font-size:9.5px;color:var(--ink-3);">金额</div><div style="font-size:11px;">￥209</div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">描述列表</span><span class="en">Descriptions</span><span class="tag">组件</span></div><p class="desc">成组展示只读的字段详情</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>详情页里展示一批只读字段（订单信息、用户资料），不需要表格那种密集对比。</p>
+      <div class="label">关键细节</div><p>label 用弱化的小字灰色，value 用正常字号黑色，形成清楚的主次关系。</p>
+      <div class="label">代码</div><pre>.desc-label{ font-size:12px; color:var(--ink-3); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 列表 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;align-items:stretch;gap:7px;width:160px;">
+      <div style="display:flex;align-items:center;gap:7px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--accent);"></span><span style="font-size:11.5px;">列表条目一</span></div>
+      <div style="display:flex;align-items:center;gap:7px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--accent);"></span><span style="font-size:11.5px;">列表条目二</span></div>
+      <div style="display:flex;align-items:center;gap:7px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--accent);"></span><span style="font-size:11.5px;">列表条目三</span></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">列表</span><span class="en">List</span><span class="tag">组件</span></div><p class="desc">展示一组同构的简单条目</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>结构简单、不需要卡片式分隔的一组内容，比如通知、日志。</p>
+      <div class="label">关键细节</div><p>用分隔线而非卡片间距区分条目，更适合信息密度高的场景。</p>
+      <div class="label">代码</div><pre>.list-item + .list-item{ border-top:1px solid var(--line); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 时间线 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;align-items:flex-start;gap:0;">
+      <div style="display:flex;gap:8px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:3px;"></div><div><div style="font-size:11px;font-weight:600;">已下单</div><div style="font-size:9.5px;color:var(--ink-3);">10:24</div></div></div>
+      <div style="width:1.5px;height:16px;background:var(--card-line);margin-left:3px;"></div>
+      <div style="display:flex;gap:8px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--card-line);margin-top:3px;"></div><div><div style="font-size:11px;color:var(--ink-3);">待发货</div></div></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">时间线</span><span class="en">Timeline</span><span class="tag">组件</span></div><p class="desc">按时间顺序展示一系列节点</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>物流轨迹、操作日志等有明确先后顺序的信息。</p>
+      <div class="label">关键细节</div><p>已完成节点用实心圆+主色，未来节点用空心/灰色，一眼能看出进度所在。</p>
+      <div class="label">代码</div><pre>.node.done{ background:var(--accent); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 统计盘 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;gap:2px;">
+      <div style="font-size:24px;font-weight:700;color:var(--ink);">8,642</div>
+      <div style="font-size:11px;color:var(--accent);">↑ 12.6%</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">统计盘</span><span class="en">Statistic</span><span class="tag">组件</span></div><p class="desc">突出展示一个关键数字</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>数据看板首屏，把最重要的一个指标用最大的字号呈现。</p>
+      <div class="label">关键细节</div><p>趋势用颜色+箭头双重编码（不要只靠颜色，兼顾色弱用户）；数字变化可配合滚动过渡而非瞬间跳变。</p>
+      <div class="label">代码</div><pre>.stat-value{ font-size:28px; font-weight:700; font-variant-numeric:tabular-nums; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 气泡卡片 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="background:#fff;border:1px solid var(--card-line);border-radius:9px;padding:10px;width:130px;box-shadow:0 6px 16px rgba(0,0,0,.08);">
+        <div style="font-size:11.5px;font-weight:600;margin-bottom:3px;">王曼昱</div>
+        <div style="font-size:10px;color:var(--ink-2);">国乒女单主力选手</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">气泡卡片</span><span class="en">Popover</span><span class="tag">组件</span></div><p class="desc">悬浮展示一小块富内容</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>比 Tooltip 内容更丰富（标题+描述+按钮）但又不想跳转新页面的场景。</p>
+      <div class="label">关键细节</div><p>点击触发比 hover 触发更适合含交互元素的气泡卡片，避免鼠标移出误关闭。</p>
+      <div class="label">代码</div><pre>.popover{ box-shadow:0 6px 16px rgba(0,0,0,.08); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 评论 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="display:flex;gap:8px;width:160px;">
+        <div style="width:26px;height:26px;border-radius:50%;background:var(--accent-blue);flex-shrink:0;"></div>
+        <div><div style="font-size:11px;font-weight:600;">周琳</div><div style="font-size:10.5px;color:var(--ink-2);line-height:1.5;">今天的比赛真精彩！</div></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">评论</span><span class="en">Comment</span><span class="tag">组件</span></div><p class="desc">用户发言的标准展示单元</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>留言板、动态下的评论区，需要清楚区分"谁说了什么"。</p>
+      <div class="label">关键细节</div><p>头像固定尺寸并对齐名字第一行；二级回复用缩进而不是重复展示头像结构。</p>
+      <div class="label">代码</div><pre>.comment{ display:flex; gap:8px; align-items:flex-start; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 日历 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="display:grid;grid-template-columns:repeat(7,14px);gap:3px;">
+        <span></span><span></span><span style="width:14px;height:14px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);">1</span><span style="width:14px;height:14px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);">2</span><span style="width:14px;height:14px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);">3</span><span style="width:14px;height:14px;font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);">4</span><span style="width:14px;height:14px;font-size:8px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;border-radius:50%;">5</span>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">日历</span><span class="en">Calendar</span><span class="tag">组件</span></div><p class="desc">按月展示日期并标记事项</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>赛程表、排班表这类需要按天查看安排的场景。</p>
+      <div class="label">关键细节</div><p>今天用描边或圆点区分；有事项的日期用小色点标注，而不是把格子撑高。</p>
+      <div class="label">代码</div><pre>.day.today{ background:var(--accent); color:#fff; border-radius:50%; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 二维码 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="width:52px;height:52px;background:repeating-conic-gradient(var(--ink) 0% 25%, #fff 0% 50%) 0/8px 8px;border:6px solid #fff;box-shadow:0 0 0 1px var(--card-line);"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">二维码</span><span class="en">QR Code</span><span class="tag">组件</span></div><p class="desc">承载链接的可扫描图形</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>线下扫码进入小程序、分享链接等需要"拍照即达"的场景。</p>
+      <div class="label">关键细节</div><p>四周留白（静区）不能省，否则扫描识别率会明显下降；中心可放小 logo 但不超过整体面积 15%。</p>
+      <div class="label">代码</div><pre>.qr{ padding:8px; background:#fff; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 走马灯 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;gap:8px;">
+      <div style="width:120px;height:50px;border-radius:8px;background:var(--accent-blue-soft);"></div>
+      <div style="display:flex;gap:4px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--accent);"></span><span style="width:5px;height:5px;border-radius:50%;background:var(--card-line);"></span><span style="width:5px;height:5px;border-radius:50%;background:var(--card-line);"></span></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">走马灯</span><span class="en">Carousel</span><span class="tag">组件</span></div><p class="desc">循环轮播一组内容</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>首屏 Banner、图集浏览等一次只展示一项、可自动或手动切换的场景。</p>
+      <div class="label">关键细节</div><p>自动播放间隔 3-5 秒，鼠标悬停时暂停；指示点当前项要明显区别于其余点。</p>
+      <div class="label">代码</div><pre>.dot.active{ width:16px; border-radius:4px; background:var(--accent); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 图片 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="width:70px;height:56px;background:#EDF3F1;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:18px;">▲</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">图片</span><span class="en">Image</span><span class="tag">组件</span></div><p class="desc">图片加载前后的统一占位</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>需要固定图片容器比例、并处理加载失败/加载中状态的场景。</p>
+      <div class="label">关键细节</div><p>容器提前用 aspect-ratio 占位，避免图片加载完成后页面"跳一下"；加载失败给出统一的占位图标而不是破图标。</p>
+      <div class="label">代码</div><pre>.img-box{ aspect-ratio: 4/3; background:var(--card); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 警告提示 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="background:var(--accent-blue-soft);color:#1E5FC7;border-radius:8px;padding:8px 12px;font-size:11.5px;display:flex;gap:6px;align-items:center;width:150px;"><span>ⓘ</span>系统将于今晚维护</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">警告提示</span><span class="en">Alert</span><span class="tag">组件</span></div><p class="desc">页面内嵌的持续性提醒</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>需要用户注意但不打断操作的信息，常驻在页面某个区域而非弹出。</p>
+      <div class="label">关键细节</div><p>info/success/warning/error 四种语义色要固定映射，不能同一个颜色表达两种含义。</p>
+      <div class="label">代码</div><pre>.alert-info{ background:var(--accent-blue-soft); color:#1E5FC7; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 抽屉 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="position:relative;width:100%;height:100%;">
+      <div style="position:absolute;right:20px;top:8px;bottom:8px;width:70px;background:#fff;border:1px solid var(--card-line);border-radius:8px 0 0 8px;box-shadow:-6px 0 14px rgba(0,0,0,.06);padding:8px;font-size:9.5px;color:var(--ink-2);">筛选条件<br>· · ·</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">抽屉</span><span class="en">Drawer</span><span class="tag">组件</span></div><p class="desc">从边缘滑出的浮层容器</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>筛选面板、详情预览等需要保留主内容上下文、又要承载较多内容的场景。</p>
+      <div class="label">关键细节</div><p>比 Modal 更适合"边看边操作"的场景；宽度通常是屏幕的 1/3-1/2，不要全屏顶满。</p>
+      <div class="label">代码</div><pre>.drawer{ transition: transform .25s ease-out; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 全局提示 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="background:var(--ink);color:#fff;font-size:11.5px;padding:7px 14px;border-radius:999px;display:flex;gap:6px;align-items:center;"><span style="color:var(--accent);">✓</span>操作成功</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">全局提示</span><span class="en">Message</span><span class="tag">组件</span></div><p class="desc">操作完成后的轻量反馈</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>保存、提交等操作完成后的一次性轻反馈，不需要用户处理。</p>
+      <div class="label">关键细节</div><p>2-3 秒后自动消失，出现在页面顶部居中或右上角固定位置；不要用它承载需要用户决策的信息。</p>
+      <div class="label">代码</div><pre>.message{ position:fixed; top:20px; left:50%; transform:translateX(-50%); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 气泡确认框 -->
+  <article class="card" data-cat="component">
+    <div class="demo">
+      <div style="background:#fff;border:1px solid var(--card-line);border-radius:9px;padding:9px;width:120px;box-shadow:0 6px 16px rgba(0,0,0,.08);">
+        <div style="font-size:11px;margin-bottom:6px;">确定要删除吗？</div>
+        <div style="display:flex;gap:5px;justify-content:flex-end;"><span style="font-size:10px;color:var(--ink-2);">取消</span><span style="font-size:10px;color:var(--accent);font-weight:600;">确定</span></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">气泡确认框</span><span class="en">Popconfirm</span><span class="tag">组件</span></div><p class="desc">轻量级的原地二次确认</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>删除单行数据这类风险较低的操作，不需要用 Modal 那么重的确认方式。</p>
+      <div class="label">关键细节</div><p>紧贴触发元素定位，不遮挡整个页面；比 Modal 更轻，但对高风险操作仍不够用（此时应升级为 Modal）。</p>
+      <div class="label">代码</div><pre>.popconfirm{ position:absolute; z-index:10; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 树控件 -->
+  <article class="card" data-cat="component">
+    <div class="demo" style="flex-direction:column;align-items:flex-start;gap:5px;">
+      <div style="font-size:11px;">▾ 项目结构</div>
+      <div style="font-size:11px;padding-left:14px;">▾ 组件库</div>
+      <div style="font-size:11px;padding-left:28px;color:var(--accent);">按钮.tsx</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">树控件</span><span class="en">Tree</span><span class="tag">组件</span></div><p class="desc">展示带层级关系的结构数据</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>文件目录、组织架构等多级嵌套数据的浏览与选择。</p>
+      <div class="label">关键细节</div><p>每一级缩进保持一致（通常14-16px）；展开/折叠图标要和文字有明显的点击间距，避免误触。</p>
+      <div class="label">代码</div><pre>.tree-node{ padding-left: calc(var(--depth) * 14px); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 放大进场 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div class="scale-demo" style="width:50px;height:50px;border-radius:10px;background:var(--accent);animation:scalein 1.6s ease-in-out infinite;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">放大进场</span><span class="en">Scale In</span><span class="tag">动画</span></div><p class="desc">从小到大出现，强调新内容</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>新增元素（新消息、新卡片）出现时，用轻微放大强调"这是新出现的"。</p>
+      <div class="label">关键细节</div><p>起始缩放不要小于 0.85，太小会有"弹出"的廉价感；配合 opacity 从 0 到 1 一起变化。</p>
+      <div class="label">代码</div><pre>@keyframes scalein{
+  0%{ transform:scale(.85); opacity:.6; }
+  50%{ transform:scale(1); opacity:1; }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 弹跳 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--accent-blue);animation:bounce 1.2s ease-in-out infinite;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">弹跳</span><span class="en">Bounce</span><span class="tag">动画</span></div><p class="desc">模拟物理弹性的上下运动</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>引导性提示（新手引导箭头、下拉刷新图标）需要持续吸引注意力的地方。</p>
+      <div class="label">关键细节</div><p>用 ease-in-out 而非 linear 模拟重力感；持续循环的弹跳要克制使用，容易显得幼稚或烦人。</p>
+      <div class="label">代码</div><pre>@keyframes bounce{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-10px); }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 脉冲发光 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(15,169,104,.5);animation:pulseglow 1.8s ease-out infinite;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">脉冲发光</span><span class="en">Pulse Glow</span><span class="tag">动画</span></div><p class="desc">向外扩散的光晕强调提醒</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>未读消息小红点、新功能引导点，比呼吸律动更"急切"一些。</p>
+      <div class="label">关键细节</div><p>用 box-shadow 扩散而不是 transform 缩放主体本身，能保持点的实际大小不变，只有光晕在动。</p>
+      <div class="label">代码</div><pre>@keyframes pulseglow{
+  to{ box-shadow:0 0 0 10px rgba(15,169,104,0); }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 对勾描边 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;">
+        <span style="color:var(--accent);font-size:16px;">✓</span>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">对勾描边</span><span class="en">Checkmark Draw</span><span class="tag">动画</span></div><p class="desc">像手绘一样画出对勾</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>支付成功、任务完成等结果反馈页，用"画出来"的过程强化完成感。</p>
+      <div class="label">关键细节</div><p>用 SVG stroke-dasharray / stroke-dashoffset 实现描边动画，时长 400-600ms，配合圆圈的放大做前置动作。</p>
+      <div class="label">代码</div><pre>path{ stroke-dasharray:40; stroke-dashoffset:40;
+  animation: draw .5s ease-out forwards; }
+@keyframes draw{ to{ stroke-dashoffset:0; } }</pre>
+    </div></div>
+  </article>
+
+  <!-- 点赞爆炸 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <button class="btn btn-secondary" style="border-radius:999px;" onclick="event.stopPropagation(); likeBurst(this)">♡ 点赞</button>
+    </div>
+    <div class="info"><div class="row"><span class="name">点赞爆炸</span><span class="en">Like Burst</span><span class="tag">动画</span></div><p class="desc">点赞瞬间的粒子发散反馈</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>社交类产品的点赞/收藏按钮，用一次性的小庆祝感提升互动愉悦度。</p>
+      <div class="label">关键细节</div><p>粒子数量 6-10 个足够，太多会显得杂乱；整个过程控制在 500ms 内，不要拖慢连续点赞的操作。</p>
+      <div class="label">代码</div><pre>/* 点击时批量生成小圆点，随机角度 translate + 缩小淡出 */</pre>
+    </div></div>
+  </article>
+
+  <!-- 闪烁高亮 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="padding:6px 12px;border-radius:7px;background:var(--accent-soft);font-size:12px;animation:flash 1.6s ease-in-out infinite;">新上线</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">闪烁高亮</span><span class="en">Flash</span><span class="tag">动画</span></div><p class="desc">短暂反复提示"这里有更新"</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>新功能徽标、未读角标等需要在不打扰的前提下持续引导注意力的位置。</p>
+      <div class="label">关键细节</div><p>只变化透明度或背景饱和度，不要闪成完全消失又出现，太生硬会像"故障"而不是"提示"。</p>
+      <div class="label">代码</div><pre>@keyframes flash{ 50%{ opacity:.45; } }</pre>
+    </div></div>
+  </article>
+
+  <!-- 跑马灯 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="overflow:hidden;width:160px;">
+      <div style="white-space:nowrap;font-size:12px;color:var(--ink-2);animation:marquee 4s linear infinite;">最新战报：半决赛以 4:1 晋级 · 半决赛以 4:1 晋级</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">跑马灯</span><span class="en">Marquee</span><span class="tag">动画</span></div><p class="desc">横向循环滚动的长文本</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>公告栏、实时战报等文本较长、空间有限、又希望完整展示的场景。</p>
+      <div class="label">关键细节</div><p>速度要匀速（linear），太快会读不清；鼠标悬停最好暂停滚动，方便仔细阅读。</p>
+      <div class="label">代码</div><pre>@keyframes marquee{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 打字机 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <span style="font-family:var(--mono);font-size:13px;border-right:2px solid var(--accent);padding-right:2px;animation:blink 1s step-end infinite;">Hello, world</span>
+    </div>
+    <div class="info"><div class="row"><span class="name">打字机</span><span class="en">Typewriter</span><span class="tag">动画</span></div><p class="desc">逐字符出现，模拟输入过程</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>AI 对话、引导语等想营造"正在生成/输入"感的文本展示场景。</p>
+      <div class="label">关键细节</div><p>逐字速度 30-60ms/字符，光标闪烁周期约 1s；文本较长时提供跳过动画直接看完整内容的方式。</p>
+      <div class="label">代码</div><pre>@keyframes blink{ 50%{ border-color:transparent; } }</pre>
+    </div></div>
+  </article>
+
+  <!-- 渐变流动文字 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <span style="font-size:22px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent-blue),var(--accent));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradientmove 3s linear infinite;">Gradient</span>
+    </div>
+    <div class="info"><div class="row"><span class="name">渐变流动文字</span><span class="en">Gradient Text</span><span class="tag">动画</span></div><p class="desc">色彩持续流动的强调文字</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>品牌页、活动页的主标题，用来强调"这是有科技感/活力感的重点内容"。</p>
+      <div class="label">关键细节</div><p>只用在极少的强调文字上（标题级），正文文字用它会严重影响可读性；渐变色数不超过3个。</p>
+      <div class="label">代码</div><pre>@keyframes gradientmove{
+  to{ background-position:200% 0; }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 网络信号 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="display:flex;align-items:flex-end;gap:3px;height:30px;">
+      <div style="width:5px;height:8px;background:var(--accent);border-radius:2px;animation:signal 1s ease-in-out infinite;animation-delay:0s;"></div>
+      <div style="width:5px;height:16px;background:var(--accent);border-radius:2px;animation:signal 1s ease-in-out infinite;animation-delay:.15s;"></div>
+      <div style="width:5px;height:24px;background:var(--accent);border-radius:2px;animation:signal 1s ease-in-out infinite;animation-delay:.3s;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">网络信号</span><span class="en">Signal Bars</span><span class="tag">动画</span></div><p class="desc">动态波形暗示信号/音频强度</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>语音输入、通话中、连接检测等需要表达"实时强度变化"的场景。</p>
+      <div class="label">关键细节</div><p>每根柱子延迟依次错开（0.15s左右），营造"波动"感而不是整体齐刷刷跳动。</p>
+      <div class="label">代码</div><pre>@keyframes signal{ 50%{ transform:scaleY(.4); } }</pre>
+    </div></div>
+  </article>
+
+  <!-- 分栏面板 -->
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div style="display:flex;gap:5px;width:180px;height:70px;">
+        <div style="flex:1;background:#fff;border:1px solid var(--card-line);border-radius:8px;"></div>
+        <div style="width:5px;background:var(--card-line);border-radius:3px;"></div>
+        <div style="flex:1.3;background:#fff;border:1px solid var(--card-line);border-radius:8px;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">分栏面板</span><span class="en">Split Panel</span><span class="tag">布局</span></div><p class="desc">可拖拽调整宽度的双栏</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>代码编辑器、邮件客户端这类需要同时对比两块内容、且比例因人而异的场景。</p>
+      <div class="label">关键细节</div><p>拖拽手柄的可点击范围要比视觉宽度大（建议±4px），否则很难精确抓取。</p>
+      <div class="label">代码</div><pre>.split-handle{ cursor:col-resize; width:1px; padding:0 4px; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 圣杯布局 -->
+  <article class="card" data-cat="layout">
+    <div class="demo" style="flex-direction:column;gap:4px;width:180px;">
+      <div style="height:12px;background:var(--accent-soft);border-radius:3px;"></div>
+      <div style="display:flex;gap:4px;"><div style="width:30px;height:34px;background:#EDECE7;border-radius:3px;"></div><div style="flex:1;height:34px;background:#fff;border:1px solid var(--card-line);border-radius:3px;"></div><div style="width:30px;height:34px;background:#EDECE7;border-radius:3px;"></div></div>
+      <div style="height:10px;background:var(--accent-soft);border-radius:3px;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">圣杯布局</span><span class="en">Holy Grail</span><span class="tag">布局</span></div><p class="desc">经典的头部+双边栏+主体+底部</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>需要同时保留左侧导航和右侧辅助信息（目录、广告位）的内容型网页。</p>
+      <div class="label">关键细节</div><p>移动端优先让两侧栏收起或转为抽屉，只保留头部+主体，避免三栏挤压内容宽度。</p>
+      <div class="label">代码</div><pre>.holy-grail{ grid-template-columns:200px 1fr 200px; grid-template-rows:auto 1fr auto; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 仪表盘网格 -->
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;width:180px;">
+        <div style="height:30px;background:#fff;border:1px solid var(--card-line);border-radius:6px;"></div>
+        <div style="height:30px;background:#fff;border:1px solid var(--card-line);border-radius:6px;"></div>
+        <div style="height:30px;background:#fff;border:1px solid var(--card-line);border-radius:6px;"></div>
+        <div style="grid-column:span 3;height:34px;background:var(--accent-soft);border-radius:6px;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">仪表盘网格</span><span class="en">Dashboard Grid</span><span class="tag">布局</span></div><p class="desc">多张卡片自由排布的看板</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>数据看板、后台首页，用统一 gap 的网格容纳大小不一的统计卡片和图表。</p>
+      <div class="label">关键细节</div><p>关键指标卡片放在视线起始点（左上），趋势图表通常占据更宽的跨列空间。</p>
+      <div class="label">代码</div><pre>.dashboard{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 图文布局 -->
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div style="display:flex;gap:8px;width:170px;">
+        <div style="width:44px;height:44px;background:var(--accent-blue-soft);border-radius:8px;flex-shrink:0;"></div>
+        <div style="flex:1;"><div style="height:8px;width:80%;background:#E5E9E7;border-radius:3px;margin-bottom:5px;"></div><div style="height:6px;width:100%;background:#EEF1EF;border-radius:3px;margin-bottom:4px;"></div><div style="height:6px;width:60%;background:#EEF1EF;border-radius:3px;"></div></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">图文布局</span><span class="en">Media Object</span><span class="tag">布局</span></div><p class="desc">图片/图标与文字并排的基础单元</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>评论、消息列表、文章摘要卡这类"一张图+一段文字"反复出现的结构。</p>
+      <div class="label">关键细节</div><p>图片用固定尺寸，文字区域用 flex:1 自适应剩余空间，避免不同长度文字撑乱对齐。</p>
+      <div class="label">代码</div><pre>.media{ display:flex; gap:12px; }
+.media img{ flex-shrink:0; }
+.media .body{ flex:1; min-width:0; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 瀑布流 -->
+  <article class="card" data-cat="layout">
+    <div class="demo">
+      <div style="columns:3;column-gap:5px;width:180px;">
+        <div style="height:34px;background:var(--accent-soft);border-radius:6px;margin-bottom:5px;"></div>
+        <div style="height:22px;background:var(--accent-blue-soft);border-radius:6px;margin-bottom:5px;"></div>
+        <div style="height:28px;background:#fff;border:1px solid var(--card-line);border-radius:6px;margin-bottom:5px;"></div>
+        <div style="height:18px;background:var(--accent-soft);border-radius:6px;"></div>
+        <div style="height:30px;background:#fff;border:1px solid var(--card-line);border-radius:6px;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">瀑布流</span><span class="en">Masonry</span><span class="tag">布局</span></div><p class="desc">高度不等的卡片错落排布</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>图片、内容高度天然不一致的场景（图集、笔记流），不想强行裁剪成统一比例。</p>
+      <div class="label">关键细节</div><p>列间距要与行间距视觉一致；懒加载时预留占位高度，避免图片加载完成后整体重排跳动。</p>
+      <div class="label">代码</div><pre>.masonry{ columns: 3; column-gap: var(--space-4); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 视差滚动 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="position:relative;overflow:hidden;">
+      <div style="position:absolute;width:70px;height:70px;background:var(--accent-blue-soft);border-radius:12px;animation:parallaxback 4s ease-in-out infinite;"></div>
+      <div style="position:relative;width:40px;height:40px;background:var(--accent);border-radius:10px;animation:parallaxfront 4s ease-in-out infinite;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">视差滚动</span><span class="en">Parallax</span><span class="tag">动画</span></div><p class="desc">前后景以不同速率位移出深度感</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>官网首屏、故事型长页面，用多层背景差速滚动制造空间纵深感。</p>
+      <div class="label">关键细节</div><p>前景移动速度快、背景慢（比例通常 1:0.3-0.5）；效果服务于氛围，过量使用会让人头晕，长文本区不要用。</p>
+      <div class="label">代码</div><pre>/* 真实实现绑定 scrollY，按图层深度乘不同系数 */
+el.style.transform = `translateY(${scrollY * depth}px)`;</pre>
+    </div></div>
+  </article>
+
+  <!-- 滚动展开 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div class="reveal-item" style="width:120px;height:50px;border-radius:10px;background:var(--accent-soft);opacity:0;transform:translateY(20px) scale(.92);transition:opacity .5s ease-out, transform .5s ease-out;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">滚动展开</span><span class="en">Scroll Reveal</span><span class="tag">动画</span></div><p class="desc">单个大模块滚入视口时的入场</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>官网分节介绍，每一屏内容随滚动依次"揭幕"，比交错入场更适合大块、独立的内容区。</p>
+      <div class="label">关键细节</div><p>位移幅度可以比列表项更大（16-24px），只触发一次，不要每次滚回视口都重播，容易显得聒噪。</p>
+      <div class="label">代码</div><pre>const io = new IntersectionObserver(es=>{
+  es.forEach(e=> e.isIntersecting && e.target.classList.add('in'));
+});</pre>
+    </div></div>
+  </article>
+
+  <!-- 页面切换 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="width:130px;height:60px;overflow:hidden;border-radius:8px;border:1px solid var(--card-line);position:relative;" onclick="event.stopPropagation()">
+        <div id="ptrack" style="display:flex;width:260px;height:100%;transition:transform .3s ease-out;">
+          <div style="width:130px;flex-shrink:0;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:11px;">页面 A</div>
+          <div style="width:130px;flex-shrink:0;background:var(--accent-blue-soft);display:flex;align-items:center;justify-content:center;font-size:11px;">页面 B</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary" style="margin-left:8px;" onclick="event.stopPropagation(); pageSwitch()">切换</button>
+    </div>
+    <div class="info"><div class="row"><span class="name">页面切换</span><span class="en">Page Transition</span><span class="tag">动画</span></div><p class="desc">整屏内容之间的横向切换</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>移动端多步流程、Tab 切页等整屏内容替换的场景，比淡入淡出更强调"方向感"。</p>
+      <div class="label">关键细节</div><p>前进用左滑，后退用右滑，方向要和用户的操作意图一致；时长 250-300ms，太慢会拖慢连续操作。</p>
+      <div class="label">代码</div><pre>.track{ transform: translateX(-50%); transition: transform .3s; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 数字滚动 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <span id="countUpVal" style="font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;">0</span>
+      <button class="btn btn-secondary" onclick="event.stopPropagation(); countUp()">播放</button>
+    </div>
+    <div class="info"><div class="row"><span class="name">数字滚动</span><span class="en">Count Up</span><span class="tag">动画</span></div><p class="desc">数字从0快速滚动到目标值</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>统计盘、战报页展示关键数字时，用滚动过程强调"这是一个正在增长/达成的成果"。</p>
+      <div class="label">关键细节</div><p>用 ease-out 让滚动先快后慢，在接近目标值时明显减速；总时长 800-1200ms 为宜，太久用户会失去耐心。</p>
+      <div class="label">代码</div><pre>const t=performance.now();
+requestAnimationFrame(function tick(now){
+  const p = Math.min(1,(now-t)/1000);
+  el.textContent = Math.round(target * (1-Math.pow(1-p,3)));
+  if(p<1) requestAnimationFrame(tick);
+});</pre>
+    </div></div>
+  </article>
+
+  <!-- 磁性按钮 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" id="magZone" style="height:100px;" onmousemove="magneticMove(event,this)" onmouseleave="magneticReset(this)">
+      <button class="btn btn-primary" id="magBtn" style="transition:transform .15s ease-out;">跟随鼠标</button>
+    </div>
+    <div class="info"><div class="row"><span class="name">磁性按钮</span><span class="en">Magnetic Button</span><span class="tag">动画</span></div><p class="desc">鼠标靠近时按钮被"吸"过去</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>官网 CTA 按钮，用轻微的跟随位移增加互动的趣味感和精致感。</p>
+      <div class="label">关键细节</div><p>位移幅度控制在按钮尺寸的 20-30% 内，太大会让按钮"跑丢"；离开区域要平滑回弹到原位。</p>
+      <div class="label">代码</div><pre>const dx=(e.clientX-cx)*.3, dy=(e.clientY-cy)*.3;
+btn.style.transform = `translate(${dx}px,${dy}px)`;</pre>
+    </div></div>
+  </article>
+
+  <!-- 卡片倾斜 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div id="tiltCard" style="width:100px;height:70px;background:#fff;border:1px solid var(--card-line);border-radius:10px;transition:transform .12s ease-out;" onmousemove="tiltMove(event,this)" onmouseleave="tiltReset(this)"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">卡片倾斜</span><span class="en">Tilt Card</span><span class="tag">动画</span></div><p class="desc">跟随鼠标位置产生3D透视倾斜</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>产品展示卡片、作品集封面，制造"悬浮在空中"的精致质感。</p>
+      <div class="label">关键细节</div><p>旋转角度控制在 ±8-10 度内，配合 perspective(600px) 使用，角度太大会显得夸张失真。</p>
+      <div class="label">代码</div><pre>card.style.transform =
+  `perspective(600px) rotateX(${ry}deg) rotateY(${rx}deg)`;</pre>
+    </div></div>
+  </article>
+
+  <!-- 光泽扫过 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <button class="btn btn-primary" style="position:relative;overflow:hidden;">
+        <span style="position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);animation:shine 2.2s ease-in-out infinite;"></span>
+        领取奖励
+      </button>
+    </div>
+    <div class="info"><div class="row"><span class="name">光泽扫过</span><span class="en">Shine Sweep</span><span class="tag">动画</span></div><p class="desc">一道高光周期性扫过按钮</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>限时活动、签到奖励按钮，用周期性高光提示"这里有便宜可占"。</p>
+      <div class="label">关键细节</div><p>高光带角度倾斜 15-20 度更自然；间隔 2-3 秒扫一次即可，频率太高会喧宾夺主。</p>
+      <div class="label">代码</div><pre>@keyframes shine{ to{ left:130%; } }</pre>
+    </div></div>
+  </article>
+
+  <!-- 液态按钮 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <button class="btn btn-secondary" style="position:relative;overflow:hidden;" onmouseenter="this.querySelector('.liquid').style.height='100%'" onmouseleave="this.querySelector('.liquid').style.height='0%'">
+        <span class="liquid" style="position:absolute;left:0;bottom:0;width:100%;height:0%;background:var(--accent);transition:height .3s ease-out;z-index:0;"></span>
+        <span style="position:relative;z-index:1;">立即体验</span>
+      </button>
+    </div>
+    <div class="info"><div class="row"><span class="name">液态按钮</span><span class="en">Liquid Fill</span><span class="tag">动画</span></div><p class="desc">悬浮时颜色像液体一样注满</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>次要按钮（描边样式）在 hover 时切换为实心色的一种更有质感的过渡方式。</p>
+      <div class="label">关键细节</div><p>文字颜色最好同步过渡（白→深/深→白），避免填充过程中文字和背景色一度难以辨认。</p>
+      <div class="label">代码</div><pre>.liquid{ height:0; transition:height .3s ease-out; }
+.btn:hover .liquid{ height:100%; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 加载点点点 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="gap:5px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dotbounce 1.2s ease-in-out infinite;animation-delay:0s;"></span>
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dotbounce 1.2s ease-in-out infinite;animation-delay:.15s;"></span>
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:dotbounce 1.2s ease-in-out infinite;animation-delay:.3s;"></span>
+    </div>
+    <div class="info"><div class="row"><span class="name">加载点点点</span><span class="en">Loading Dots</span><span class="tag">动画</span></div><p class="desc">三点依次跳动，表达"正在输入/处理"</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>对话类产品里"对方正在输入"，或按钮内联的轻量加载态，比整页 Spinner 更轻。</p>
+      <div class="label">关键细节</div><p>三点依次错开 0.15s 左右延迟；跳动幅度不超过 6px，保持在原地小幅起伏而不是大幅弹跳。</p>
+      <div class="label">代码</div><pre>@keyframes dotbounce{ 0%,80%,100%{transform:translateY(0);} 40%{transform:translateY(-6px);} }</pre>
+    </div></div>
+  </article>
+
+  <!-- 卡片翻转 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="perspective:600px;">
+      <div class="flip-outer" style="width:90px;height:60px;position:relative;transform-style:preserve-3d;transition:transform .5s;" onmouseenter="this.style.transform='rotateY(180deg)'" onmouseleave="this.style.transform='rotateY(0)'">
+        <div style="position:absolute;inset:0;backface-visibility:hidden;background:var(--accent-soft);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--accent-dark);">正面</div>
+        <div style="position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);background:var(--accent);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;">背面</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">卡片翻转</span><span class="en">Flip Card</span><span class="tag">动画</span></div><p class="desc">沿Y轴翻转露出卡片背面</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>展示"正面结果+背面详情"两组信息，如闪卡记忆、翻牌抽奖。</p>
+      <div class="label">关键细节</div><p>父级要设置 perspective，两面都要 backface-visibility:hidden，否则翻转到背面时会看到镜像文字。</p>
+      <div class="label">代码</div><pre>.flip:hover .inner{ transform: rotateY(180deg); }
+.face{ backface-visibility:hidden; }</pre>
+    </div></div>
+  </article>
+
+  <!-- 环形进度 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="width:56px;height:56px;border-radius:50%;background:conic-gradient(var(--accent) 0% 72%, var(--card-line) 72% 100%);display:flex;align-items:center;justify-content:center;">
+        <div style="width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;">72%</div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">环形进度</span><span class="en">Circular Progress</span><span class="tag">动画</span></div><p class="desc">用圆环表达完成度</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>比横向进度条更紧凑，适合放进卡片角落展示单项任务或存储空间占用。</p>
+      <div class="label">关键细节</div><p>数值变化时用 SVG stroke-dashoffset 或 conic-gradient 角度过渡，配合中心文字同步滚动更新。</p>
+      <div class="label">代码</div><pre>background: conic-gradient(var(--accent) 0% var(--pct),
+  var(--line) var(--pct) 100%);</pre>
+    </div></div>
+  </article>
+
+  <!-- 滚动进度条 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="flex-direction:column;align-items:stretch;gap:6px;width:150px;">
+      <div style="height:3px;background:var(--card-line);border-radius:2px;overflow:hidden;"><div style="width:40%;height:100%;background:var(--accent);"></div></div>
+      <div style="height:6px;width:90%;background:#EEF1EF;border-radius:3px;"></div>
+      <div style="height:6px;width:70%;background:#EEF1EF;border-radius:3px;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">滚动进度条</span><span class="en">Scroll Progress</span><span class="tag">动画</span></div><p class="desc">顶部细条表示当前阅读进度</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>长文章、教程页固定在顶部，让读者感知自己读到了整体内容的百分之多少。</p>
+      <div class="label">关键细节</div><p>宽度直接绑定 scrollY / (scrollHeight - clientHeight)，高度 2-4px 足够，不要抢占内容视觉焦点。</p>
+      <div class="label">代码</div><pre>bar.style.width = (scrollTop/(scrollHeight-clientHeight)*100)+'%';</pre>
+    </div></div>
+  </article>
+
+  <!-- 弹性弹出 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <button class="btn btn-secondary" onclick="event.stopPropagation(); springPop(this)">点击弹出</button>
+      <div class="spring-target" style="width:36px;height:36px;border-radius:9px;background:var(--accent);"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">弹性弹出</span><span class="en">Spring Pop</span><span class="tag">动画</span></div><p class="desc">带轻微过冲的弹性缩放</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>新增标签、加入购物车成功等"轻量庆祝"反馈，比普通 Scale In 更有弹性和活力。</p>
+      <div class="label">关键细节</div><p>用 cubic-bezier 制造过冲（先放大超过目标值再回弹），常见曲线 cubic-bezier(.34,1.56,.64,1)。</p>
+      <div class="label">代码</div><pre>transition: transform .4s cubic-bezier(.34,1.56,.64,1);</pre>
+    </div></div>
+  </article>
+
+  <!-- 卡片堆叠 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="position:relative;height:70px;">
+      <div style="position:absolute;width:70px;height:46px;background:#fff;border:1px solid var(--card-line);border-radius:9px;transform:translate(10px,8px) rotate(4deg);"></div>
+      <div style="position:absolute;width:70px;height:46px;background:#fff;border:1px solid var(--card-line);border-radius:9px;transform:translate(5px,4px) rotate(-2deg);"></div>
+      <div style="position:absolute;width:70px;height:46px;background:var(--accent-soft);border:1px solid var(--card-line);border-radius:9px;transition:transform .18s;" onmouseenter="this.style.transform='translateY(-6px)'" onmouseleave="this.style.transform='translateY(0)'"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">卡片堆叠</span><span class="en">Card Stack</span><span class="tag">动画</span></div><p class="desc">多张卡片错位叠放，顶层可交互</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>左滑喜欢/不喜欢式的选择流程（相亲、推荐流），或强调"还有更多"的堆叠感。</p>
+      <div class="label">关键细节</div><p>底层卡片用小角度旋转+轻微缩小制造透视堆叠感；顶层卡片划走后，下一张要有补位动画衔接。</p>
+      <div class="label">代码</div><pre>.stack-item:nth-child(2){ transform: translate(5px,4px) rotate(-2deg); }</pre>
+    </div></div>
+  </article>
+
+  <!-- 分隔线扫光 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="width:100%;">
+      <div style="position:relative;width:160px;height:1px;background:var(--card-line);overflow:visible;">
+        <div style="position:absolute;top:-2px;width:24px;height:5px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:dividershine 2.4s linear infinite;"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">分隔线扫光</span><span class="en">Divider Shine</span><span class="tag">动画</span></div><p class="desc">一段高光沿分隔线持续移动</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>科技感/品牌页里区块之间的分隔线，用微弱的动效替代死气沉沉的一条静态线。</p>
+      <div class="label">关键细节</div><p>光带要窄（20-30px）、移动匀速；这是纯装饰细节，正文密集的功能页面不建议使用。</p>
+      <div class="label">代码</div><pre>@keyframes dividershine{ from{left:-10%;} to{left:110%;} }</pre>
+    </div></div>
+  </article>
+
+  <!-- 漂浮元素 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="width:44px;height:44px;border-radius:12px;background:var(--accent-blue);animation:floaty 3.4s ease-in-out infinite;"></div>
+    </div>
+    <div class="info"><div class="row"><span class="name">漂浮元素</span><span class="en">Floating</span><span class="tag">动画</span></div><p class="desc">静止元素缓慢上下漂浮</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>官网插画、图标装饰，让静态画面显得"活"一点，常见于产品介绍页的悬浮图形。</p>
+      <div class="label">关键细节</div><p>幅度小（6-10px）、周期长（3-4s），配合 ease-in-out；多个元素错开延迟，避免所有元素同步漂浮显得死板。</p>
+      <div class="label">代码</div><pre>@keyframes floaty{ 50%{ transform:translateY(-10px); } }</pre>
+    </div></div>
+  </article>
+
+  <!-- 摇摆 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div style="font-size:26px;transform-origin:top center;animation:wiggle 3s ease-in-out infinite;">🔔</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">摇摆</span><span class="en">Wiggle</span><span class="tag">动画</span></div><p class="desc">图标周期性小幅摇摆吸引注意</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>通知铃铛、消息图标在有新内容时的低打扰提醒，区别于因错误触发的"摇晃"。</p>
+      <div class="label">关键细节</div><p>大部分时间静止，只在动画周期的一小段（如 5%-15%）里摆动 2-3 次，制造"偶尔提醒"而非持续烦扰的感觉。</p>
+      <div class="label">代码</div><pre>@keyframes wiggle{
+  0%,92%,100%{ transform:rotate(0); }
+  94%{ transform:rotate(-12deg); } 96%{ transform:rotate(10deg); } 98%{ transform:rotate(-6deg); }
+}</pre>
+    </div></div>
+  </article>
+
+  <!-- 数字翻牌 -->
+  <article class="card" data-cat="animation">
+    <div class="demo">
+      <div id="flipDigit" style="width:34px;height:44px;background:var(--ink);color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:20px;transition:transform .35s;" onclick="event.stopPropagation(); flipDigit(this)">3</div>
+    </div>
+    <div class="info"><div class="row"><span class="name">数字翻牌</span><span class="en">Flip Digit</span><span class="tag">动画</span></div><p class="desc">像老式翻页钟一样切换数字</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>倒计时、比分牌这类需要强调"数字更新"这个动作本身的场景。</p>
+      <div class="label">关键细节</div><p>翻转轴心在卡片中线，配合 rotateX 实现半张卡片先翻走、露出下一个数字；单次翻转 250-350ms。</p>
+      <div class="label">代码</div><pre>digit.style.transform = 'rotateX(90deg)';
+setTimeout(()=>{ digit.textContent = next; digit.style.transform='rotateX(0)'; }, 175);</pre>
+    </div></div>
+  </article>
+
+  <!-- 无限循环滚动 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="overflow:hidden;width:170px;">
+      <div style="display:flex;gap:14px;width:340px;animation:logoscroll 6s linear infinite;">
+        <div style="width:26px;height:26px;border-radius:6px;background:var(--accent-soft);"></div>
+        <div style="width:26px;height:26px;border-radius:6px;background:var(--accent-blue-soft);"></div>
+        <div style="width:26px;height:26px;border-radius:6px;background:var(--accent-soft);"></div>
+        <div style="width:26px;height:26px;border-radius:6px;background:var(--accent-blue-soft);"></div>
+        <div style="width:26px;height:26px;border-radius:6px;background:var(--accent-soft);"></div>
+        <div style="width:26px;height:26px;border-radius:6px;background:var(--accent-blue-soft);"></div>
+      </div>
+    </div>
+    <div class="info"><div class="row"><span class="name">无限循环滚动</span><span class="en">Infinite Scroll Row</span><span class="tag">动画</span></div><p class="desc">一排图标/Logo无缝循环滚动</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>合作伙伴 Logo 墙、标签云等展示型内容，在有限宽度内展示更多项目。</p>
+      <div class="label">关键细节</div><p>内容必须完整复制一份拼接在后面，动画走完前半程正好无缝衔接后半程，才能实现"看不出接缝"的循环。</p>
+      <div class="label">代码</div><pre>@keyframes logoscroll{ to{ transform:translateX(-50%); } }</pre>
+    </div></div>
+  </article>
+
+  <!-- 弹幕 -->
+  <article class="card" data-cat="animation">
+    <div class="demo" style="position:relative;overflow:hidden;height:110px;">
+      <span style="position:absolute;top:14px;font-size:11px;color:var(--accent-dark);background:var(--accent-soft);padding:3px 8px;border-radius:999px;white-space:nowrap;animation:danmu 3.5s linear infinite;">曼昱加油！🏓</span>
+      <span style="position:absolute;top:46px;font-size:11px;color:#1E5FC7;background:var(--accent-blue-soft);padding:3px 8px;border-radius:999px;white-space:nowrap;animation:danmu 4.5s linear infinite;animation-delay:1s;">这一板绝了</span>
+      <span style="position:absolute;top:78px;font-size:11px;color:var(--accent-dark);background:var(--accent-soft);padding:3px 8px;border-radius:999px;white-space:nowrap;animation:danmu 3.8s linear infinite;animation-delay:2s;">4:1 拿下！</span>
+    </div>
+    <div class="info"><div class="row"><span class="name">弹幕</span><span class="en">Barrage</span><span class="tag">动画</span></div><p class="desc">评论以横向飘过的形式滚动展示</p></div>
+    <div class="detail"><div class="detail-inner">
+      <div class="label">适用场景</div><p>直播、赛事页面展示实时评论/助威文字，营造热闹的现场氛围。</p>
+      <div class="label">关键细节</div><p>不同行速度和延迟要错开，避免同时出现的文字互相重叠；轨道行数和字号要克制，太密会遮挡主内容。</p>
+      <div class="label">代码</div><pre>@keyframes danmu{
+  from{ left:100%; } to{ left:-60%; }
+}</pre>
+    </div></div>
+  </article>
+
+</div>
+
+<script>
+  // filter
+  document.getElementById('filters').addEventListener('click', (e)=>{
+    const pill = e.target.closest('.pill');
+    if(!pill) return;
+    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    const cat = pill.dataset.cat;
+    document.querySelectorAll('.card').forEach(card=>{
+      card.hidden = (cat !== 'all' && card.dataset.cat !== cat);
+    });
+  });
+
+  // expand
+  document.getElementById('grid').addEventListener('click', (e)=>{
+    const card = e.target.closest('.card');
+    if(!card) return;
+    if(e.target.closest('.dropdown') || e.target.closest('.toggle')) return;
+    card.classList.toggle('expanded');
+  });
+
+  // page transition demo
+  let ptIndex = 0;
+  function pageSwitch(){
+    ptIndex = 1 - ptIndex;
+    const track = document.getElementById('ptrack');
+    if(track) track.style.transform = `translateX(-${ptIndex*50}%)`;
+  }
+
+  // count up demo
+  function countUp(){
+    const el = document.getElementById('countUpVal');
+    if(!el) return;
+    const target = 8642;
+    const t0 = performance.now();
+    function tick(now){
+      const p = Math.min(1, (now - t0) / 1000);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if(p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // magnetic button demo
+  function magneticMove(e, zone){
+    const btn = document.getElementById('magBtn');
+    if(!btn) return;
+    const rect = zone.getBoundingClientRect();
+    const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+    const dx = (e.clientX - cx) * 0.3, dy = (e.clientY - cy) * 0.3;
+    btn.style.transform = `translate(${dx}px, ${dy}px)`;
+  }
+  function magneticReset(zone){
+    const btn = document.getElementById('magBtn');
+    if(btn) btn.style.transform = 'translate(0,0)';
+  }
+
+  // tilt card demo
+  function tiltMove(e, card){
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(600px) rotateX(${py * -14}deg) rotateY(${px * 14}deg)`;
+  }
+  function tiltReset(card){
+    card.style.transform = 'perspective(600px) rotateX(0) rotateY(0)';
+  }
+
+  // spring pop demo
+  function springPop(btn){
+    const target = btn.nextElementSibling;
+    if(!target) return;
+    target.style.transition = 'none';
+    target.style.transform = 'scale(0)';
+    void target.offsetWidth;
+    target.style.transition = 'transform .45s cubic-bezier(.34,1.56,.64,1)';
+    target.style.transform = 'scale(1)';
+  }
+
+  // flip digit demo
+  const digitSeq = [3,7,1,9,4,2];
+  let digitIdx = 0;
+  function flipDigit(el){
+    digitIdx = (digitIdx + 1) % digitSeq.length;
+    el.style.transform = 'rotateX(90deg)';
+    setTimeout(()=>{
+      el.textContent = digitSeq[digitIdx];
+      el.style.transform = 'rotateX(0)';
+    }, 175);
+  }
+
+  // scroll reveal demo
+  const revealEls = document.querySelectorAll('.reveal-item');
+  const revealObs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('in'); });
+  }, {threshold:.4});
+  revealEls.forEach(el=> revealObs.observe(el));
+
+  // like burst
+  function likeBurst(el){
+    const rect = el.getBoundingClientRect();
+    for(let i=0;i<8;i++){
+      const p = document.createElement('span');
+      p.style.position='fixed';
+      p.style.left=(rect.left+rect.width/2)+'px';
+      p.style.top=(rect.top+rect.height/2)+'px';
+      p.style.width='6px';p.style.height='6px';p.style.borderRadius='50%';
+      p.style.background='var(--accent)';p.style.pointerEvents='none';p.style.zIndex=9999;
+      document.body.appendChild(p);
+      const angle = (Math.PI*2*i)/8;
+      const dx = Math.cos(angle)*36, dy = Math.sin(angle)*36;
+      p.animate([
+        {transform:'translate(0,0) scale(1)', opacity:1},
+        {transform:`translate(${dx}px, ${dy}px) scale(.3)`, opacity:0}
+      ], {duration:480, easing:'ease-out'}).onfinish = ()=> p.remove();
+    }
+  }
+
+  // ripple
+  function createRipple(e, el){
+    const r = document.createElement('span');
+    const rect = el.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    r.className = 'ripple-span';
+    r.style.width = r.style.height = size + 'px';
+    r.style.left = (e.clientX - rect.left - size/2) + 'px';
+    r.style.top  = (e.clientY - rect.top - size/2) + 'px';
+    el.appendChild(r);
+    r.addEventListener('animationend', ()=> r.remove());
+  }
+
+  // stagger replay when scrolled into view
+  const staggerEl = document.getElementById('staggerWrap');
+  function playStagger(){
+    const items = staggerEl.querySelectorAll('.stagger-item');
+    items.forEach((it,i)=>{
+      it.classList.remove('in');
+      it.style.transitionDelay='0ms';
+      void it.offsetWidth;
+      it.style.transitionDelay = (i*70)+'ms';
+      requestAnimationFrame(()=> it.classList.add('in'));
+    });
+  }
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{ if(entry.isIntersecting){ playStagger(); } });
+  }, {threshold:.4});
+  if(staggerEl) obs.observe(staggerEl);
+
+  // close dropdown when clicking outside
+  document.addEventListener('click', (e)=>{
+    document.querySelectorAll('.dropdown.open').forEach(dd=>{
+      if(!dd.contains(e.target)) dd.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

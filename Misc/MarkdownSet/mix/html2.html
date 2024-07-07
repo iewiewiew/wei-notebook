@@ -1,0 +1,126 @@
+<table>
+    <tr>
+        <th colspan=\\\"2\\\">测试项名称</th>
+        <th>架构</th>
+        <th width=\\\"15%\\\">结果</th>
+        <th>门禁详细日志</th>
+        <th>流水线</th>
+        <th>备注</th>
+    </tr>
+    <tr>
+        <td colspan=\\\"2\\\">spec</td>
+        <td rowspan=\\\"4\\\"> -</td>
+        <td>:warning: warning</td>
+        <td>
+            <a href=\\\"https://qa.opencloudos.tech/job/ocs-gitee-gate-ci/7993/artifact/7993/ocs_ci_api/output/spec_scan.log\\\">spec_scan</a><br>
+        </td>
+        <td rowspan=\\\"4\\\"><a
+                href=\\\"https://qa.opencloudos.tech/blue/organizations/jenkins/ocs-gitee-gate-ci/detail/ocs-gitee-gate-ci/7993/pipeline/45\\\">:link:1</a>
+        </td>
+        <td>changelog缺少-[type]字段<br>changelog缺少-[desc]字段<br><a
+                href=\\\"https://docs.opencloudos.org/contribution/ci-troubleshooting/#321-spec\\\">:link:
+            spec错误解决</a></td>
+    </tr>
+    <tr>
+        <td colspan=\\\"2\\\">source</td>
+        <td>:white_check_mark: success</td>
+        <td rowspan=\\\"3\\\"><a
+                href=\\\"https://qa.opencloudos.tech/job/ocs-gitee-gate-ci/7993/artifact/7993/ocs_ci_api/output/build_info.log\\\">build_info</a><br>
+        </td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td colspan=\\\"2\\\">srpmbuild</td>
+        <td>:x: failed</td>
+        <td>构建wireshark srpm失败</td>
+    </tr>
+    <tr>
+        <td colspan=\\\"2\\\">rpmbuild</td>
+        <td>:x: failed</td>
+        <td>找不到srpm包</td>
+    </tr>
+    <tr>
+        <td rowspan=\\\"2\\\" colspan=\\\"2\\\">install</td>
+        <td>x86_64</td>
+        <td>:o: cancel</td>
+        <td rowspan=\\\"16\\\">-</td>
+        <td>
+            <a href=\\\"https://qa.opencloudos.tech/blue/organizations/jenkins/ocs-gitee-gate-ci/detail/ocs-gitee-gate-ci/7993/pipeline/74\\\">:link:2.1</a>
+        </td>
+        <td rowspan=\\\"16\\\">-</td>
+    </tr>
+    <tr>
+        <td>aarch64</td>
+        <td>:o: cancel</td>
+        <td>
+            <a href=\\\"https://qa.opencloudos.tech/blue/organizations/jenkins/ocs-gitee-gate-ci/detail/ocs-gitee-gate-ci/7993/pipeline/75\\\">:link:2.2</a>
+        </td>
+    </tr>
+    <tr>
+        <td rowspan=\\\"14\\\">compatibility</td>
+        <td>subrpmlist</td>
+        <td rowspan=\\\"7\\\">x86_64</td>
+        <td>:o: cancel</td>
+        <td rowspan=\\\"7\\\"><a
+                href=\\\"https://qa.opencloudos.tech/blue/organizations/jenkins/ocs-gitee-gate-ci/detail/ocs-gitee-gate-ci/7993/pipeline/77\\\">:link:3.1</a>
+        </td>
+    </tr>
+    <tr>
+        <td>filelist</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>ability</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>abi</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>api</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>executable</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>conf</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>subrpmlist</td>
+        <td rowspan=\\\"7\\\">aarch64</td>
+        <td>:o: cancel</td>
+        <td rowspan=\\\"7\\\"><a
+                href=\\\"https://qa.opencloudos.tech/blue/organizations/jenkins/ocs-gitee-gate-ci/detail/ocs-gitee-gate-ci/7993/pipeline/78\\\">:link:3.2</a>
+        </td>
+    </tr>
+    <tr>
+        <td>filelist</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>ability</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>abi</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>api</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>executable</td>
+        <td>:o: cancel</td>
+    </tr>
+    <tr>
+        <td>conf</td>
+        <td>:o: cancel</td>
+    </tr>
+</table><a href=\\\"https://qa.opencloudos.tech/job/ocs-gitee-gate-ci/7993/display/redirect\\\">:link:pull request
+    测试</a><strong>[未通过]</strong>，更多帮助请查看<a
+        href=\\\"https://opencloudos.gitee.io/document/contribution/ci-troubleshooting/\\\">:link:门禁排查手册</a>

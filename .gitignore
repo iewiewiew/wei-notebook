@@ -1,0 +1,13 @@
+.DS_Store
+/.tmp/
+/a_tmp/
+/.claude/
+/.idea/
+/.obsidian/
+/.vscode/
+/Database/GraphQL/node_modules/
+/DevOps/Ansible/roles/git/files/rpm.zip
+/DevOps/Ansible/Software/roles/*/files/*
+/SoftwareTest/JMeter/package/
+/lib/
+/wei-notebook.iml
