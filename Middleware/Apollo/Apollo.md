@@ -14,16 +14,18 @@
 
 
 
-## 一、Apollo 简介
-Apollo（阿波罗）是一款可靠的分布式配置管理中心，诞生于携程框架研发部，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，适用于微服务配置管理场景。
-服务端基于 Spring Boot 和 Spring Cloud 开发，打包后可以直接运行，不需要额外安装 Tomcat 等应用容器。
-Java 客户端不依赖任何框架，能够运行于所有 Java 运行时环境，同时对 Spring/Spring Boot 环境也有较好的支持。
+## 1. Apollo 简介
+
+Apollo（阿波罗）是一款可靠的分布式配置管理中心，诞生于携程框架研发部，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，适用于微服务配置管理场景。  
+服务端基于 Spring Boot 和 Spring Cloud 开发，打包后可以直接运行，不需要额外安装 Tomcat 等应用容器。  
+Java 客户端不依赖任何框架，能够运行于所有 Java 运行时环境，同时对 Spring/Spring Boot 环境也有较好的支持。  
 .Net 客户端不依赖任何框架，能够运行于所有.Net 运行时环境。
 
 
 
-## 二、Apollo 安装
-方式一
+## 2. Apollo 安装
+
+方式一  
 [docker-compose 部署](https://www.apolloconfig.com/#/zh/deployment/quick-start-docker)
 ```
 下载 docker-compose.yml 和 sql 文件夹到本地目录，如 docker-quick-start。
@@ -43,6 +45,7 @@ use ApolloConfigDB;
 show tables;
 select * from App;
 ```
+
 方式二
 ```
 1、配置 sql
@@ -119,42 +122,50 @@ docker rm -f apollo-portal
 
 
 
-## 三、Appllo 模块
+## 3. Appllo 模块
+
 四个核心模块及其主要功能
 
 ### ConfigService
+
 提供配置获取接口
 提供配置推送接口
 服务于 Apollo 客户端
 
 ### AdminService
+
 提供配置管理接口
 提供配置修改发布接口
 服务于管理界面 Portal
 
 ### Client
+
 为应用获取配置，支持实时更新
 通过 MetaServer 获取 ConfigService 的服务列表
 使用客户端软负载 SLB 方式调用 ConfigService
 
 ### Portal
+
 配置管理界面
 通过 MetaServer 获取 AdminService 的服务列表
 使用客户端软负载 SLB 方式调用 AdminService
 三个辅助服务发现模块
 
 ### Eureka
+
 用于服务发现和注册
 Config/AdminService 注册实例并定期报心跳
 和 ConfigService 住在一起部署
 
 ### MetaServer
+
 Portal 通过域名访问 MetaServer 获取 AdminService 的地址列表
 Client 通过域名访问 MetaServer 获取 ConfigService 的地址列表
 相当于一个 Eureka Proxy
 逻辑角色，和 ConfigService 住在一起部署
 
 ### NginxLB
+
 和域名系统配合，协助 Portal 访问 MetaServer 获取 AdminService 地址列表
 和域名系统配合，协助 Client 访问 MetaServer 获取 ConfigService 地址列表
 和域名系统配合，协助用户访问 Portal 进行配置管理

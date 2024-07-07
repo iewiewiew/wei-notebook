@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片浏览</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+        }
+        h1 { text-align: center; margin-bottom: 20px; }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .gallery-item:hover .url-overlay {
+            opacity: 1;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .url-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            word-break: break-all;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .url-overlay:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        .gallery-item .name {
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .url-link {
+            color: #4CAF50;
+            text-decoration: underline;
+            font-size: 12px;
+            margin-top: 5px;
+            padding: 0 10px;
+            display: block;
+            word-break: break-all;
+        }
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 图片浏览</h1>
+        <div id="gallery" class="gallery">
+            <div class="empty">正在加载...</div>
+        </div>
+    </div>
+    <script>
+        async function loadImages() {
+            try {
+                const res = await fetch('/uploads/');
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
+                }
+                const html = await res.text();
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a[href]')).filter(a => {
+                    const href = a.getAttribute('href');
+                    return href && !href.endsWith('/') && /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(href);
+                });
+                
+                const gallery = document.getElementById('gallery');
+                if (links.length === 0) {
+                    gallery.innerHTML = '<div class="empty">暂无图片，请将图片放入 uploads 目录</div>';
+                    return;
+                }
+                
+                const baseUrl = window.location.origin;
+                gallery.innerHTML = links.map(a => {
+                    const href = a.getAttribute('href');
+                    const name = decodeURIComponent(a.textContent.trim());
+                    // 确保路径正确，如果 href 已经包含 /uploads，直接使用，否则添加前缀
+                    const imgPath = href.startsWith('/') ? href : `/uploads/${encodeURIComponent(href)}`;
+                    const fullUrl = baseUrl + imgPath;
+                    const safeUrl = fullUrl.replace(/'/g, "\\'");
+                    return `<div class="gallery-item">
+                        <div class="url-overlay" onclick="copyToClipboard('${safeUrl}')" title="点击复制地址">
+                            ${fullUrl}
+                        </div>
+                        <img src="${imgPath}" alt="${name}" loading="lazy" onerror="console.error('图片加载失败:', this.src)">
+                        <div class="name">${name}</div>
+                        <a href="${fullUrl}" target="_blank" class="url-link">${fullUrl}</a>
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                console.error('加载图片失败:', e);
+                document.getElementById('gallery').innerHTML = '<div class="empty">加载失败: ' + e.message + '</div>';
+            }
+        }
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('地址已复制到剪贴板：' + text);
+            }).catch(err => {
+                // 降级方案
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('地址已复制到剪贴板：' + text);
+            });
+        }
+
+        loadImages();
+        // 每10秒自动刷新
+        setInterval(loadImages, 10000);
+    </script>
+</body>
+</html>
+

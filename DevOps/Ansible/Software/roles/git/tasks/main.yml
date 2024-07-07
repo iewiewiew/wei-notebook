@@ -1,0 +1,21 @@
+---
+
+- name: Detect Git
+  command: git version
+  ignore_errors: True
+  register: git_install
+
+- name: Check Git
+  block:
+    - debug: 
+        msg: |
+          Git Not Exsits
+      when: git_install.failed
+
+    - debug: 
+        msg: |
+          Git Exsits
+      when: not git_install.failed
+
+- include_tasks: install.yml
+  when: git_install.failed # 检测git是否已安装

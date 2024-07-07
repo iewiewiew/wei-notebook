@@ -1,0 +1,15 @@
+---
+
+- name: Make Dir Python3 Rpm Files
+  shell: |
+    rm -rf {{ python3_dir }}
+    mkdir -p {{ python3_dir }}/rpm
+
+- name: Copy Python3 Rpm To Remote
+  copy: src=rpm.zip dest={{ python3_dir }}/rpm
+
+- name: Unzip Python3 Rpm Zip
+  command: unzip {{ python3_dir }}/rpm/rpm.zip -d {{ python3_dir }}
+
+- name: Install Python3
+  command: rpm -Uvh --force --nodeps {{ python3_dir }}/rpm/*.rpm

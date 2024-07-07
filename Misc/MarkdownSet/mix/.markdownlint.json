@@ -1,0 +1,5 @@
+{
+  "default": true,
+  "MD013": false, // 禁用行长度规则
+  "MD029": { "style": "ordered" } // 强制有序列表
+}

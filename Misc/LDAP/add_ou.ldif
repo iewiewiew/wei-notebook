@@ -1,0 +1,3 @@
+dn: ou=users,dc=mycompany,dc=com
+objectClass: organizationalUnit
+ou: users

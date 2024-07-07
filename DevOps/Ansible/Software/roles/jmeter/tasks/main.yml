@@ -1,0 +1,22 @@
+---
+
+- name: Make Dir Jmeter Files
+  shell: |
+    rm -rf {{ jmeter_dir }}
+    mkdir -p {{ jmeter_dir }}/files
+
+- name: Copy Jmeter File To Remote
+  copy: src={{ jmeter_file_name }} dest={{ jmeter_dir }}/files
+
+- name: Unzip {{ jmeter_file_name }}
+  command: unzip {{ jmeter_dir }}/files/{{ jmeter_file_name }} -d {{ jmeter_dir }}
+
+- name: Set JMeter Env
+  shell: |
+    echo "" >> /etc/profile
+    echo "export JMETER_HOME={{ jmeter_home }}" >> /etc/profile
+    echo "export PATH=\${JMETER_HOME}/bin:\$PATH" >> /etc/profile
+    source /etc/profile
+
+- name: Chmod +x /bin/jmeter
+  command: chmod +x {{ jmeter_home }}/bin/jmeter

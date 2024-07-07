@@ -1,0 +1,23 @@
+---
+
+- name: Detect Python3
+  command: python3 --version
+  ignore_errors: True
+  register: python3_install
+
+- name: Check Python3
+  block:
+    - debug: 
+        msg: |
+          Python3 Not Exsits
+      when: python3_install.failed
+
+    - debug: 
+        msg: |
+          Python3 Exsits
+      when: not python3_install.failed
+
+- include_tasks: install.yml
+  when: python3_install.failed # 检测python3是否已安装
+
+- include_tasks: install_whl.yml
