@@ -18,7 +18,7 @@ sidebar_position: 1
 
 
 
-## :sunny: 1、项目简介
+## 1、项目简介
 
 
 - wei-notebook
@@ -26,21 +26,13 @@ sidebar_position: 1
   - <https://github.com/iewiewiew/wei-notebook.git>
   - <https://gitee.com/iewiewiew/wei-notebook.git>
 - Learn-Java
-  项目说明：Java 和前端项目，包含 Java 基础，SpringBoot，React，Vue，TypeScript 等。
+  项目说明：Java 和前端项目，包含 Java 基础、SpringBoot等。
   - <https://github.com/iewiewiew/Learn-Java.git>
   - <https://gitee.com/iewiewiew/Learn-Java.git>
-- Learn-Python
-  项目说明：Python 项目，包含 Python 基础，cypress，pytest，robotframework，selenium，unitest 等测试框架。
-  - <https://github.com/iewiewiew/Learn-Python.git>
-  - <https://gitee.com/iewiewiew/Learn-Python.git>
-- Learn-Go
-  项目说明：Go 项目。
-  - <https://github.com/iewiewiew/Learn-Go.git>
-  - <https://gitee.com/iewiewiew/Learn-Go.git>
 
 
 
-## :earth_asia: 2、质量保障体系建设
+## 2、质量保障体系建设
 
 - 在线地址：[质量保障体系建设](https://www.processon.com/view/link/62526ac61efad407891c5dd5)
 - 本地文件：[质量保障体系建设](./docs/质量保障体系建设.pdf)
@@ -49,7 +41,7 @@ sidebar_position: 1
 
 
 
-## :frog: 3、测试工程师技能图谱
+## 3、测试工程师技能图谱
 
 - 在线地址：[测试工程师技能图谱](https://www.processon.com/view/link/615eae81e0b34d06f3dcdf4b)  
 - 本地文件：[测试工程师技能图谱](./docs/测试工程师技能图谱.xmind)

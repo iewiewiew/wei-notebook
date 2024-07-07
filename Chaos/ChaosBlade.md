@@ -15,12 +15,14 @@
 
 
 
-## 一、ChaosBlade 入门
-### 1.1、ChaosBlade 简介
+## 1. ChaosBlade 入门
+
+### 1.1 ChaosBlade 简介
 
 ChaosBlade 是阿里巴巴 2019 年开源的混沌工程项目，包含混沌工程实验工具 chaosblade 和混沌工程平台 chaosblade-box，旨在通过混沌工程帮助企业解决云原生过程中高可用问题。
 
-### 1.2、ChaosBlade 架构
+### 1.2 ChaosBlade 架构
+
 ChaosBlade 支持多种环境部署与演练，包括 linux、docker、kubernetes 集群及各类云厂商环境。ChaosBlade 主要包括以下几个组件：
 
 - ChaosBlade-Box Console：ChaosBlade 可视化组件，主要提供一套用户友好的 Web 界面，用户可以通过该界面进行混沌工程实验的编排与操作管理。
@@ -28,12 +30,13 @@ ChaosBlade 支持多种环境部署与演练，包括 linux、docker、kubernete
 - Agent：核心逻辑组件，部署在用户终端的主机或 Kubernetes 集群内，主要负责和 ChaosBlade-Box Server 建联上报心跳并作为命令下发通道。
 - ChaosBlade：主要执行工具，能在主机和 Kubernetes 等不同环境上执行故障注入，能对系统网络设备、文件系统、内核及系统上运行的应用等进行故障干扰。
 
-![chaosblade 架构](img/chaosblade_architect.png)
+![chaosblade 架构](img/chaosblade-architect.png)
 
 
 
-## 二、ChaosBlade 搭建
-### 2.1、ChaosBlade 搭建
+## 2. ChaosBlade 搭建
+
+### 2.1 ChaosBlade 搭建
 
 [ChaosBlade 下载地址](https://github.com/chaosblade-io/chaosblade/releases)
 
@@ -69,7 +72,7 @@ source ~/.bashrc
 cat ~/.bashrc
 ```
 
-### 2.2、ChaosBlade Operator 搭建
+### 2.2 ChaosBlade Operator 搭建
 
 [ChaosBlade Operator 下载地址](https://github.com/chaosblade-io/chaosblade-operator/releases)
 
@@ -99,7 +102,7 @@ blades=$(kubectl get blade | grep -v NAME | awk '{print $1}' | tr '\n' ' ') && k
 helm del --purge chaosblade-operator
 ```
 
-### 2.3、ChaosBlade Box 搭建
+### 2.3 ChaosBlade Box 搭建
 
 [ChaosBlade Box 下载地址](https://github.com/chaosblade-io/chaosblade-box)
 
@@ -156,9 +159,9 @@ helm uninstall agent -n chaosblade
 
 
 
-## 三、ChaosBlade 实验
-### 3.1、ChaosBlade 场景
-![](img/chaosblade_scene.png)
+## 3. ChaosBlade 实验
+### 3.1 ChaosBlade 场景
+![](img/chaosblade-scene.png)
 ```
 ck          Clickhouse experiment 
 cplus       C++ chaos experiments
@@ -200,7 +203,7 @@ zk          zk experiment
 
 
 
-### 3.2、ChaosBlade 基础
+### 3.2 ChaosBlade 基础
 **参考资料**  
 [ChaosBlade 官网](https://chaosblade.io/)  
 [ChaosBlade 文档](https://chaosblade-io.gitbook.io/chaosblade-help-zh-cn/)   
@@ -309,7 +312,7 @@ http://127.0.0.1:8080/chaosblade?cmd=destroy e866e0cd3706ca72
 curl "http://127.0.0.1:8080/chaosblade?cmd=destroy%20e866e0cd3706ca72"
 ```
 
-### 3.2、ChaosBlade 实验
+### 3.2 ChaosBlade 实验
 
 #### blade create cpu load
 
@@ -772,7 +775,7 @@ kubectl top pod -A | sort --reverse --key 4 --numeric
 
 
 
-## 四、ChaosBlade 原理
+## 4. ChaosBlade 原理
 
 ### 4.1 磁盘 IO
 
@@ -848,7 +851,7 @@ dd if=/dev/urandom of=randomdata.bin bs=1M count=10
 
 
 
-## 五、知识碎片
+## 5. 知识碎片
 
 [高可用测试用例](https://wi9wku2j1p.feishu.cn/sheets/H5HEsuWGohJZsKtLTQscMVY4n8c)
 

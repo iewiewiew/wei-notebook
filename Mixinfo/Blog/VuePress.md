@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">VuePress 博客主题</h1>
 
 > By：weimenghua  

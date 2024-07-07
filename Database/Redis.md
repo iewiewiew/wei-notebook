@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">Redis</h1>
 
 > By：weimenghua  
@@ -13,9 +11,9 @@
 
 
 
-## 一、Redis 简介
+## 1. Redis 简介
 
-### 1.1、Redis 简介
+### 1.1 Redis 简介
 
 Redis 是完全开源免费的，遵守 BSD 协议，是一个高性能的 key-value 数据库。
 Redis 与其他 key - value 缓存产品有以下三个特点：
@@ -23,7 +21,7 @@ Redis 支持数据的持久化，可以将内存中的数据保持在磁盘中�
 Redis 不仅仅支持简单的 key-value 类型的数据，同时还提供 list，set，zset，hash 等数据结构的存储。
 Redis 支持数据的备份，即 master-slave 模式的数据备份。
 
-### 1.2、Redis 优势
+### 1.2 Redis 优势
 
 性能极高 – Redis 能读的速度是110000次/s,写的速度是81000次/s 。
 丰富的数据类型 – Redis 支持二进制案例的 Strings, Lists, Hashes, Sets 及 Ordered Sets 数据类型操作。
@@ -41,11 +39,11 @@ select 1
 
 
 
-## 二、Redis 数据类型
+## 2. Redis 数据类型
 
 Redis 支持五种数据类型：string（字符串），hash（哈希），list（列表），set（集合），zset(有序集合)。
 
-### 2.1、String（字符串）
+### 2.1 String（字符串）
 
 string 是 Redis 最基本的类型，一个 key 对应一个 value。string 类型的值最大能存储 512MB。 
 ```
@@ -59,7 +57,7 @@ get key1
 del key1
 ```
 
-### 2.2、Hash（哈希）
+### 2.2 Hash（哈希）
 
 Redis hash 是一个 string 类型的 field（字段） 和 value（值） 的映射表，hash 特别适合用于存储对象。 Redis 中每个 hash 可以存储 232的平方 - 1 键值对（40多亿）。 
 ```
@@ -85,7 +83,7 @@ hlen <key>
 hdel key2 name
 ```
 
-### 2.3、List（列表）
+### 2.3 List（列表）
 
 Redis 列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素到列表的头部（左边）或者尾部（右边）。 一个列表最多可以包含 232的平方 - 1 个元素 (4294967295, 每个列表超过40亿个元素)。  
 ```
@@ -98,7 +96,7 @@ lpush key3 is guagua
 lrange key3 0 10
 ```
 
-### 2.4、Set（集合）
+### 2.4 Set（集合）
 
 Redis 的 Set 是 string 类型的无序集合。集合是通过哈希表实现的，所以添加，删除，查找的复杂度都是 O(1)。  
 ```
@@ -119,7 +117,7 @@ SCARD <key>
 SADD <key> <member1> [member2 ...]
 ```
 
-### 2.5、zset（sorted set：有序集合）
+### 2.5 zset（sorted set：有序集合）
 
 Redis zset 和 set 一样也是 string 类型元素的集合，且不允许重复的成员。不同的是每个元素都会关联一个 double 类型的分数。redis 正是通过分数来为集合中的成员进行从小到大的排序。 zset 的成员是唯一的，但分数(score)却可以重复。  
 ```
@@ -131,25 +129,25 @@ zrange key5 0 10
 
 
 
-## 三、Redis 持久化
+## 3. Redis 持久化
 
-### 3.1、Redis 为什么需要持久化
+### 3.1 Redis 为什么需要持久化
 
 由于 Redis 的数据都存放在内存中，如果没有配置持久化，Redis 重启后数据就全丢失了，于是需要开启 Redis 的持久化功能，将数据保存到磁盘上，当 Redis 重启后，可以从磁盘中恢复数据。
 
-### 3.2、Redis 提供两种方式进行持久化
+### 3.2 Redis 提供两种方式进行持久化
 
-**3.2.1、RDB（Redis DataBase）持久化**
+**3.2.1 RDB（Redis DataBase）持久化**
 原理是将 Reids 在内存中的数据库记录定时 dump 到磁盘上的 RDB 持久化。  
 RDB 方式生成 dump.rdb 文件。dump.rdb 是由 Redis 服务器自动生成的。默认情况下 每隔一段时间 Redis 服务器程序会自动对数据库做一次遍历，把内存快照写在一个叫做“dump.rdb”的文件里，这个持久化机制叫做 SNAPSHOT。有了 SNAPSHOT 后，如果服务器宕机，重新启动 Redis 服务器程序时 Redis 会自动加载 dump.rdb，将数据库状态恢复到上一次做 SNAPSHOT 时的状态。至于多久做一次 SNAPSHOT，SNAPSHOT 文件的路径和文件名，你可以在 Redis 的 conf 文件里指定。
 
-**3.2.2、AOF（Append Only File）持久化**
+**3.2.2 AOF（Append Only File）持久化**
 原理是将 Reids 的操作日志以追加的方式写入文件。
 以日志的形式来记录每个写操作，将 Redis 执行过的所有写指令记录下来(读操作不记录)，只许追加文件但不可以改写文件，redis 启动之初会读取该文件重新构建数据，换言之，Redis 重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作
 
-### 3.3、RDB 和 AOF 二者的区别
+### 3.3 RDB 和 AOF 二者的区别
 
-**3.3.1、RDB 持久化**
+**3.3.1 RDB 持久化**
 RDB 持久化是指在指定的时间间隔内将内存中的数据集快照写入磁盘，实际操作过程是 fork 一个子进程，先将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储。
 
 - 优势
@@ -159,7 +157,7 @@ RDB 持久化是指在指定的时间间隔内将内存中的数据集快照写�
 在一定间隔时间做一次备份，所以如果 redis 意外 down 掉的话，就会丢失最后一次快照后的所有修改；
 fork 的时候，内存中的数据被克隆了一份，大致2倍的膨胀性需要考虑。
 
-**3.3.2、AOF 持久化**
+**3.3.2 AOF 持久化**
 AOF 持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。
 
 - 优势
@@ -172,9 +170,9 @@ aof 运行效率要慢于 rdb,每秒同步策略效率较好，不同步效率�
 
 
 
-## 四、其它
+## 4. 其它
 
-### 4.1、Redis  Hotkey BigKey
+### 4.1 Redis  Hotkey BigKey
 
 **参考资料**
 [深度干货｜一文详解 Redis 中 BigKey、HotKey 的发现与处理](https://developer.aliyun.com/article/788845)
@@ -203,7 +201,7 @@ aof 运行效率要慢于 rdb,每秒同步策略效率较好，不同步效率�
 - 通过 Redis 官方客户端 redis-cli 的 hotkeys 参数发现热 Key
 - 使用 monitor 命令在紧急情况时找出热 Key
 
-### 4.2、Redis 连接数
+### 4.2 Redis 连接数
 
 ```
 # 启动 Redis 客户端
@@ -242,13 +240,13 @@ CLIENT KILL TYPE normal
 举例：CLIENT KILL ADDR 127.0.0.1:6379
 ```
 
-### 4.3、查看 Redis 主从
+### 4.3 查看 Redis 主从
 
 ```
 kubectl -n <namespace> exec -it pod/redis-master-0 -- redis-cli  info Replication | grep role
 ```
 
-### 4.4、查看 Redis 使用情况
+### 4.4 查看 Redis 使用情况
 在 Redis server 上测试实例的响应延迟情况
 `redis-cli -h 127.0.0.1 -p 6379 --intrinsic-latency 60`
 
@@ -302,4 +300,9 @@ keys *tmp*
 
 查看 key 类型
 type <key_name>
+```
+
+[Redis 连接工具 Tiny RDM](https://github.com/tiny-craft/tiny-rdm/releases)
+```
+sudo xattr -d com.apple.quarantine /Applications/Tiny\ RDM.app
 ```
