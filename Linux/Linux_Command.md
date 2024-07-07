@@ -176,6 +176,7 @@ rwx 说明：
 - date +%Y%m%d                         #注意：+前面有空格
 - date +%Y-%m-%d%t%H:%M:%S
 - date -R                              #以 RFC 2822 格式显示当前时间和日期，例如：Wed, 12 Jul 2023 14:54:29 +0800
+- date -u                              #获取 UTC 时间
 
 ### dd
 - dd if=/dev/random of=binary bs=1024000 count=1		# 创建1M 文件
@@ -344,7 +345,6 @@ lsd 类似于 ls
 - lsof -i:port           #根据端口号查进程查
 - lsof -i:pid            #根据进程号查端口
 
-@TODO
 ### md5sum
 md5sum tmp.txt
 
@@ -397,9 +397,13 @@ md5sum tmp.txt
 说明：nohup 的作用可以将程序以忽略挂起信号（SIGHUP）的方式运行。常见的用法是和 & 命令一同使用, 将命令放置到后台运行, 即使终端挂掉, 进程会忽略挂起信号, 继续运行。
 
 ### nmon  
-[nmon 下载地址](https://nmon.sourceforge.io/pmwiki.php?n=Site.Download)  
-`http://sourceforge.net/projects/nmon/files/nmon16e_mpginc.tar.gz`  
-- nmon           #监控系统资源 yum install -y nmon
+[nmon 下载地址](https://nmon.sourceforge.io/pmwiki.php?n=Site.Download)   查看操作系统的信息：uname -a，查看linux发行版本：lsb_release -a，确认下载版本
+wget http://sourceforge.net/projects/nmon/files/nmon16e_mpginc.tar.gz / wget http://sourceforge.net/projects/nmon/files/nmon_linux_14i.tar.gz
+tar -zxvf  nmon16e_mpginc.tar.gz / chmod u+x nmon_x86_64_ubuntu15
+报错：./nmon_x86_64_ubuntu15: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+解决：sudo apt-get install libncurses5
+按下c，m，d 后 CPU、内存、磁盘的消耗情况都直观的展现出来，按 q 键退出。
+- nmon   # 监控系统资源 yum install -y nmon
 - nmon -s 10 c 60 -f -m /root
   -s 10 每 10 秒采集一次数据。
   -c 60 采集 60 次，即为采集十分钟的数据。
@@ -441,6 +445,9 @@ pstree -a 使用 -a 选项显示进程的完整命令行
 
 ### rm
 - rm -rf !(demo1 | demo2)  #删除 demo1和 demo2文件之外的所有文件
+- echo "y" | rm -rf /path/to/directory  # 直接删除，无需手动确认
+- yes | rm -rf /path/to/directory # 直接删除，无需手动确认
+- rm -rf /path/to/directory <<< "y" # 直接删除，无需手动确认
 
 ### rpm
 - rpm-qa|grep demo       #查找 demo 安装包
@@ -754,3 +761,21 @@ host 8.8.8.8
 查找与域名关联的 IP 地址
 host devopscube.com
 
+
+创建 1 KB 大小的 example.txt 文件
+mkfile 1024b example.txt
+
+创建 10 MB 大小的 example.txt 文件并显示详细信息
+mkfile -v 10m example.txt
+
+创建两个 1 GB 大小的文件 file1.txt 和 file2.txt
+mkfile 1g file1.txt file2.txt
+
+查看文件大小
+du -sh example.txt
+
+### 设置别名
+alias ll="ls -l"
+alias k="kubectl --insecure-skip-tls-verify"
+alias cilog="~/ci_k8s_log.sh"
+alias s="sshpass -p '123456' ssh root@127.0.0.1"

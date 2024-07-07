@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">Helm</h1>
 
 > By：weimenghua  
@@ -9,16 +7,16 @@
 > Description：Helm 包管理器
 
 **参考资料**  
-[Helm 官方文档](https://helm.sh/zh/docs/)  
-[Helm 仓库](https://artifacthub.io/)  
+[Helm 官方文档](https://helm.sh/zh/docs/)    
+[Helm 仓库1](https://artifacthub.io/)   
+[Helm 仓库2](https://hub.grapps.cn/). 
 [bitnami 源](https://charts.bitnami.com/)  
-[微软 azure 源](http://mirror.azure.cn/kubernetes/charts/)  
-[Helm 仓库](https://hub.grapps.cn/)
+[azure 源](http://mirror.azure.cn/kubernetes/charts/)  
 [Helm 安装软件](./Helm_Install.md)
 
 
 
-## 一、Helm 简介
+## 1. Helm 简介
 
 Helm 的核心组成包括 `Repository`、`Chart`、`Release`。
 
@@ -32,7 +30,7 @@ Release 是运行在 Kubernetes 集群中的 chart 的实例。一个 chart 通�
 
 
 
-## 二、Helm 安装
+## 2. Helm 安装
 
 ```
 1、Linux 安装 Helm
@@ -92,7 +90,7 @@ helm uninstall dashboard
 
 
 
-## 三、Helm 使用
+## 3. Helm 使用
 
 ### 基本操作
 
@@ -125,10 +123,10 @@ values.yaml 文件命名规范：
 ```
 1、添加 chart 仓库
 命令：helm repo add <仓库名称> <仓库 URL>
-举例：helm repo add bitnami https://charts.bitnami.com/bitnami
 举例：helm repo add azure http://mirror.azure.cn/kubernetes/charts
-举例：helm repo add stable https://charts.helm.sh/stable
 举例：helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+举例：helm repo add bitnami https://charts.bitnami.com/bitnami
+举例：helm repo add stable https://charts.helm.sh/stable
 
 2、查看配置的仓库
 helm repo list
@@ -278,7 +276,7 @@ APIService
 
 
 
-## 四、Chart 解释
+## 4. Chart 解释
 
 [帮助文档](https://helm.sh/zh/docs/chart_template_guide/getting_started/)
 

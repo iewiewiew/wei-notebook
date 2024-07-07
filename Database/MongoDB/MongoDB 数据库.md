@@ -12,9 +12,9 @@
 
 
 
-## 一、MongoDB 搭建
+## 1. MongoDB 搭建
 
-### Linux
+### 1.1 Linux
 
 ```
 查看 mongo 版本
@@ -31,7 +31,7 @@ mongo --version
 注：查看 Linux 版本：cat /etc/os-release; 或者 cat /proc/version;
 ```
 
-### Docker
+### 1.2 Docker
 
 ```
 创建目录
@@ -89,9 +89,9 @@ root	只在 admin 数据库中可用。超级账号，超级权限
 
 
 
-## 二、MongoDB 教程
+## 2. MongoDB 教程
 
-### MongoDB 连接
+### 2.1 MongoDB 连接
 ```
 格式
 mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]
@@ -109,7 +109,7 @@ mongodb://admin:123456@localhost/test
 
 
 
-### MongoDB 概念解析
+### 2.2 MongoDB 概念解析
 
 | SQL 术语/概念 | MongoDB 术语/概念 | 解释/说明                           |
 | ------------ | ---------------- | ----------------------------------- |
@@ -123,7 +123,7 @@ mongodb://admin:123456@localhost/test
 
 
 
-### MongoDB 语法
+### 2.3 MongoDB 语法
 **保留数据库**  
 - admin：从权限的角度来看，这是"root"数据库。要是将一个用户添加到这个数据库，这个用户自动继承所有数据库的权限。一些特定的服务器端命令也只能从这个数据库运行，比如列出所有的数据库或者关闭服务器。
 - local：这个数据永远不会被复制，可以用来存储限于本地单台服务器的任意集合。

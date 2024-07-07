@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">Zookeeper</h1>
 
 > By：weimenghua  
@@ -10,9 +8,9 @@
 
  
 
-## 一、环境搭建
+## 1. 环境搭建
 
-**1、下载并解压 zookeeper**
+**1、下载并解压 zookeeper**  
 1.1、下载 zookeeper
 
 ```
@@ -85,8 +83,8 @@ ls /             //查看 zookeeper 节点
 
 
 
+## 2. 常用命令
 
-## 二、常用命令
 **2.1、连接 zookeeper 服务**
 连接本机 zookeeper 服务：`./zkCli.sh`  
 连接远程 zookeeper 服务：`./zkCli.sh -server ip:port （./zkCli.sh -server 127.0.0.1:2181）`
@@ -117,7 +115,8 @@ ls /             //查看 zookeeper 节点
 
 
 
-## 三、调用过程
+## 3. 调用过程
+
 注册中心的调用过程
 1. 服务提供者启动时，会将自己的服务信息(服务名称/IP 地址/端口号等)写入注册中心。
 2. 当注册中心接收提供者数据时，会动态的维护服务列表数据。

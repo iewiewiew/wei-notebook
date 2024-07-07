@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">Zipkin</h1>
 
 > By：weimenghua  
@@ -13,8 +11,8 @@
 
 
 
+### 1. Zipkin 简介
 
-### 一、Zipkin 简介
 Zipkin 主要由4个部分组成，  
 收集器：Collector  
 存储器：Storage，默认是内存存储，我们可以改成数据库如 Mysql 等  
@@ -23,7 +21,8 @@ Web 界面：单独的 UI 组件
 
 
 
-### 二、Zipkin 搭建
+### 2. Zipkin 搭建
+
 ```
 方式一
 docker run -d -p 9411:9411 openzipkin/zipkin

@@ -14,7 +14,7 @@
 
 
 
-## 一、Jenkins 介绍
+## 1. Jenkins 介绍
 
 Jenkins 是一个流行的开源自动化服务器，可用于自动构建、测试和部署软件。它支持许多不同的插件和集成，可以与其他工具和平台集成，例如 Git、Docker、Kubernetes 和 AWS 等。Jenkins 具有广泛的应用场景，并且被广泛用于 DevOps 实践中。
 
@@ -26,7 +26,7 @@ Jenkins 是一个流行的开源自动化服务器，可用于自动构建、测
 
 
 
-## 二、Jenkins 搭建
+## 2. Jenkins 搭建
 
 ### Docker 安装
 ```
@@ -120,7 +120,7 @@ cat /var/jenkins_home/secrets/initialAdminPassword
 
 
 
-## 三、Jenkins 教程
+## 3. Jenkins 教程
 
 ### 创建 job 的完整流程
 
@@ -259,7 +259,7 @@ cd /etc && source profile
 
 
 
-## 四、Jenkins 示例
+## 4. Jenkins 示例
 
 ### Java Maven 项目构建
 
@@ -296,7 +296,7 @@ cd /etc && source profile
 
 
 
-## 五、Jenkins API
+## 5. Jenkins API
 
 查看 api
 ```
@@ -333,7 +333,7 @@ curl -X post http://127.0.0.1:5555/job/test-demo-param2/buildWithParameters?toke
 
 
 
-## 六、知识碎片
+## 6. 知识碎片
 
 **IDEA 集成 Jenkins**
 

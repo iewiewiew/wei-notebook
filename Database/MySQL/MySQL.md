@@ -10,7 +10,7 @@
 
 
 
-## 一、数据库基础
+## 1. 数据库基础
 **数据库连接**
 
 ```
@@ -51,23 +51,23 @@ sudo /usr/local/mysql/support-files/mysql.server restart
 
 **drop、truncate 和 delete 的区别**
 
-一、delete  
+1. drop  
+1、drop 是 DDL，会隐式提交，所以，不能回滚，不会触发触发器。  
+2、drop 语句删除表结构及所有数据，并将表所占用的空间全部释放。  
+3、drop 语句将删除表的结构所依赖的约束，触发器，索引，依赖于该表的存储过程/函数将保留,但是变为 invalid 状态。
+
+2. delete  
 1、delete 是 DML，执行 delete 操作时，每次从表中删除一行，并且同时将该行的的删除操作记录在 redo 和 undo 表空间中以便进行回滚（rollback）和重做操作，但要注意表空间要足够大，需要手动提交（commit）操作才能生效，可以通过 rollback 撤消操作。  
 2、delete 可根据条件删除表中满足条件的数据，如果不指定 where 子句，那么删除表中所有记录。  
 3、delete 语句不影响表所占用的 extent，高水线(high watermark)保持原位置不变。
 
-二、truncate  
+3. truncate  
 1、truncate 是 DDL，会隐式提交，所以，不能回滚，不会触发触发器。  
 2、truncate 会删除表中所有记录，并且将重新设置高水线和所有的索引，缺省情况下将空间释放到 minextents 个 extent，除非使用 reuse storage，。不会记录日志，所以执行速度很快，但不能通过 rollback 撤消操作（如果一不小心把一个表 truncate 掉，也是可以恢复的，只是不能通过 rollback 来恢复）。  
 3、对于外键（foreignkey ）约束引用的表，不能使用 truncate table，而应使用不带 where 子句的 delete 语句。  
 4、truncate table 不能用于参与了索引视图的表。
 
-三、drop  
-1、drop 是 DDL，会隐式提交，所以，不能回滚，不会触发触发器。  
-2、drop 语句删除表结构及所有数据，并将表所占用的空间全部释放。  
-3、drop 语句将删除表的结构所依赖的约束，触发器，索引，依赖于该表的存储过程/函数将保留,但是变为 invalid 状态。
-
-四、总结  
+4. 总结  
 1、在速度上，一般来说，drop> truncate > delete。  
 2、在使用 drop 和 truncate 时一定要注意，虽然可以恢复，但为了减少麻烦，还是要慎重。  
 3、如果想删除部分数据用 delete，注意带上 where 子句，回滚段要足够大；  
@@ -86,7 +86,7 @@ sudo /usr/local/mysql/support-files/mysql.server restart
 
 
 
-## 二、sql 执行详解
+## 2. sql 执行详解
 ### sql 执行过程
 Step1：客户端向 Mysql 服务器发送 SQL 语句。  
 Step2：服务器收到后先查询”查询缓存“，如果命中，从缓存中直接返回 sql 执行的结果集。否则，进入 Step3。  
@@ -191,7 +191,7 @@ type：对表访问方式，表示 MySQL 在表中找到所需行的方式，又
 
 
 
-## 三、数据库索引
+## 3. 数据库索引
 ### 索引基数
 基数是数据列所包含的不同值的数量。  
 例如，某个数据列包含值1、3、7、4、7、3，那么它的基数就是4。索引的基数相对于数据表行数较高（也就是说，列中包含很多不同的值，重复的值很少）的时候，它的工作效果最好。如果某数据列含有很多不同的年龄，索引会很快地分辨数据行。如果某个数据列用于记录性别（只有"M"和"F"两种值），那么索引的用处就不大。如果值出现的几率几乎相等，那么无论搜索哪个值都可能得到一半的数据行。在这些情况下，最好根本不要使用索引，因为查询优化器发现某个值出现在表的数据行中的百分比很高的时候，它一般会忽略索引，进行全表扫描。惯用的百分比界线是"30%"。
@@ -308,7 +308,7 @@ create index 索引名 on 表名(列名1,列名2)   eg. create index enameIndex 
 
 
 
-## 四、数据库日志
+## 4. 数据库日志
 - 重做日志（redo log）
 - 二进制日志（bin log）
 - 回滚日志（undo log）
@@ -387,7 +387,7 @@ mysql --host=127.0.0.1 --port=3306 --user=root --password=root < .tmp/events.sql
 
 
 
-## 五、数据库监控
+## 5. 数据库监控
 
 1、如何监控数据库的连接数
 
@@ -435,7 +435,7 @@ show slave status \G;
 
 
 
-## 六、知识碎片
+## 6. 知识碎片
 
 ### MySQL VIP 漂移
 
@@ -661,9 +661,8 @@ MySQL有4个级别的字符集和比较规则，分别是：
 [图形化数据设计工具1](https://drawdb.vercel.app/editor)  
 [图形化数据设计工具2](https://dbdiagram.io/home)
 
+### 如何定位慢 SQL
 
-
-## 如何定位慢 SQL
 查看是否开启慢查询
 `show variables like '%slow%';`
 
@@ -681,6 +680,7 @@ slow_query_log_file	        /usr/local/mysql/data/menghuadeMacBook-Pro-slow.log
 
 sudo cp /usr/local/mysql/data/menghuadeMacBook-Pro-slow.log /Users/menghuawei/IdeaProjects/my-project/wei-notebook/Database/MySQL
 
+```
 系统变量log_slow_admin_statements
 表示是否将慢管理语句例如ANALYZE TABLE和ALTER TABLE等记入慢查询日志
 
@@ -705,11 +705,9 @@ set global slow_query_log='ON';
 修改慢查询时间为5
 set long_query_time = 5;
 show global status like '%slow%';
+```
 
-
-
-示例
-### show full processlist
+**示例**
 
 ```
 -- 显示哪些 SQL 线程正在运
@@ -729,7 +727,7 @@ show full processlist;
 - State：显示当前 SQL 语句的状态，这是一个非常重要的判断标识，比如多次刷新命令时，发现 SQL 常处于 Sending data，那么这条 SQL 大概率是存在问题的。
 - Info：显示正在执行的 SQL 语句，这也是你能直接拿到慢 SQL 的方式。
 
-###  实例对比：索引对性能的影响
+实例对比：索引对性能的影响
 
 创建表
 
@@ -766,3 +764,19 @@ select * from `dbname`.t_table_info where id = '1';
 添加索引的前提下，使用 JMeter 根据 ID 进行查询
 
 测试结果
+
+《八股文》MySQL面试夺命20问：https://mp.weixin.qq.com/s/I-n9bAIGWUAj1n2wP2OLjQ
+
+连接数据库工具：https://github.com/dbgate/dbgate
+
+MySQL 搭建
+当前版本：https://dev.mysql.com/downloads/mysql/
+历史版本：https://downloads.mysql.com/archives/community/
+
+```
+```
+
+
+读取 sql 文件里的关键字并替换为大写的，重新写入新的 sql 文件：
+https://github.com/iewiewiew/Learn-Python/tree/master/utils/replace_key_word.py
+

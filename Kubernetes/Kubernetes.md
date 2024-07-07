@@ -18,11 +18,11 @@
 
 
 
-# 1、Kubernetes 入门
+# 1. Kubernetes 入门
 
-## 1.1、Kubernetes 简介
+## 1.1 Kubernetes 简介
 
-**1.1.1、简介**
+**1.1.1 简介**
 
 Kubernetes 是容器集群管理系统，是一个开源的平台，可以实现容器集群的自动化部署、自动扩缩容、维护等功能。
 
@@ -35,13 +35,13 @@ Kubernetes 是容器集群管理系统，是一个开源的平台，可以实现
 Kubernetes 的全生命周期管理：创建集群，部署应用，发布应用，扩展应用，更新应用。
 Kubernetes 是Google 2014年创建管理的，是 Google 10多年大规模容器管理技术 Borg 的开源版本。
 
-**1.1.2、特点**
+**1.1.2 特点**
 
 - 可移植: 支持公有云，私有云，混合云，多重云（multi-cloud）
 - 可扩展: 模块化, 插件化，可挂载，可组合
 - 自动化: 自动部署，自动重启，自动复制，自动伸缩/扩展
 
-**1.1.3、优势**
+**1.1.3 优势**
 
 容器优势总结：
 
@@ -56,9 +56,9 @@ Kubernetes 是Google 2014年创建管理的，是 Google 10多年大规模容器
 
 
 
-## 1.2、Kubernetes 组件
+## 1.2 Kubernetes 组件
 
-**1.2.1、组件**
+**1.2.1 组件**
 一个 Kubernetes 集群包含两种类型的资源:
 
 - Master 负责管理整个集群。 Master 协调集群中的所有活动，例如调度应用、维护应用的所需状态、应用扩容以及推出新的更新。
@@ -72,7 +72,7 @@ Kubernetes 是Google 2014年创建管理的，是 Google 10多年大规模容器
 7. kubelet：运行在每个计算节点上，作为 agent，接收分配该节点的 Pods 任务及管理容器，周期性获取容器状态，反馈给 kube-apiserver。
 8. DNS：一个可选的 DNS 服务，用于为每个 Service 对象创建 DNS 记录，这样所有的 Pod 就可以通过 DNS 访问服务了。
 
-**1.2.2、源码**
+**1.2.2 源码**
 [kubernetes 源码](https://github.com/kubernetes/kubernetes)  
 - 文档类（api、docs、logo）  
 - 工具类（build、cluster、Godeps、hack、staging、translations）     
@@ -80,42 +80,45 @@ Kubernetes 是Google 2014年创建管理的，是 Google 10多年大规模容器
 
 
 
-# 2、Kubernetes 搭建
-## 2.1、Kubernetes 搭建（Mac）
+# 2. Kubernetes 搭建
+
+## 2.1 Kubernetes 搭建（Mac）
 
 ```
-1、下载 Docker Desktop
+1. 下载 Docker Desktop
 https://www.docker.com/products/docker-desktop/
 
-2、下载 Kubernetes-docker-desktop-for-mac
+2. 下载 Kubernetes-docker-desktop-for-mac
 git clone https://github.com/gotoKubernetes/Kubernetes-docker-desktop-for-mac.git
 
-3、进入 Kubernetes-docker-desktop-for-mac 项目，拉取镜像
+3. 进入 Kubernetes-docker-desktop-for-mac 项目，拉取镜像
 ./load_images.sh
 
-4、打开 Docker Desktop 配置页面，勾选 enable Kubernetes（时间有点长）
+4. 打开 Docker Desktop 配置页面，勾选 enable Kubernetes（时间有点长）
 
-5、在命令终端输入如下命令，验证是否安装成功
+5. 在命令终端输入如下命令，验证是否安装成功
 kubectl cluster-info
 ```
 
 
 
-## 2.2、Kubernetes 搭建（Linux）
+## 2.2 Kubernetes 搭建（Linux）
 
 部署 Kubernetes 集群主要有两种方式：
-**kubeadm**
-[Kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/) 是官方社区推出的一个用于快速部署 kubernetes 集群的工具，提供 kubeadm init 和 kubeadm join，用于快速部署 Kubernetes 集群。
-**二进制包**
-从 github 下载发行版的二进制包，手动部署每个组件，组成 Kubernetes 集群。
+
+- kubeadm：[Kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/) 是官方社区推出的一个用于快速部署 kubernetes 集群的工具，提供 kubeadm init 和 kubeadm join，用于快速部署 Kubernetes 集群。
+
+- 二进制包：从 github 下载发行版的二进制包，手动部署每个组件，组成 Kubernetes 集群。
+
 以下是通过 kubeadm 安装 Kubernetes 的教程。
 
 **2.2.1 初始化环境**
+
 ```
-1、查看操作系统版本
+1. 查看操作系统版本
 命令：cat /etc/centos-release
 
-2、关闭防火墙
+2. 关闭防火墙
 作用：kubernetes 和docker 在运行的中会产生大量的 iptables 规则，为了不让系统规则跟它们混淆，直接关闭系统的规则。
 命令：
 systemctl stop firewalld    //暂时关闭防火墙
@@ -127,25 +130,28 @@ systemctl stop iptables    //暂时关闭 iptables
 systemctl disable iptables //永久关闭 iptables
 检查：systemctl status iptables / iptables -L
 
-3、禁用 selinux
+3. 禁用 selinux
 命令：sed -i 's/enforcing/disabled/' /etc/selinux/config
 检查：cat /etc/selinux/config
 
-4、关闭 swap
+4. 关闭 swap
 作用：swap 分区指的是虚拟内存分区，它的作用是物理内存使用完，之后将磁盘空间虚拟成内存来使用，启用 swap 设备会对系统的性能产生非常负面的影响，因此 kubernetes 要求每个节点都要禁用 swap 设备，但是如果因为某些原因确实不能关闭 swap 分区，就需要在集群安装过程中通过明确的参数进行配置说明。
 命令：
 swapoff -a                          //暂时关闭 swap
 sed -ri 's/.*swap.*/#&/' /etc/fstab //永久关闭 swap
 检查：cat /etc/fstab 或者 free -m
 
-5、时间同步（未操作）
+5. 时间同步（未操作）
 作用：kubernetes 要求集群中的节点时间必须精确一直，这里使用 chronyd 服务从网络同步时间。
 命令：
 systemctl start chronyd
 systemctl enable chronyd
+手动校准：chronyc makestep
+查看同步状态：chronyc tracking
+
 检查：date
 
-6、配置内核参数
+6. 配置内核参数
 作用：将桥接的 IPv4流量传递到 iptables 的链。
 命令：
 cat >> /etc/sysctl.d/Kubernetes.conf <<EOF
@@ -155,14 +161,14 @@ EOF
 刷新配置：sysctl --system
 检查：cat /etc/sysctl.d/Kubernetes.conf
 
-7、添加阿里源
+7. 添加阿里源
 命令：
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup 或者 rm -rfv /etc/yum.repos.d/*
 curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo # 根据系统版本选择
 wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
 检查：cat /etc/yum.repos.d/CentOS-Base.repo
 
-8、配置主机名（替换为主机 ip）
+8. 配置主机名（替换为主机 ip）
 作用：为了方便集群节点间的直接调用
 命令：
 cat >> /etc/hosts << EOF
@@ -172,18 +178,19 @@ cat >> /etc/hosts << EOF
 EOF
 检查：cat /etc/hosts
 
-9、其它
+9. 其它
 查看本机 ip：ifconfig
 修改主机名：hostnamectl set-hostname k8s-master
 重启主机：reboot
 ```
 
-**2.2.2、安装常用包**
+**2.2.2 安装常用包**
+
 ```
-1、安装常用包
+1. 安装常用包
 yum install -y vim bash-completion net-tools gcc
 
-2、使用阿里云源安装 docker-ce（跳过，如果本地没有 Docker 则需执行）
+2. 使用阿里云源安装 docker-ce（跳过，如果本地没有 Docker 则需执行）
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 yum install -y docker-ce
@@ -201,13 +208,13 @@ EOF
 检查：cat /etc/docker/daemon.json  注：追加写入，注意检查下是否有重复
 ```
 
-**2.2.3、安装 kubectl、kubelet、kubeadm**
+**2.2.3 安装 kubectl、kubelet、kubeadm**
 Kubelet 是负责与其他节点集群通信，并进行本节点 Pod 和容器生命周期的管理。  
 Kubeadm 是 Kubernetes 的自动化部署工具，降低了部署难度，提高效率。  
 Kubectl 是 Kubernetes 集群管理工具。  
 
 ```
-1、添加阿里云 kubernetes 源
+1. 添加阿里云 kubernetes 源
 命令：
 cat >> /etc/yum.repos.d/kubernetes.repo << EOF
 [kubernetes]
@@ -225,15 +232,15 @@ EOF
 gpgcheck=0
 repo_gpgcheck=0
 
-2、安装 kubectl、kubelet、kubeadm（踩坑：指定合适的版本，各组件版本一致，以下使用1.23.5版本）
+2. 安装 kubectl、kubelet、kubeadm（踩坑：指定合适的版本，各组件版本一致，以下使用1.23.5版本）
 命令：
 yum install -y kubectl kubelet kubeadm
 yum install -y kubectl-1.23.5 kubelet-1.23.5 kubeadm-1.23.5
 
-3、开机自启 docker+开机自启 kubelet
+3. 开机自启 docker+开机自启 kubelet
 命令：systemctl daemon-reload && systemctl enable kubelet && systemctl start kubelet
 
-4、配置 kubelet 的cgroup
+4. 配置 kubelet 的cgroup
 命令：
 cat >> /etc/sysconfig/kubelet << EOF
 KUBELET_CGROUP_ARGS="--cgroup-driver=systemd"
@@ -241,7 +248,7 @@ KUBE_PROXY_MODE="ipvs"
 EOF
 检查：cat /etc/sysconfig/kubelet  注：追加写入，注意检查下是否有重复
 
-5、查看版本
+5. 查看版本
 命令：
 kubectl version
 kubelet --version
@@ -251,24 +258,24 @@ yum list --showduplicates kubeadm --disableexcludes=kubernetes
 升级 kubeadm
 yum install -y kubeadm-1.18.9-0 --disableexcludes=kubernetes
 
-6、查看镜像
+6. 查看镜像
 命令：kubeadm config images list
 
-7、查看 kubelet 配置
+7. 查看 kubelet 配置
 cat /var/lib/kubelet/config.yaml |grep group
 
-8、重启 kubelet
+8. 重启 kubelet
 命令：systemctl restart kubelet
 
-9、配置 k8s 环境变量
+9. 配置 k8s 环境变量
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 source ~/.bash_profile
 cat ~/.bash_profile
 
-10、卸载 kubectl、kubelet、kubeadm
+10. 卸载 kubectl、kubelet、kubeadm
 命令：yum remove -y kubectl kubelet kubeadm
 
-11、踩坑
+11. 踩坑
 问题1：kubectl 启动不了？
 解决1：
 修改 Docker 配置
@@ -281,16 +288,16 @@ vim /etc/docker/daemon.json
 systemctl restart docker  # 即使已经配置也要重启一下
 ```
 
-**2.2.4、初始化 Kubernetes 单节点/集群**
+**2.2.4. 初始化 Kubernetes 单节点/集群**
 
 ```
-1、初始化 Kubernetes 单节点 
+1. 初始化 Kubernetes 单节点 
 踩坑：只有单节点，参数无需添加(10.0.12.14 内网 ip) --apiserver-advertise-address=10.0.12.14   \
 kubeadm init --kubernetes-version=v1.23.5 \
 --image-repository registry.aliyuncs.com/google_containers  \
 --service-cidr=10.10.0.0/16 --pod-network-cidr=10.122.0.0/16
 
-2、初始化 Kubernetes 集群
+2. 初始化 Kubernetes 集群
 命令：
 kubeadm init --kubernetes-version=v1.23.5 \
 --apiserver-advertise-address=10.0.12.14   \
@@ -326,28 +333,29 @@ rm -rf /etc/kubernetes/manifests
 rm -rf /etc/kubernetes
 rm -rf /var/lib/etcd
 
-3、创建 kubectl
+3. 创建 kubectl
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 cat $HOME/.kube/config
 
-4、使 kubectl 可以自动补充
+4. 使 kubectl 可以自动补充
 source <(kubectl completion bash)
 
-5、查看节点
+5. 查看节点
 kubectl get node
 
-6、node 节点为 NotReady，因为 corednspod 没有启动，缺少网络 pod，安装 calico 网络
+6. node 节点为 NotReady，因为 corednspod 没有启动，缺少网络 pod，安装 calico 网络
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
-7、重置配置
+7. 重置配置
 踩坑：如果修改配置重启后不生效，就重置再安装
 kubeadm reset
 ```
 
-**2.2.5、添加 node 节点**
+**2.2.5 添加 node 节点**
 Node 是Kubernetes 中的工作节点，最开始被称为 minion。一个 Node 可以是 VM 或物理机。每个 Node（节点）具有运行 pod 的一些必要服务，并由 Master 组件进行管理，Node 节点上的服务包括 Docker、kubelet 和kube-proxy。
+
 ```
 1、添加新节点需要在原 master 节点获取 token 和hash 值
 获取 token（在 master 节点执行），有效期24小时
@@ -380,21 +388,22 @@ wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-
 kubectl apply -f kube-flannel.yml
 ```
 
-**2.2.5.1、查看 node**
+**2.2.5.1 查看 node**
+
 ```
-1、查看 node
+1. 查看 node
 命令：kubectl get node
 
-2、查看 node 详细信息
+2. 查看 node 详细信息
 命令：kubectl get node -o wide
 
-3、查看 node 标签
+3. 查看 node 标签
 命令：kubectl get node --show-labels
 
-4、查看 node 详情
+4. 查看 node 详情
 命令：kubectl describe node
 
-5、查看资源占用情况
+5. 查看资源占用情况
 命令：kubectl top node
 ```
 
@@ -538,8 +547,9 @@ cat ~/.bashrc
 
 
 
-# 3、Kubernetes 资源
-## 3.1、资源配置
+# 3. Kubernetes 资源
+
+## 3.1 资源配置
 
 ```
 1、查看某种资源可以配置的一级属性
@@ -551,7 +561,7 @@ cat ~/.bashrc
 举例：kubectl explain pod.spec
 ```
 
-## 3.2、资源管理
+## 3.2 资源管理
 
 ```
 1、命令式对象管理：直接使用命令去操作 kubernetes 资源
@@ -564,7 +574,7 @@ kubectl create/patch -f nginx-pod.yaml
 kubectl apply -f nginx-pod.yaml
 ```
 
-## 3.3、资源类型
+## 3.3 资源类型
 
 kubernetes 中所有的内容都抽象为资源，查看资源类型：kubectl api-resources。
 | 资源分类      | 资源名称                 | 缩写    | 资源作用        |
@@ -590,7 +600,7 @@ kubernetes 中所有的内容都抽象为资源，查看资源类型：kubectl a
 
 
 
-# 4、Kubernetes 资源
+# 4. Kubernetes 资源
 
 ## kubectl
 
@@ -686,6 +696,7 @@ kubectl get services --all-namespace --field-seletor metadata.namespace != defau
 
 2、复制 pod 文件到本地
 命令：kubectl cp <pod 名称>:<文件/目录> <本地文件路径> -n <ns 名称>
+命令：kubectl cp <pod 名称>:<文件/目录> <本地文件路径> -n <ns 名称> -c <容器名称>
 举例：kubectl cp nginx-deployment-9456bbbf9-9g8zn:/gor_1.3_RC1_x64.tar.gz /root/tmp/test.tar.gz -n my-space
 ```
 
@@ -1829,7 +1840,7 @@ docker run --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sy
 
 访问 http:localhost:8080/containers/，在首页可以查看到主机的资源使用情况，包括 CPU、内存、文件系统、网络等。
 
-# 6、相关概念
+# 6. 相关概念
 
 ## 亲和性和反亲和性
 
@@ -1997,7 +2008,7 @@ pod 是单一亦或一组容器的合集。
 deployment 是 pod 版本管理的工具，用来区分不同版本的 pod。
 单独创建 pod 的时候就不会有 deployment 出现，但是创建 deployment 的时候一定会创建 pod,因为 pod 是一个基础的单位。任何的控制器单位的具体实现必须落到 pod 去实现。
 
-# 7、知识碎片
+# 7. 知识碎片
 
 **网络诊断：**
 
@@ -2033,3 +2044,17 @@ source ~/.kube/aliases.sh
 
 在容器内部尝试访问另一个 Pod 的服务:  
 `curl http://<other_pod_service_name>:<port>`
+
+k8s pod 参数说明
+```
+Limits:
+  cpu:     4
+  memory:  8092Mi
+Requests:
+  cpu:     200m
+  memory:  2Gi
+```
+- CPU Limits: 这个 Pod 被限制最多使用 4 个 CPU 核心。也就是说,即使节点上有更多可用的 CPU 资源,这个 Pod 也最多只能使用 4 个 CPU 核心。
+- Memory Limits: 这个 Pod 被限制最多使用 8092 Mi (8.092 GB) 的内存。如果 Pod 使用的内存超过这个限制,就会被 Kubernetes 终止。
+- CPU Requests: 这个 Pod 声明需要 200 m (0.2) 个 CPU 核心。Kubernetes 会确保调度这个 Pod 到一个至少有 0.2 个 CPU 核心可用的节点上。
+- Memory Requests: 这个 Pod 声明需要 2 Gi (2 GB) 的内存。Kubernetes 会确保调度这个 Pod 到一个至少有 2 GB 可用内存的节点上。

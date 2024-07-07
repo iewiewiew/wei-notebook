@@ -8,17 +8,18 @@
 
 
 
-
-## 一、K0S
+## 1. K0S
 
 **参考资料**  
 [k0sproject](https://k0sproject.io/)  
 [docs.k0sproject](https://docs.k0sproject.io/v1.27.1+k0s.0/)
 
-### K0S 简介
+### 1.1 K0S 简介
+
 K0S 轻量级 Kubernetes
 
-### K0S 搭建
+### 1.2 K0S 搭建
+
 ```
 curl -sSLf https://get.k0s.sh | sudo sh
 
@@ -31,18 +32,18 @@ sudo k0s status
 
 
 
-## 二、K3S
+## 2. K3S
 
 **参考资料**  
 [K3S 官网](https://k3s.io/)  
 [K3S 文档](https://docs.rancher.cn/docs/k3s/_index)  
 [K3S 源码](https://github.com/k3s-io/k3s)
 
-### K3S 简介
+### 2.1 K3S 简介
 
 K3S 轻量级 Kubernetes
 
-### K3S 搭建
+### 2.2 K3S 搭建
 
 ```
 关闭防火墙
@@ -85,15 +86,15 @@ sh /usr/local/bin/k3s-uninstall.sh
 
 
 
-## 三、KubeSphere
+## 3. KubeSphere
 
 [KubeSphere 官网](https://kubesphere.io/zh/)
 
 
 
-## 四、MiniKube
+## 4. MiniKube
 
-### MiniKube 搭建
+### 4.1 MiniKube 搭建
 
 Minikube 是一种轻量级的 Kubernetes 实现，可在本地计算机上创建 VM 并部署仅包含一个节点的简单集群。 Minikube 可用于 Linux ， macOS 和 Windows 系统。Minikube CLI 提供了用于引导集群工作的多种操作，包括启动、停止、查看状态和删除。
 ```
@@ -104,7 +105,7 @@ curl -Lo minikube https://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/relea
 minikube start      
 ```
 
-### MiniKube 常用指令
+### 4.2 MiniKube 常用指令
 
 ```
 1. minikube version             //查看版本

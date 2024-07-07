@@ -7,7 +7,26 @@
 > Description：Ubuntu 操作系统 
 
 
+
+### APT
+
+高级打包工具（英语：Advanced Packaging Tools，缩写为APT）是Debian及其派生的Linux软件包管理器。APT可以自动下载，配置，安装二进制或者源代码格式的软件包，因此简化了Unix系统上管理软件的过程。APT最早被设计成dpkg的前端，用来处理deb格式的软件包。现在经过APT-RPM组织修改，APT已经可以安装在支持RPM的系统管理RPM包。
+APT由以下的几个主要的命令构成：  
+- apt-get  
+- apt-cache
+- apt-file
+在Debian系统中，APT建构于dpkg之上。
+
+打印所有软件包的列表，包括软件包的版本和结构的信息。
+sudo apt list
+
+从APT存储库中获取最新索引数据
+sudo apt update
+
+
+
 ### 安装 Ansible
+
 ```
 更新系统软件包列表
 sudo apt update
@@ -22,6 +41,7 @@ ansible --version
 
 
 ### 安装 MySQL
+
 ```
 更新软件包列表
 sudo apt update
@@ -69,19 +89,20 @@ sudo systemctl start mysql
 
 
 ### ubuntu 系统启用 root 用户远程登陆
-1、使用ubuntu用户登陆到系统中；
 
-2、编辑/etc/ssh/sshd_config文件；  
+1. 使用ubuntu用户登陆到系统中；
+
+2. 编辑/etc/ssh/sshd_config文件；  
 sudo vim /etc/ssh/sshd_config  
 找到配置参数：PermitRootLogin  
 将该参数后面的值修改为yes即可；  
 按“esc键” :wq 回车，保存退出；
 
-3、给root用户设置密码；  
+3. 给root用户设置密码；  
 sudo passwd root  
 输入两遍密码；  
 （给root用户设置了密码后，就已经可以使用root用户从vnc登陆到系统中了）
 
-4、重启ssh服务
+4. 重启ssh服务
 sudo systemctl restart ssh  
 然后测试用root用户远程登陆即可；

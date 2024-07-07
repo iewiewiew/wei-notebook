@@ -12,9 +12,10 @@
 
 
 
-## Kuboard
+## 1.  Kuboard
 
 ### Kuboard 简介
+
 [Kuboard 简介](https://kuboard.cn/overview/)*
 Kuboard，是一款免费的 Kubernetes 图形化管理工具，Kuboard 力图帮助用户快速在 Kubernetes 上落地微服务。提供了丰富的功能，结合已有或新建的代码仓库、镜像仓库、CI/CD 工具等，可以便捷的搭建一个生产可用的 Kubernetes 容器云平台，轻松管理和运行云原生应用。
 样例：https://demo.kuboard.cn  
@@ -25,7 +26,7 @@ Kuboard，是一款免费的 Kubernetes 图形化管理工具，Kuboard 力图�
 
 
 
-## Kuboard 搭建
+### Kuboard 搭建
 [Kuboard 安装教程](https://kuboard.cn/install/v3/install-in-k8s.html#%E5%AE%89%E8%A3%85)
 
 ```
@@ -75,7 +76,7 @@ curl -k -H "Content-Type: application/json" -X PUT --data-binary @kuboard.json h
 
 
 
-## Rancher
+## 2. Rancher
 
 ### Rancher 简介
 Rancher 是一个 Kubernetes 管理工具，让你能在任何地方和任何提供商上部署和运行集群。
@@ -121,7 +122,7 @@ helm install rancher ./rancher-2.7.0.tgz --namespace cattle-system  --set hostna
 
 
 
-## kubeval yaml 检查工具
+## 3. kubeval yaml 检查工具
 
 **参考资料**  
 [kubeval](https://kubeval.instrumenta.dev/)

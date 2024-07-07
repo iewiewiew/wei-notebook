@@ -13,35 +13,36 @@
 
 
 
-## 一、环境搭建
+## 1. 环境搭建
 
 [下载 Postman](https://www.postman.com/downloads/) 选择合适的版本进行安装，也可选择 [网页版 Postman](https://web.postman.co/)，注意切换到自己的工作空间。
 
 切换工作空间
 
-![](../img/postman/postman_workspace.png)
+![](../img/postman/postman-workspace.png)
 
 Postman 登录后本地数据会和远程数据同步，如果未登录则无法导入文件（踩坑点）。
 
-![](../img/postman/postman_import.png)
+![](../img/postman/postman-import.png)
 
 
 
-## 二、使用教程
+## 2. 使用教程
 
 ### 基本操作
 
 请求示例：可使用 `htttp://www.baidu.com` 、`https://gorest.co.in/public/v1/users`。
 
-![](../img/postman/postman_demo.png)
+![](../img/postman/postman-demo.png)
 
-导入接口：在 web 页面按 F12 打开控制台，选择接口右键复制以 cUrl 格式或者其它格式复制，打开 Postman 点击 Impoet 进行导入，也可选择导入文件或者文件夹。
+导入接口：在 web 页面按 F12 打开控制台，选择接口右键复制以 cUrl 格式或者其它格式复制，打开 Postman 点击 Impoet 进行导入，也可选择导入文件或者文件夹。可以导入 swagger.json 文件（文件示例：https://gitee.com/api/v5/doc_json?from=file）
+）。
 
-![](../img/postman/postman_import_curl.png)
+![](../img/postman/postman-import-curl.png)
 
 导出接口：选择 Collections 的集合右键选择 Export 进行导出。
 
-![](../img/postman/postman_export.png)
+![](../img/postman/postman-export.png)
 
 
 
@@ -49,7 +50,7 @@ Postman 登录后本地数据会和远程数据同步，如果未登录则无法
 
 设置环境变量：在 Enviroments 添加环境变量，可配置多组环境变量，在请求时右上角进行切换组变量。
 
-![](../img/postman/postman_variable.png)
+![](../img/postman/postman-variable.png)
 
 设置随机变量：注：以下常用变量是指值，并且需要加 $。
 
@@ -59,7 +60,7 @@ Postman 登录后本地数据会和远程数据同步，如果未登录则无法
 {{$randomInt}}  //0-1000 的随机整数
 ```
 
-![](../img/postman/postman_random_varialble.png)
+![](../img/postman/postman-random-varialble.png)
 
 设置其它变量：在 Test 里添加。
 ```
@@ -97,12 +98,12 @@ pm.globals.set("counter", pm.globals.get("counter") + 1);
 
 引用环境变量：环境变量用 {{变量名称}}，举例：{{name}}。
 
-![](../img/postman/postman_use_varibable.png)
+![](../img/postman/postman-use-varibable.png)
 
 读取文件内容为变量：点击集合【...】，选择【Run Collection】，设置 Iterations，选择文件，在请求里面引用变量（文件表头），例如 {{name}}。
 
 
-![](../img/postman/postman_file.png)
+![](../img/postman/postman-file.png)
 
 设置响应结果为变量： 方式一：设置响应正文值为变量：选择文本，然后右键单击或按住 Control 单击，选择相关范围（环境或全局），然后选择变量的名称；方式二：在 Tests 添加如下脚本：
 

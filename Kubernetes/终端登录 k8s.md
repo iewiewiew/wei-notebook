@@ -8,7 +8,7 @@
 
 
 
-### 1、安装 kubectl
+### 1. 安装 kubectl
 
 ```
 下载
@@ -23,7 +23,7 @@ kubectl -h
 
 
 
-### 2、配置
+### 2. 配置
 
 ```
 查看上下文获取<cluster_name>
@@ -63,7 +63,7 @@ cat ~/.kube/config
 
 
 
-### 3、添加脚本
+### 3. 添加脚本
 
 ```
 #!/bin/bash

@@ -12,7 +12,7 @@
 
 
 
-## 一、Pipeline 简介
+## 1. Pipeline 简介
 
 实现 Pipeline 功能的脚本语言叫做 Jenkinsfile，由 Groovy 语言实现。Jenkinsfile 一般是放在项目根目录，随项目一起受源代码管理软件控制，无需像创建"自由风格\"项目一样，每次可能需要拷贝很多设置到新项目，提供了一些直接的好处：
 - Pipeline 上的代码审查/迭代
@@ -22,13 +22,13 @@ Pipeline 支持：Declarative（在 Pipeline 2.5 中引入）和 Scripted Pipeli
 
 
 
-## 二、Pipeline 踩坑
+## 2. Pipeline 踩坑
 
 1、pipeline 首次构建无法拉取 git 分支，需要直接构建，直接构建之后才能拉取 git 分支。  
 
 
 
-## 三、知识碎片
+## 3. 知识碎片
 
 在Jenkins中，failFast是Jenkinsfile中的一个选项，可用于控制构建过程中的错误处理行为。当设置failFast为true时，如果在构建过程中遇到错误，Jenkins将立即停止构建并将其标记为失败，而不会继续执行后续的步骤。
 

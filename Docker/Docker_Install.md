@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">Docker_Install</h1>
 
 > By：weimenghua  
@@ -10,6 +8,7 @@
 
 **参考资料**  
 [乔克叔叔 DevOps](https://www.yuque.com/coolops)
+
 
 
 **公共命令**
@@ -50,9 +49,12 @@ docker cp <容器名称>:<文件名称> <文件名称>
 docker cp mysql:/etc/my.cnf /etc/my.cnf
 ```
 
+镜像地址
+- dockerpull.com
 
 
-## 数据库
+
+## 1. 数据库
 
 ### Docker 安装 MySQL
 
@@ -67,22 +69,30 @@ docker run -d \
 -v /var/lib/mysql:/var/lib/mysql \
 -v /etc/my.conf:/etc/my.conf \
 -e MYSQL_ROOT_PASSWORD=root \
-mysql:8.0
+dockerpull.com/mysql:8.0
+
+目录挂载（待定）
+
+进入容器
+docker exec -it mysql bash
 
 配置
-mysql -uroot -proot
+第一次 mysql -u root -p 输入 root 密码：root
 use mysql;
 alter user 'root'@'%' identified with mysql_native_password by 'root';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION; -- MySQL8
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; -- MySQL5.7
 flush privileges;
 select host,user,plugin,authentication_string from mysql.user;
+
+修改 root 用户的 root 密码为 123456
+ALTER USER 'root'@'%' IDENTIFIED BY '123456';
+flush privileges;
 
 解决时差问题
 docker cp /usr/share/zoneinfo/Asia/Shanghai mysql:/etc/localtime
 docker restart mysql
 ```
-
----
 
 
 
@@ -105,7 +115,7 @@ redis-server --appendonly yes --requirepass "root": 在容器执行 redis-server
 docker exec -it redis redis-cli
 ```
 
----
+
 
 ### Docker 安装 redisinsight
 
@@ -229,6 +239,8 @@ docker logs -f ch-server
 docker rm -f ch-server
 ```
 
+
+
 ### Docker 安装 Hive (未实践成功)
 
 [下载 Hive 仓库](https://github.com/big-data-europe/docker-hive)
@@ -289,11 +301,14 @@ http://127.0.0.1:8080/
 
 
 
-## 监控
+## 2. 监控
 
 ### Docker 安装 Grafana
 
 ```
+拉取镜像
+docker pull dockerpull.com/grafana/grafana:latest
+
 运行容器
 docker run -d \
 --name grafana \
@@ -327,14 +342,15 @@ http://127.0.0.1:3000/login admin/admin
 https://grafana.com/grafana/dashboards/
 ```
 
----
-
 
 
 ### Docker 安装 Prometheus
 
 ```
 官网：https://prometheus.io/
+
+拉取镜像
+docker pull dockerpull.com/prom/prometheus:latest
 
 添加配置
 mkdir -vp /root/prometheus && cd /root/prometheus
@@ -484,7 +500,7 @@ MySQL 监控模板 ID：7362
 
 
 
-## 消息队列
+## 3. 消息队列
 
 ### Docker 安装 RocketMQ
 
@@ -740,7 +756,7 @@ docker run -d --name kafdrop \
 
 
 
-## 其它
+## 4. 其它
 
 ### Docker 安装 Portainer
 

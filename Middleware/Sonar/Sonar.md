@@ -14,7 +14,7 @@
 
 
 
-### 一、Sonar 搭建
+### 1. Sonar 搭建
 
 Docker 安装 Sonar  
 [sonarqube](https://hub.docker.com/_/sonarqube)
@@ -39,7 +39,7 @@ http://127.0.0.1:9100/
 
 
 
-### 二、Sonar 使用
+### 2. Sonar 使用
 
 安装中文插件
 
@@ -68,7 +68,7 @@ mvn sonar:sonar \
 
 
 
-### 三、Sonar 集成 Jenkins
+### 3. Sonar 集成 Jenkins
 
 1、安装 [SonarQube Scanner](https://plugins.jenkins.io/sonar) 插件
 

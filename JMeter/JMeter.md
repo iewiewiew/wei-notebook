@@ -11,13 +11,14 @@
 
 
 
-## 一、环境搭建
+## 1. 环境搭建
 
 ### 1.1 安装 JDK+JMeter+Ant
 
 1. 安装软件
 
 1.1 安装 JDK
+
 ```
 https://www.oracle.com/java/technologies/downloads/#java8
 tar -zxvf jdk-8u351-linux-x64.tar.gz
@@ -195,6 +196,9 @@ remote_hosts=127.0.0.1 若 master，作为压力机，需要删除 127.0.0.1改�
 ps -ef | grep jmeter | grep -v grep | awk '{ print $2 }' | xargs kill -9 
 ```
 
+验证分布式集群搭建成功
+假设有3台机器，设置并发数1，启动日志会输出启动3个
+
 踩坑
 报错：使用 java 远程启动 jmeter 服务报错，报错内容：Neither the JAVA_HOME nor the JRE_HOME environment variable is defined
 解决：在 修改/root/software/apache-jmeter-5.5/bin/jmeter-server 顶部添加以下命令
@@ -229,7 +233,7 @@ HEAP="-Xms2g -Xmx2g -XX:MaxMetaspaceSize=256m"。
 
 
 
-## 二、组件教程
+## 2. 组件教程
 
 ### 测试计划列表
 
@@ -608,8 +612,7 @@ JSON断言
 
 
 
-
-## 三、使用教程
+## 3. 使用教程
 
 ### 命令规范
 
@@ -948,7 +951,7 @@ ${__P(url,)}
 
 
 
-## 四、知识碎片
+## 4. 知识碎片
 
 1、问题一
 
@@ -974,3 +977,23 @@ ${__P(url,)}
 6、File > Merge 合并测试计划
 
 ![](./img/JMeter_Merge.png)
+
+
+
+swagger 转换为 jmeter
+
+swagger 文件
+https://gitee.com/api/v5/doc_json?from=file
+
+下载 swagger 转 jmeter 文件工具包
+wget https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.3.0/openapi-generator-cli-5.3.0.jar -O openapi-generator-cli.jar
+
+转换 swagger.json 到 jmeter.jmx 文件
+
+java -jar openapi-generator-cli.jar generate -i FeHelper-20240719180245.json -g jmeter --skip-validate-spec
+java -jar openapi-generator-cli.jar generate -i gitee.postman_collection.json -g jmeter --skip-validate-spec
+
+Mac 执行 Jmeter 脚本自动闪退 
+```
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again /Users/menghuawei/software/apache-jmeter-5.5/bin/jmeter: line 200: 49141 Abort trap: 6           "$JAVA_HOME/bin/java" $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
+```

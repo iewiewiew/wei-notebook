@@ -17,10 +17,11 @@
 
 
 
-## 一、Ansible 简介
+## 1. Ansible 简介
+
 ansible 是自动化运维工具，基于 Python 开发，集合了众多运维工具（puppet、cfengine、chef、func、fabric）的优点，实现了批量系统配置、批量程序部署、批量运行命令等功能。
 
-### Ansible 的特点
+### 1.1 Ansible 的特点
 
 ansible 是基于模块工作的，本身没有批量部署的能力。真正具有批量部署的是 ansible 所运行的模块，ansible 只是提供一种框架。主要包括：  
 (1) 连接插件 connection plugins：负责和被监控端实现通信  
@@ -29,7 +30,7 @@ ansible 是基于模块工作的，本身没有批量部署的能力。真正具
 (4) 借助于插件完成记录日志邮件等功能  
 (5) playbook：剧本执行多个任务时，非必需可以让节点一次性运行多个任务  
 
-### Ansible 相关概念
+### 1.2 Ansible 相关概念
 
 - Play：将一系列主机与需要在主机上运行的任务列表相关联
 - Playbook：一个 ansible 脚本，它指定一系列 play 与一批 play 执行的对象主机
@@ -40,7 +41,7 @@ ansible 是基于模块工作的，本身没有批量部署的能力。真正具
 
 
 
-## 二、Ansible 搭建
+## 2. Ansible 搭建
 
 1. ansible 的安装来源于 epel 仓库，因此在安装前需确保安装了正确的 epel 源：`yum install -y epel-release`
 2. 安装 ansible 命令：`yum install ansible -y` `sudo apt install ansible`
@@ -49,7 +50,7 @@ ansible 是基于模块工作的，本身没有批量部署的能力。真正具
 
 
 
-## 三、Ansible 使用
+## 3. Ansible 使用
 
 ansible 配置文件：`/etc/ansible/ansible.cfg`
 
@@ -143,7 +144,7 @@ ansible-playbook -b playbook.yml
 
 
 
-## 四、Ansible 模块
+## 4. Ansible 模块
 
 [Ansible 模块](https://docs.ansible.com/ansible/2.9/modules/modules_by_category.html)
 
@@ -498,7 +499,7 @@ ansible <host> -m hostname -a 'name=<host_name>'
 
 
 
-## 五、Ansible Playbook
+## 5. Ansible Playbook
 playbooks 使用 yaml 语法，在 ansible 中几乎所有的 yaml 文件都是以 list 开始，每个 item 是键值对的 list。  
 所有的 yaml 文件都以---开头表示开始一个 document，所有的列表元素以 - 开头，键值对用 : 。  
 键值对中的值如果是 bool 类型的字符串 true/false（首字母不论大小写），pyyaml 会 load 成 python 中对应的 bool 值，在键值对中如果值中有 : 或者以 {{ 开头的变量定义，则必须用引号引起来。
@@ -600,7 +601,7 @@ ansible-console 是一个交互式命令行工具，用于与远程主机进行�
 
 
 
-## 六、Ansible Galaxy
+## 6. Ansible Galaxy
 
 ### Ansible Role
 Ansible Role 是一种组织和重用 Ansible 配置的方式，它可以将相关的配置任务、变量和文件组织在一起，以便在多个项目或环境中重复使用。  
@@ -648,10 +649,9 @@ Ansible 提供的用于文件修改的三个关键模块是 lineinfile、replace
 
 
 
-## 七、知识碎片
+## 7. 知识碎片
 ### Ansible 踩坑
 ansible 脚本中的参数不能带-
 
 干了个蠢事，调试的时候加了 -C，我说咋又没报错，咋都没执行成功
-
 

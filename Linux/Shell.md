@@ -10,6 +10,7 @@
 
 
 ### shell 数组
+
 #### shell 数组的遍历  
 1. 使用 @ 或 * 可以获取数组中的所有元素
 2. ${数组名[@]} 得到是以空格隔开的元素，可以用在数组遍历中
@@ -54,12 +55,14 @@ done
 
 
 ### 软链接
+
 ln -s file1 lnk1    #创建一个指向文件或目录的软链接
 ln -s /data/.jenkins/bak_workspace bak_jenkins_workspace    #举例：在目标文件所在路径下：ln -s 源文件或目录 目标文件或目录(lnk1|目标文件或目录件：无需新建)
 ln file1 lnk1   #创建一个指向文件或目录的物理链接
 
 
-### 2>&1 重定向  
+### 2>&1 重定向 
+
 nohup command>/dev/null 2>&1 &  
 - nohup 表示当前用户和系统的会话下的进程忽略响应 HUP 消息，也就是不挂断地运行命令
 - /dev/null 表示空设备文件
@@ -70,6 +73,7 @@ nohup command>/dev/null 2>&1 &
 
 
 ### shell 反斜杠拼成一行  
+
 ./configure \  
 –prefix=/usr \  
 –sbin-path=/usr/sbin/nginx \  
@@ -77,6 +81,7 @@ nohup command>/dev/null 2>&1 &
 
 
 ### shell 单引号和双引号的区别
+
 使用单引号时，内部的内容会被视为纯文本，而使用双引号时，内部的内容可以包含变量、转义字符等特殊字符。
 具体来说，使用单引号时，内部所有的字符都会被原样输出，包括特殊字符和变量。
 
@@ -86,6 +91,16 @@ Hello, $USER
 
 $ echo "Hello, $USER"
 Hello, username
+```
+
+```
+NAME="John"
+echo ${NAME}    # => John (变量)
+echo $NAME      # => John (变量)
+echo "$NAME"    # => John (变量)
+echo '$NAME'    # => $NAME (字符串原样输出)
+echo "${NAME}!" # => John! (变量)
+NAME = "John"   # => Error (注意不能有空格)
 ```
 
 使用单引号时可以避免变量和特殊字符的解析，因此有时候会更加安全
@@ -106,12 +121,13 @@ brew install shellcheck
 
 
 ### 踩坑
+
 使用 #!/bin/bash 解释器，sh start.sh 执行以下脚本，报错： `start.sh: 40: start.sh: Syntax error: "(" unexpected (expecting "}")`
 ```
 for1() {
-array=(a b c)
-for i in ${array[@]}; do
-echo "for 循环: ${i}"
+    array=(a b c)
+    for i in ${array[@]}; do
+    echo "for 循环: ${i}"
 done
 }
 ```

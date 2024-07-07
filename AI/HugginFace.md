@@ -13,7 +13,7 @@
 
   
 
-## 一、基本介绍
+## 1. 基本介绍
 
 Hugging Face是一个知名的开源社区和公司，专注于自然语言处理(NLP)和机器学习(ML)领域。
 
@@ -26,11 +26,9 @@ Hugging Face是一个知名的开源社区和公司，专注于自然语言处�
 - Solutions（解决方案）
 - Pricing（报价）
 
-![](img/HG_Index.png)
 
 
-
-## 二、Models（模型）
+## 2. Models（模型）
 
 ![](img/HG_模型.png)
 
@@ -45,7 +43,7 @@ Hugging Face是一个知名的开源社区和公司，专注于自然语言处�
 
 
 
-## 三、Datasets（数据集）
+## 3. Datasets（数据集）
 
 ![](img/HG_数据集.png)
 
@@ -98,7 +96,7 @@ git push
 
 
 
-## 四、Spaces（分享空间）
+## 4. Spaces（分享空间）
 
 Hugging Face Spaces 提供了一种简单的方法，可以直接在您的个人资料或组织的个人资料中托管 ML 演示应用程序。这使您可以创建自己的 ML 投资组合，在会议上或向利益相关者展示您的项目，并与 ML 生态系统中的其他人协作。
 
@@ -276,7 +274,7 @@ git push
 
 
 
-## 五、AutoTrain（自动训练）
+## 5. AutoTrain（自动训练）
 
 [AutoTrain](https://huggingface.co/docs/autotrain/index) 是一个用于自动化训练的库，旨在简化模型训练的过程。它提供了一种简单的方法来定义和训练深度学习模型，自动处理数据加载、批处理、优化器、损失函数等训练过程中的细节。
 
@@ -284,7 +282,7 @@ git push
 
 
 
-## 六、推理
+## 6. 推理
 
 - 推理 API
 
@@ -307,7 +305,7 @@ curl https://api-inference.huggingface.co/models/xlm-roberta-base \
 
 
 
-## 七、其它
+## 7. 知识碎片
 
 [HuggingFace 接口](https://api.endpoints.huggingface.cloud/#/)
 

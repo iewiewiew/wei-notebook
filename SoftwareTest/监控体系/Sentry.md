@@ -13,7 +13,7 @@
 
 
 
-## 一、Sentry 搭建
+## 1. Sentry 搭建
 
 ### 方式一（未实践成功）
 
@@ -59,7 +59,7 @@ http://127.0.0.1:9000
 
 
 
-## 二、Sentry 接入
+## 2. Sentry 接入
 
 ### Python
 
@@ -79,4 +79,4 @@ if __name__ == '__main__':
     demo()
 ```
 
-![](../../Mixinfo/img/Sentry_Python.png)
+![](../../Mixinfo/img/sentry-python.png)
