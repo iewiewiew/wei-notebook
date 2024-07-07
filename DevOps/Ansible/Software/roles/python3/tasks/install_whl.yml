@@ -1,0 +1,60 @@
+---
+
+- name: Make Dir Python3 Whl Files
+  shell: |
+    rm -rf {{ python3_dir }}/whl
+    mkdir -p {{ python3_dir }}/whl
+
+- name: Copy Whl To Remote
+  copy: src={{ item }} dest={{ python3_dir }}/whl
+  with_fileglob:
+    - "*.whl"
+    - "*.tar.gz"
+
+- name: Pip Install charset-normalizer
+  command: pip3 install {{ python3_dir }}/whl/charset_normalizer-2.0.12-py3-none-any.whl
+
+- name: Pip Install idna
+  command: pip3 install {{ python3_dir }}/whl/idna-3.3-py3-none-any.whl
+
+- name: Pip Install certifi
+  command: pip3 install {{ python3_dir }}/whl/certifi-2021.10.8-py2.py3-none-any.whl
+
+- name: Pip Install urllib3
+  command: pip3 install {{ python3_dir }}/whl/urllib3-1.26.8-py2.py3-none-any.whl
+
+- name: Pip Install requests
+  command: pip3 install {{ python3_dir }}/whl/requests-2.27.1-py2.py3-none-any.whl
+
+- name: Pip Install PyYAML
+  command: pip3 install {{ python3_dir }}/whl/PyYAML-6.0-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+
+- name: Pip Install MarkupSafe
+  command: pip3 install {{ python3_dir }}/whl/MarkupSafe-2.0.1-cp36-cp36m-manylinux1_x86_64.whl
+
+- name: Pip Install Jinja2
+  command: pip3 install {{ python3_dir }}/whl/Jinja2-3.0.3-py3-none-any.whl
+
+- name: Pip Install msgpack
+  command: pip3 install {{ python3_dir }}/whl/msgpack-1.0.3.tar.gz
+
+- name: Pip Install six
+  command: pip3 install {{ python3_dir }}/whl/six-1.16.0-py2.py3-none-any.whl
+
+- name: Pip Install python-dateutil
+  command: pip3 install {{ python3_dir }}/whl/python_dateutil-2.8.2-py2.py3-none-any.whl
+
+- name: Pip Install pytz
+  command: pip3 install {{ python3_dir }}/whl/pytz-2022.1-py2.py3-none-any.whl
+
+- name: Pip Install influxdb
+  command: pip3 install {{ python3_dir }}/whl/influxdb-5.3.1-py2.py3-none-any.whl
+
+- name: Pip Install numpy
+  command: pip3 install {{ python3_dir }}/whl/numpy-1.19.5-cp36-cp36m-manylinux1_x86_64.whl
+
+- name: Pip Install pandas
+  command: pip3 install {{ python3_dir }}/whl/pandas-1.1.5-cp36-cp36m-manylinux1_x86_64.whl
+
+- name: Pip Install lxml
+  command: pip3 install {{ python3_dir }}/whl/lxml-4.9.0-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.whl

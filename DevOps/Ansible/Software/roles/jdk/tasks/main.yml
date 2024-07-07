@@ -1,0 +1,27 @@
+---
+
+# - name: Debug
+#   debug:
+#     msg: | 
+#       jdk_dir is {{ jdk_dir }} 
+#       jdk_file_name is {{ jdk_file_name }}
+
+- name: Make Dir Jdk Files
+  shell: |
+    rm -rf {{ jdk_dir }}
+    mkdir -p {{ jdk_dir }}/files
+
+- name: Copy Jdk File To Remote
+  copy: src={{ jdk_file_name }} dest={{ jdk_dir }}/files
+
+- name: Tar {{ jdk_file_name }}
+  command: tar -zxvf {{ jdk_dir }}/files/{{ jdk_file_name }} -C {{ jdk_dir }}
+
+- name: Set Jdk Env
+  shell: |
+    echo "" >> /etc/profile
+    echo "export JAVA_HOME={{ java_home }}" >> /etc/profile
+    echo "export JRE_HOME=\${JAVA_HOME}/jre" >> /etc/profile
+    echo "export CLASSPATH=.:\${JAVA_HOME}/lib:\${JRE_HOME}/lib" >> /etc/profile
+    echo "export PATH=\${JAVA_HOME}/bin:\$PATH" >> /etc/profile
+    source /etc/profile

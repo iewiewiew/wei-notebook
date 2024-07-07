@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">MinIO</h1>
 
 > By：weimenghua  
@@ -16,16 +14,15 @@
 
 
 
-## 一、MinIO 简介
+## MinIO 简介
 
 MinIO 是根据 GNU Affero 通用公共许可证 v3.0发布的高性能对象存储。它与 Amazon S3云存储服务兼容。使用 MinIO 构建用于机器学习，分析和应用程序数据工作负载的高性能基础架构。  
 其设计的主要目标是作为私有云对象存储的标准方案。主要用于存储海量的图片，视频，文档等。非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几 kb 到最大5T 不等。
 
-![](./img/minio.png)
+![](./images/minio.png)
 
 
-
-## 二、MinIO 特点
+## MinIO 特点
 
 - 高性能：作为高性能对象存储，在标准硬件条件下它能达到55GB/s 的读、35GG/s 的写速率
 - 可扩容：不同 MinIO 集群可以组成联邦，并形成一个全局的命名空间，并跨越多个数据中心
@@ -40,7 +37,80 @@ MinIO 是根据 GNU Affero 通用公共许可证 v3.0发布的高性能对象存
 
 
 
-## 三、MinIO 使用
+### MinIO 部署
+
+```
+# 创建本地存储目录（防止容器删除数据丢失）
+mkdir -p /your_dir
+
+# https://docker.aityp.com/r/quay.io/minio/minio
+# 启动 MinIO 容器（账号：admin，密码：Admin123456，# 密码满足8位以上且包含大小写/数字）
+docker run -d \
+  --name minio-server \
+  -p 9000:9000 \
+  -p 9001:9001 \
+  -v /your_dir:/data \
+  -e "MINIO_ROOT_USER=admin" \
+  -e "MINIO_ROOT_PASSWORD=Admin123456" \
+  --restart=always \
+  swr.cn-north-4.myhuaweicloud.com/ddn-k8s/quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z \
+  server /data \
+  --console-address ":9001"
+```
+
+访问地址   
+http://127.0.0.1:9001
+
+
+
+## MinIO 使用
+
+配置 MinIO（创建桶 + 公开访问）
+
+1. 创建存储桶（Bucket）  
+   登录 MinIO 控制台后，点击左侧「Buckets」→「Create Bucket」  
+   填写 Bucket 名称（如：nextjs-assets），其他默认，点击「Create Bucket」
+
+2. 设置公开访问（前端能直接访问文件）  
+   进入刚创建的桶（nextjs-assets）→ 右上角「Settings」→「Access Policy」  
+   选择「Public」（公开读）→ 点击「Save」    
+   此时桶内文件可通过 URL 直接访问：http://<服务器IP>:9000/nextjs-assets/文件名.jpg
+
+3. 生成 Access Key（供 Next.js 调用）  
+   点击控制台左侧「Access Keys」→「Create access key」  
+   点击「Create」，会生成 Access Key 和 Secret Key
+
+注意：社区版 MinIO 阉割很多功能，可能没有上述入口，需要通过命令行方式操作
+
+```
+# Linux 安装 mc
+wget https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+sudo mv mc /usr/local/bin/
+
+# 验证
+mc --version
+
+# 格式：mc alias set <别名> <MinIO地址> <root账号> <root密码>
+mc alias set myminio http://127.0.0.1:9000 admin Admin123456
+
+# 测试连接
+mc ls myminio
+```
+
+直接用 Root 账号（最快，仅开发用）
+如果只是开发测试，不用创建新 Access Key，直接用启动时的 Root 账号：
+Access Key：admin（启动时的 MINIO_ROOT_USER）
+Secret Key：Admin123456（启动时的 MINIO_ROOT_PASSWORD）
+
+把 .env.local 里的密钥换成刚创建的：
+```
+MINIO_ENDPOINT=http://<服务器IP>:9000
+MINIO_ACCESS_KEY=admin
+MINIO_SECRET_KEY=Admin123456
+MINIO_BUCKET=nextjs-assets
+MINIO_USE_SSL=false
+```
 
 `mc anonymous set public local/demo/*`
 
@@ -104,7 +174,6 @@ mc cp my-minio/my-bucket/example.txt myminio/example2.txt
 ```
 
 
-
-## 四、知识碎片
+## 知识碎片
 
 桶（Bucket）是OBS中存储对象的容器。对象存储提供了基于桶和对象的扁平化存储方式，桶中的所有对象都处于同一逻辑层级，去除了文件系统中的多层级树形目录结构。 

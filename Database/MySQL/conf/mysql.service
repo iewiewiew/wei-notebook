@@ -1,0 +1,13 @@
+[Unit]
+Description=MySQL Community Server
+After=network.target
+
+[Service]
+Type=simple
+User=mysql
+Group=mysql
+ExecStart=/usr/local/mysql-8.0.20/bin/mysqld_safe --defaults-file=/etc/my.cnf
+ExecStop=/usr/local/mysql-8.0.20/bin/mysqladmin shutdown
+
+[Install]
+WantedBy=multi-user.target

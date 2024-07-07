@@ -1,0 +1,4 @@
+dn: uid=john,ou=users,dc=mycompany,dc=com
+changetype: modify
+replace: mail
+mail: john.new@mycompany.com

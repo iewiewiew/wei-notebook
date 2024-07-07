@@ -1,0 +1,35 @@
+<!-- 一般情况 maven 的通用 settings.xml 在 .m2 文件夹下, 项目内 settings.xml 也可以进行设置，优先级更高 -->
+<settings>
+    <!-- omitted xml -->
+    <!-- 请妥善保管好您的配置，不要随意分享给他人 -->
+    <servers>
+        <server>
+            <id>weiweiwei666-wei-maven_example</id>
+            <username>maven_example-1710126487757</username>
+            <password>654627805bf4bbd9f74b57e3514093a0405b9ffb</password>
+        </server>
+    </servers>
+
+    <!-- omitted xml -->
+    <profiles>
+        <profile>
+            <id>Repository Proxy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>weiweiwei666-wei-maven_example</id>
+                    <name>maven_example</name>
+                    <url>https://weiweiwei666-maven.pkg.coding.net/repository/wei/maven_example/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+</settings>

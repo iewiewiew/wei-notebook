@@ -1,0 +1,45 @@
+# Cursor pytest API 自动化测试 Rules
+## 规则说明
+以下规则专为 Cursor 设计，用于生成符合工业级标准的 pytest API 自动化测试代码，覆盖通用规范、代码生成、调试优化、异常场景四大核心场景。
+
+---
+
+## Rule 1：pytest API 自动化通用规范（基础）
+### 名称
+pytest API 自动化通用规范
+
+### 描述
+生成符合 PEP8 标准的 pytest API 自动化代码，遵循以下规则：
+1. **项目结构**：按「用例层(tests)、接口层(api)、配置层(config)、工具层(utils)」分层设计；
+2. **命名规范**：
+   - 测试文件：test_xxx_api.py
+   - 测试函数：test_xxx_api_[get/post/put/delete]_[场景]
+   - 变量：接口地址(BASE_URL)、请求头(headers)、测试数据(test_data)
+3. **依赖管理**：使用 requests 发送请求，pytest 作为测试框架，pytest-html 生成报告；
+4. **基础配置**：
+   - 全局前置：conftest.py 中定义 session 级的 requests.Session() 夹具，复用连接；
+   - 环境隔离：通过 pytest_addoption 区分测试/预发/生产环境；
+   - 异常处理：捕获 requests.exceptions 异常，断言响应状态码、响应时间、返回字段；
+5. **断言要求**：优先断言「状态码、核心业务字段、数据类型、非空校验」，避免仅断言响应存在。
+
+---
+
+## Rule 2：pytest API 用例生成（精准生成单接口用例）
+### 名称
+pytest API 单接口用例生成
+
+### 描述
+根据接口信息生成完整的 pytest 测试用例，包含以下内容：
+1. **输入参数**：接口URL、请求方法(GET/POST/PUT/DELETE)、请求头、请求体/参数、预期响应；
+2. **输出内容**：
+   - 导入模块：pytest、requests、json、os；
+   - 夹具：conftest.py 中的 session 级 client 夹具（复用 requests.Session）；
+   - 测试用例：
+     - 前置：设置请求参数、处理鉴权（如 Token 从配置文件读取）；
+     - 执行：发送请求，记录响应时间；
+     - 断言：状态码、响应耗时(<1s)、核心字段存在且类型正确、业务逻辑符合预期；
+     - 异常场景：参数缺失、鉴权失败、数据不存在等异常用例；
+3. **额外要求**：
+   - 测试数据通过 yaml/json 文件管理，不从代码硬编码；
+   - 打印关键日志（请求URL、请求参数、响应内容），便于调试；
+   - 用 pytest.mark.parametrize 实现参数化用例。

@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:张三
+N:张;三;;;
+ORG:Gitee
+TITLE:测试工程师
+TEL;TYPE=WORK,VOICE:+86-138-0000-0000
+EMAIL;TYPE=WORK:zhangsan@example.com
+URL:https://gitee.com
+NOTE:这是一个用于知识库测试的联系人信息
+END:VCARD
+
