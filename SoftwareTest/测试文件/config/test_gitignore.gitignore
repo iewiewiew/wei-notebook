@@ -1,0 +1,32 @@
+# 测试Gitignore文件
+# 这是一个用于知识库测试的Gitignore示例文件
+
+# 依赖
+node_modules/
+vendor/
+__pycache__/
+
+# 构建输出
+dist/
+build/
+*.o
+*.exe
+
+# 日志文件
+*.log
+logs/
+
+# 环境变量
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 操作系统
+.DS_Store
+Thumbs.db
+

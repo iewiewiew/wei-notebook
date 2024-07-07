@@ -13,7 +13,7 @@
 
 
 
-### 一、PostgreSQL 搭建
+### 1. PostgreSQL 搭建
 
 ```
 运行容器
@@ -32,7 +32,7 @@ postgres
 
 
 
-### 二、PostgreSQL 教程
+### 2. PostgreSQL 教程
 
 **PostgreSQL 语法**
 
@@ -114,7 +114,7 @@ PostgreSQL 模式（SCHEMA）可以看着是一个表的集合。
 
 
 
-### 三、知识碎片
+### 3. 知识碎片
 
 **JDBC 驱动**  
 [JDBC PostgreSQL 驱动下载](https://jdbc.postgresql.org/download/)    

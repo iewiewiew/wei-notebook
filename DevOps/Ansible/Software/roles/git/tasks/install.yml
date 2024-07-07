@@ -1,0 +1,20 @@
+---
+
+- name: Make Dir Git Rpm Files
+  shell: |
+    rm -rf {{ git_dir }}
+    mkdir -p {{ git_dir }}/rpm
+
+- name: Copy Git Rpm To Remote
+  copy: src=rpm.zip dest={{ git_dir }}/rpm
+
+- name: Unzip Git Rpm Zip
+  command: unzip {{ git_dir }}/rpm/rpm.zip -d {{ git_dir }}
+
+- name: Install Git
+  command: rpm -Uvh --force --nodeps {{ git_dir }}/rpm/*.rpm
+
+- name: Git Global Config
+  shell: |
+    git config --global user.name {{ user_name }}
+    git config --global user.email {{ user_email }}

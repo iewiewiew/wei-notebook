@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Data</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid black;
+            overflow-x: auto; /* Add horizontal scrollbar */
+        }
+        th {
+            background-color: #f2f2f2;
+            white-space: nowrap; /* Prevent table headers from wrapping */
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid black;
+            min-width: 100px; /* Set a minimum width for columns */
+        }
+    </style>
+</head>
+<body>
+    <h3>File Name: {{ filename }}</h3> <!-- Added line to display the filename -->
+    <table>
+        <tr>
+<!--            <th>Serial Number</th> &lt;!&ndash; Added header for the serial number column &ndash;&gt;-->
+            {% for header in headers %}
+            <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+        {% for row in data %}
+        <tr>
+            {% if loop.index == 1 %}
+            <td>{{ '序号' }}</td>
+            {% else %}
+            <td>{{ loop.index - 1 }}</td> <!-- Added column for serial numbers -->
+            {% endif %}
+            {% for column in row %}
+            <td>{{ column }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

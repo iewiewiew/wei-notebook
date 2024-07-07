@@ -1,0 +1,25 @@
+---
+
+# - name: install docker
+#   debug:
+#     msg: "install"
+
+- name: Make Dir Docker Rpm Files
+  shell: |
+    rm -rf {{ docker_dir }}
+    mkdir -p {{ docker_dir }}/rpm
+
+- name: Copy Docker Rpm To Remote
+  copy: src=rpm.zip dest={{ docker_dir }}/rpm
+
+- name: Unzip Docker Rpm Zip
+  command: unzip {{ docker_dir }}/rpm/rpm.zip -d {{ docker_dir }}
+
+- name: Install Docker
+  command: rpm -Uvh --force --nodeps {{ docker_dir }}/rpm/*.rpm
+
+- name: Restart Docker
+  service:
+    name: docker
+    enabled: yes
+    state: restarted
