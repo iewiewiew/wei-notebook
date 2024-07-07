@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align = "center">Git</h1>
 
 > By: weimenghua  
@@ -15,9 +13,9 @@
 
 
 
-### 一、Git 工作流程
+## 1. Git 工作流程
 
-![](./img/git_workflow.png)
+![](./img/git-workflow.png)
 1. Workspace：工作区
 2. Index / Stage：暂存区
 3. Repository：仓库区（或本地仓库）
@@ -41,7 +39,7 @@ git checkout -- <file>
 git reset HEAD <file>
 
 本地仓库 < 远程仓库
-git clone <git_url>
+git clone <remoteUrl>
 ```
 
 **示例 Demo**
@@ -94,9 +92,10 @@ git push -u origin master
 
 
 
-### 二、Git 知识点
+## 2. Git 知识点
 
-#### Git 存储
+### Git 存储
+
 Git 存储内容是通过 object 的形式，文件内容是 blob 的 object，目录是 tree 的 object，commit 就是 commit 的 object。  
 Blob 对象表示一个不可变、原始数据的类文件对象。 它的数据可以按文本或二进制的格式进行读取，也可以转换成 ReadableStream 来用于数据操作。 Blob 表示的不一定是 JavaScript 原生格式的数据。 File 接口基于 Blob ，继承了 blob 的功能并将其扩展以支持用户系统上的文件。
 
@@ -110,14 +109,14 @@ git cat-file -p <commitId 或者 ？>
 
 ![](./img/cat-file.png)
 
-####  Git 文件状态
+###  Git 文件状态
 
 1. 已修改（modified）
 2. 已暂存（staged）
 3. 已提交（committed）
 4. 未追踪（Untrack）
 
-#### Git commit 规范
+### Git commit 规范
 
 1. type: commit 的类型
 2. feat: 新特性
@@ -132,7 +131,22 @@ git cat-file -p <commitId 或者 ？>
 11. ci: CI 的修改
 12. revert: revert 前一个 commit
 
-#### .git 目录结构
+Git 设置
+
+设置 Git 缓冲区大小
+
+1、将本地 http.postBuffer 数值调整到 GitHub 服务对应的单次上传大小配置： http.postBuffer 默认单位为 B（字节），所以500MB=1024*1024*500。 
+
+方法一：全局配置 git config --global http.postBuffer 524288000   
+
+方法二：当前仓库配置  git config http.postBuffer 524288000 
+
+2、查看 http.postBuffer 数值是否设置成功 
+
+查看当前的 Git 配置 git config --list  
+
+.git 目录结构
+
 查看命令：tree -L 1 .git
 ```
 .git
@@ -174,7 +188,8 @@ git cat-file -p <commitId 或者 ？>
 - .git/packed-refs - 记录了分支、标签和其他引用的提交（commit）信息
 - .git/refs - 当前代码仓库的头指针
 
-#### .gitignore
+.gitignore
+
 ```
 忽略文件和目录
 例如：folderName : 表示忽略 folderName 文件和 folderName 目录，会自动搜索多级目录，比如：*/*/folderName。
@@ -183,7 +198,7 @@ git cat-file -p <commitId 或者 ？>
 例如：!folderName/
 ```
 
-#### .gitkeep
+.gitkeep
 
 Git 不能直接提交空文件夹，需在空文件夹里 vi .gitkeep，按 Esc，输入 ：wq！保存并退出。
 
@@ -191,23 +206,26 @@ Git 不能直接提交空文件夹，需在空文件夹里 vi .gitkeep，按 Esc
 
 
 
-### 三、Git 命令
-#### 目录（字母排序）
+## 3. Git 命令
+
+目录（字母排序）
+
 1. git add
-2. git blame
-3. git branch
-4. git bundle
-5. git checkout
-6. git cherry-pick
-7. git clean
-8. git clone
-9. git commit
-10. git config
-11. git diff
-12. git fetch
-13. git gc
-14. git init
-15. git log
+2. git archive
+3. git blame
+4. git branch
+5. git bundle
+6. git checkout
+7. git cherry-pick
+8. git clean
+9. git clone
+10. git commit
+11. git config
+12. git diff
+13. git fetch
+14. git gc
+15. git init
+16. git log
 17. git pull
 18. git push
 19. git rebase
@@ -223,7 +241,7 @@ Git 不能直接提交空文件夹，需在空文件夹里 vi .gitkeep，按 Esc
 29. git tag
 30. other
 
-#### git add
+### git add
 
 ```
 添加当前目录的所有文件到暂存区
@@ -233,7 +251,27 @@ git add .
 git add <file>/<fileDir>
 ```
 
-#### git blame
+### git archive
+
+是一个 Git 命令，用于创建一个存储库内容的归档文件，保留指定状态的快照。这在发布项目或分享存储库的快照时特别有用，因为这样可以不包括整个历史记录和元数据。以下是 git archive 命令的使用方法：
+
+```
+创建当前分支最新提交的归档文件
+git archive -o archive-name.tar HEAD
+
+可以指定特定的提交、标签或分支来归档
+git archive -o archive-name.tar <commit-or-branch>
+
+如果只想归档存储库中的特定目录，可以指定该目录
+git archive -o archive-name.tar HEAD <directory>
+
+默认情况下，git archive 创建的是 tar 包。你也可以使用 --format 选项来创建 zip 文件：git archive --format=zip -o archive-name.zip HEAD
+
+示例
+git archive --format=tar.gz --prefix=test_repo_1.0.0/ --output=test_repo_1.0.0.tar.gz --remote=ssh://git@example.com/testent001/test_repo.git v1.0.0
+```
+
+### git blame
 
 ```
 追溯一个指定文件的历史修改记录
@@ -243,7 +281,7 @@ git blame README.md
 git blame -e README.md
 ```
 
-#### git branch
+### git branch
 
 ```
 查看本地分支
@@ -319,7 +357,7 @@ git log --oneline master | cut -d " " -f 1 | tail -1 | xargs git log
 git for-each-ref --format='%(committerdate) %09 %(authorname) %09 %(refname)' | sort -k5n -k2M -k3n -k4n
 ```
 
-#### git bundle
+### git bundle
 
 通过归档移动对象和引用
 
@@ -340,7 +378,7 @@ machineA$ git tag -f lastR2bundle master
 machineB$ git clone -b master /home/me/tmp/file.bundle R2
 ```
 
-#### git checkout
+### git checkout
 
 ```
 切换本地分支
@@ -372,7 +410,7 @@ git checkout master <fileName>
 git checkout -
 ```
 
-#### git cherry-pick
+### git cherry-pick
 
 ```
 这个是复制一次 commit 提交，然后在当前分支上重新提交一遍；也就是将指定 commit 的合并到当前分支；
@@ -382,7 +420,7 @@ git cherry-pick <commitId>
 git cherry-pick --abort
 ```
 
-#### git clean
+### git clean
 
 ```
 清理工作目录中的未跟踪文件
@@ -395,7 +433,7 @@ git clean -n
 git clean -f path/to/your/directory
 ```
 
-#### git clone
+### git clone
 
 ```
 克隆仓库到本地
@@ -408,7 +446,7 @@ git clone <repoUrl> <localDir>
 git clone -b <branchName> https://iewiewiew:password@gitee.com/iewiewiew/wei-notebook.git
 
 Git 只会下载指定分支的代码和提交记录，而不会下载其他分支的代码和提交记录，这可以有效减少克隆代码所需的时间和磁盘空间
-git clone --single-branch -b master <repo_url>
+git clone --single-branch -b master <repoUrl>
 
 指定克隆深度进行克隆仓库
 git clone --depth <nums> https://iewiewiew:password@gitee.com/iewiewiew/wei-notebook.git
@@ -426,17 +464,17 @@ git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 git clone -o <hostName> <repoUrl>
 
 使用账号密码进行克隆仓库
-git clone https://${username}:${password}@${host}/${repo_path}.git
+git clone https://${username}:${password}@${host}/${repoPath}.git
 git clone https://iewiewiew:password@gitee.com/iewiewiew/wei-notebook.git
 
 git clone --verbose 是用于克隆 Git 代码仓库的命令，其中 --verbose 是一个选项，用于显示详细的输出信息
-git clone --verbose https://${username}:${password}@${host}/${repo_path}.git
+git clone --verbose https://${username}:${password}@${host}/${repoPath}.git
 ```
 
-#### git commit
+### git commit
 
 ```
-将暂存区内容提交到版本库, 进入 vi 命令界面输入提交信息
+将暂存区内容提交到版本库，进入 vi 命令界面输入提交信息
 git commit
 
 提交
@@ -446,7 +484,7 @@ git commit -m 'commit info'
 git commit -am 'commit info'
 =git add -u + git commit -m <message>
 
-合并上一次提交（用于反复修改）, 进入 vi 命令界面输入提交信息
+合并上一次提交（用于反复修改），进入 vi 命令界面输入提交信息
 git commit --amend
 
 合并上一次提交（用于反复修改）
@@ -456,7 +494,7 @@ git commit --amend -m 'commit info'
 cat .git/refs/heads/master
 ```
 
-#### git config
+### git config
 
 ```
 查看配置信息 注：不带参数的情况，等同于：带--local 参数，--local 仓库配置；--global 用户配置；--system 系统配置
@@ -542,7 +580,7 @@ git config --global color.branch auto
 git config --global color.interactive auto
 ```
 
-#### git diff
+### git diff
 
 ```
 查看具体修改了什么地方，尚未缓存的改动
@@ -592,7 +630,7 @@ git diff <commit1> <commit2>
 git diff --shortstat "@{0 day ago}"
 ```
 
-#### git fetch
+### git fetch
 
 ```
 将某个远程主机的更新，全部取回本地
@@ -609,11 +647,37 @@ git fetch -pv
 抛弃本地所有的修改，回到远程仓库的状态
 git fetch --all && git reset --hard origin/master
 
-重设第一个 commit, 把所有的改动都重新放回工作区，并清空所有的 commit
+重设第一个 commit，把所有的改动都重新放回工作区，并清空所有的 commit
 git update-ref -d HEAD
 ```
 
-#### git gc
+### git fsck
+
+```
+git fsck
+检查整个仓库
+git fsck 命令用于检查 Git 仓库的完整性。它会执行一系列检查，以确保仓库中的对象(提交、树、blob等)之间的引用关系是正确的，并且所有对象都可以被访问到。
+
+检查特定的提交:
+git fsck <commit-hash>
+
+检查未引用的对象
+git fsck --unreachable
+
+显示更多详细信息
+git fsck --full
+
+找出悬空 blob
+git fsck --unreachable | grep "^blob^"
+
+检查引用日志
+git reflog expire --expire=now --all
+
+删除悬空 blob
+git prune --expire now
+```
+
+### git gc
 
 ```
 git gc
@@ -648,7 +712,7 @@ Git 把文件存储在 .git/objects 之中
 find .git/objects/ -type f | wc -l
 ```
 
-#### git init
+### git init
 
 ```
 使用当前仓库进行初始化
@@ -661,7 +725,7 @@ git init --bare demo
 git init --bare demo --template=<template_repo_dir>
 ```
 
-#### git log
+### git log
 
 ```
 显示所有 commit 日志
@@ -678,7 +742,7 @@ git log --pretty=oneline --graph --decorate --all
 
 查看分支合并情况
 git log --oneline --graph
-git log --oneline release..master    # 查看两个分支之间的 commit
+git log --oneline master..release    # 查看两个分支之间的 commit
 git log --oneline --graph README.md  # 查看指定文件 log，似乎没有用
 
 查看分叉历史，包括：提交历史、各个分支的指向以及项目的分支分叉情况
@@ -706,19 +770,19 @@ git reflog
 git log --reverse
 
 查看特定分支测试用例
-git log --reverse <branch_name>
+git log --reverse <branchName>
 
 打印出 PR 的 commit
-git log --merges --pretty=format:"%h - %an, %ar : %s"
+git log --merges --pretty=format:"%h - %an，%ar : %s"
 
 最近1周
-git log --merges --since="2 weeks ago" --pretty=format:"%h - %an, %ar : %s"
+git log --merges --since="2 weeks ago" --pretty=format:"%h - %an，%ar : %s"
 
 最近10个
-git log --merges -n 10 --pretty=format:"%h - %an, %ar : %s"
+git log --merges -n 10 --pretty=format:"%h - %an，%ar : %s"
 ```
 
-#### git pull
+### git pull
 
 ```
 取回远程主机某个分支的更新，再与本地的指定分支合并
@@ -733,7 +797,7 @@ git fetch origin
 git merge origin/master
 ```
 
-#### git push
+### git push
 
 ```
 上传本地指定分支到远程仓库
@@ -753,11 +817,11 @@ git push -f https://username%40demo.com:123456@gitee.com/iewiewiew/wei-demo-001.
 git push --mirror git@gitee.com/path/to/path/new_project_name.git
 ```
 
-#### git rebase
+### git rebase
 @todo git 压缩历史指定区间提交记录
 
 
-#### git remote
+### git remote
 
 ```
 添加远程仓库
@@ -795,7 +859,7 @@ git remote prune -n origin
 git remote show origin 
 ```
 
-#### git reset
+### git reset
 
 ```
 HEAD 表示当前版本
@@ -854,7 +918,7 @@ git log
 
 git reset --hard <commit 版本号> 
 
-完成撤销,同时将代码恢复到前一 commit_id 对应的版本 
+完成撤销，同时将代码恢复到前一 commit_id 对应的版本 
 git push <远程主机名> <本地分支名>:<远程分支名> --force
 
 要加上 force 不然会提示
@@ -862,7 +926,7 @@ error: failed to push some refs to '地址'
 hint: Updates were rejected because the tip of your current branch is behind
 ```
 
-#### git revert
+### git revert
 
 ```
 原理： git revert 是用于“反做”某一个版本，以达到撤销该版本的修改的目的。比如，我们 commit 了三个版本（版本一、版本二、 版本三），突然发现版本二不行（如：有 bug），想要撤销版本二，但又不想影响撤销版本三的提交，就可以用 git revert 命令来反做版本二，生成新的版本四，这个版本四里会保留版本三的东西，但撤销了版本二的东西。
@@ -891,7 +955,7 @@ git revert --abort
 工具方式：在 IDEA 的 Git 菜单的某条 commit 记录右键，选择 Revert Commit
 ```
 
-#### git rm
+### git rm
 
 ```
 删除工作区文件
@@ -908,7 +972,7 @@ git rm -r --cached .
 git clean -df
 ```
 
-#### git show
+### git show
 
 ```
 显示某个提交的详细内容
@@ -936,14 +1000,14 @@ git show --name-only <commit-id>
 git show <commit-id>:<filename>
 ```
 
-#### git stash
+### git stash
 
-1. stash 的原理：将本地没提交的内容(git commit 的内容不会被缓存, 但 git add 的内容会被缓存)进行缓存并从当前分支移除，缓存的数据结构为堆栈，先进后出。  
-2. 场景：在 A分支修改文件, 但不想 commit, 使用 git stash, git checkout B 分支之后, 修改的文件并不会带到 B分支, 再 git checkout A 分支, 使用 git stash pop 找出来。
+1. stash 的原理：将本地没提交的内容(git commit 的内容不会被缓存，但 git add 的内容会被缓存)进行缓存并从当前分支移除，缓存的数据结构为堆栈，先进后出。  
+2. 场景：在 A分支修改文件，但不想 commit，使用 git stash，git checkout B 分支之后，修改的文件并不会带到 B分支，再 git checkout A 分支，使用 git stash pop 找出来。
 
 ```
 stash 的参数详解：
-git stash 与git stash save 是一样的, 将没有提交的内容缓存并移除，而这条缓存名称为最新一次提交的 commit -m 的内容，如果没有本地提交则是拉远程仓库是的 commit 内容。
+git stash 与git stash save 是一样的，将没有提交的内容缓存并移除，而这条缓存名称为最新一次提交的 commit -m 的内容，如果没有本地提交则是拉远程仓库是的 commit 内容。
 
 - git stash save "xxx"：加上自己的注解进行缓存。
 - git stash list：返回缓存的列表。
@@ -954,7 +1018,7 @@ git stash 与git stash save 是一样的, 将没有提交的内容缓存并移�
 - git stash branch：指定或最新缓存创建分支。
 ```
 
-#### git status
+### git status
 
 ```
 检查当前文件状态输出十分详细
@@ -964,7 +1028,7 @@ git status
 git status -s
 ```
 
-#### git submodule
+### git submodule
 
 ```
 主模块名称：sub_main
@@ -1016,7 +1080,7 @@ git submodule deinit submodules/local-repo  # 这将取消初始化子模块，�
 git rm submodules/local-repo	
 ```
 
-#### git subtree
+### git subtree
 
 ```
 git subtree 相关命令
@@ -1042,13 +1106,13 @@ git subtree pull --prefix=foo https://github.com/demo/foo.git master --squash
 git subtree push --prefix=foo https://github.com/demo/foo.git master
 ```
 
-#### git tag
+### git tag
 
 ```
 查看本地 tag
 git tag -l
 
-查看本地 tag, 并展示详细信息
+查看本地 tag，并展示详细信息
 git tag -n
 
 查看所有远程 tag
@@ -1091,7 +1155,8 @@ git ls-remote --tags origin | awk '{print ":" $2}' | xargs git push origin
 git ls-remote --tags origin | awk '{print ":" $2}' | grep -v '\^{}' | xargs git push origin
 ```
 
-#### git ls-remote
+### git ls-remote
+
 git ls-remote 作用
 - 显示远程引用：git ls-remote 将显示远程仓库中的所有引用。这包括远程分支（remote branches）、标签（tags）和其他引用。它会列出引用的 SHA 值（提交的唯一标识符）和它们的名称。
 - 获取远程分支列表：通过运行 git ls-remote 加上远程仓库的 URL，可以获取远程仓库中所有分支的列表。
@@ -1108,7 +1173,8 @@ git ls-remote https://gitee.com/mirrors/git.git | sha256sum
 
 ```
 
-#### git for-each-ref
+### git for-each-ref
+
 git for-each-ref 是一个 Git 命令，用于遍历和显示引用（references）本地仓库的信息。引用可以是分支（branches）、标签（tags）、远程分支（remote branches）或其他引用。
 ```
 git for-each-ref
@@ -1116,7 +1182,7 @@ git for-each-ref | sha256sum
 git for-each-ref --format='%(refname:short) %(objectname:short)' refs/heads/
 ```
 
-#### other
+### other
 
 ```
 查看提交信息
@@ -1186,7 +1252,7 @@ git ls-files --others
 git ls-files --others -i --exclude-standard
 
 查看 Git 某个分支下的提交数
-git rev-list --count <branch_name>
+git rev-list --count <branchName>
 git rev-list --count master
 
 列出所有分支的所有提交
@@ -1212,24 +1278,24 @@ git rev-list HEAD -- path/to/directory
 git log $(git rev-list --max-parents=0 HEAD)
 
 查看 Git 某个分支下的文件数
-git ls-tree -r <branch_name> --name-only | wc -l
+git ls-tree -r <branchName> --name-only | wc -l
 git ls-tree -r master --name-only | wc -l
 
 查看 Git 某个分支下的贡献者
-git shortlog -s <branch_name>
+git shortlog -s <branchName>
 git shortlog -s master
 
 查看 Git 某个分支下的贡献者排名
-git shortlog -s -n <branch_name>
+git shortlog -s -n <branchName>
 git shortlog -s -n master
 
 查看 Git 仓库下的代码行数
 git log --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END {
-printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }'
+printf "added lines: %s，removed lines: %s，total lines: %s\n"，add，subs，loc }'
 
 查看 Git 仓库下的代码行数 指定时间段和作者
 git log --since =2023-01-01 --until==2023-12-31 --author="name" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { 
-printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }'
+printf "added lines: %s，removed lines: %s，total lines: %s\n"，add，subs，loc }'
 
 批量移除仓库已有的 .DS_Store
 find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatch
@@ -1241,16 +1307,198 @@ git ls-files -z | xargs -0 du -ch | tail -1
 
 
 
-### 四、Git 知识碎片
+## 4. Git 知识碎片
 
-#### Git 炸弹
+### 常用操作
+
+#### 克隆仓库再推到远程
+
+```
+克隆仓库
+git clone git@example.com:testent001/test_repo.git
+git fetch origin
+git checkout <branchName>
+
+克隆仓库（一行命令）
+git fetch --all && git branch -r | grep -v '\->' | while read remote; do git checkout --track $remote; done
+
+推送远程
+git remote add origin_new git@example.com:testent001/test_repo2.git
+git push -f origin_new --all
+
+本地分支关联远程分支（可不执行）
+git push -u origin_new master
+
+删除 remote（可不执行）
+git remote remove <remoteName>
+```
+
+#### 制造冲突
+
+在页面新增分支(起点 Master) branch1，添加 test.txt 文件，内容为：11
+在页面新增分支(起点 Master) branch2，添加 test.txt 文件，内容为：22
+
+```
+git clone <remoteUrl>
+git fetch origin
+git checkout branch1
+git merge origin/branch2
+vim test.txt 解决冲突
+git add .
+git commit 按 enter，出现编辑框，内容：Merge remote-tracking branch 'origin/branch2' into branch1
+:wq! 保存提交
+git push -f
+```
+
+解决本地和远程的冲突
+```
+git checkout master
+git pull https://gitee.com/test/test_repo_001.git branch_1
+git push origin master
+```
+
+#### 回退代码
+
+1. 查看 commits 记录：
+   git reflog
+
+2. 查看 commits 记录(详细)：
+   git log
+
+3. 撤销已经 push 的commit  
+   1、git log 拿到要回退的版本号：3d0c40d40074a2ba0c4756d7d1697983c398bd0f  
+   2、git reset –-soft <版本号> ，如 git reset --soft 3d0c40d40074a2ba0c4756d7d1697983c398bd0f ，重置至指定版本的提交，达到撤销提交的目的；回退本地代码：git reset --hard <版本号>  
+   3、git push origin master --force ，强制提交当前版本号  
+   问题：当我们有时候回滚了代码，想强制 push 到远程仓库的时候，git push origin --force，会报如下错误：You are not allowed to force push code to a protected branch on this project  
+   解决：如果用的是 gitlab 版本库，这说明 gitlab 对仓库启用了保护，需要在仓库中设置一下：进入项目 gitlab 网页版: 设置（setting）> 版本库（repo）> 保护分支（把保护的分支选择 unprotected）
+
+4. 合并 commit
+   git rebase 进行 git 压缩：git rebase -i HEAD~2 对最近的3个 commit 进行 rebase 操作  
+   对于 commit 合并可以使用 squash、fixup 指令，  
+   squash：将该 commit 的注释添加到上一个 commit 注释中  
+   fixup：是放弃当前 commit 的注释  
+   drop：删除当前 commit(drop 和fixup 的区别是啥？)  
+
+#### 本地合并分支
+
+```
+1. 创建一个文件并提交
+git init
+echo "Initial commit on main branch" > file.txt
+git add file.txt
+git commit -m "Initial commit on master branch"
+git branch
+
+2. 创建 squash-base 分支并提交
+git checkout -b squash-base
+echo "This is a change in squash-base." > file1.txt
+git add file1.txt
+git commit -m "Add file1.txt in squash-base"
+
+3. 切换到 master 分支
+git checkout master
+
+4. 创建 squash-head 分支并提交
+git checkout -b squash-head
+echo "This is a change in squash-head." > file2.txt
+git add file2.txt
+git commit -m "Add file2.txt in squash-head"
+
+5. 合并，用 --no-ff 选项来进行合并，这样会创建一个合并提交，并且保留合并信息
+git checkout squash-head
+git merge --no-ff squash-base
+产生日志：Merge branch 'squash-base' into squash-head
+
+6. 查看日志（可不执行）
+git log --oneline
+
+7. 其它，推送所有本地分支到远程（可不执行）
+git push -f --all
+```
+
+#### 本地和远程连通检验
+
+```
+ssh -T gitee.com
+ssh -vvT gitee.com
+端口默认 22，如果不是则需 -p 指定端口
+ssh -p 22 -T gitee.com   
+```
+
+### 常见问题
+
+#### git https 和 git ssh 的区别
+
+1. https
+
+- clone 项目：使用 https 方式时，没有要求，可以直接克隆下来
+- push 项目：使用 https 方式时，需要验证用户名和密码
+- 端口：一般使用 443 端口
+- 安全：通过用户名/密码授权，可用性比较高
+- 速度：速度相较快点，一般企业防火墙会打开 80 和 443 这两个 http/https 协议的端口，很方便；而对于 ssh 来说，企业防火墙很可能没打开 22 端口
+- 总结：https 利于匿名访问，适合开源项目，可以方便被别人克隆和读取(但没有 push 权限)
+
+2. ssh
+
+- clone 项目：使用 ssh 方式时，需要配置 ssh key，即要将生成的 ssh 密钥对的公钥上传至服务器
+- push 项目：使用 ssh 方式时，不需要验证用户名和密码，之前配置过 ssh key，(如果你没设置密码) 直接 push 即可
+- 端口：一般使用 22 端口
+- 速度：速度相较慢点
+- 总结：ssh 不利于匿名访问，比较适合内部项目，只要配置了 ssh 公钥极可自由实现 clone 和 push 操作
+
+#### git fetch 和 git pull 的区别
+
+1. 相同点
+   首先在作用上他们的功能是大致相同的，都是起到了更新代码的作用。
+
+2. 不同点
+
+- git fetch：git fetch 会将数据拉取到本地仓库，它并不会自动合并或修改当前的工作。 
+- git pull：git pull 是从远程获取最新版本并 merge 到本地，会自动合并或修改当前的工作。git pull = git fetch + git merge。
+
+#### git rebase 和 git merge 的区别
+
+1. rebase 会把你当前分支的 commit 放到公共分支的最后面，所以叫变基。就好像你从公共分支又重新拉出来这个分支一样。
+   举例：如果你从 master 拉了个 feature 分支出来，然后你提交了几个 commit，这个时候刚好有人把他开发的东西合并到 master 了，这个时候 master 就比你拉分支的时候多了几个 commit，如果这个时候你 rebase master 的话，就会把你当前的几个 commit，放到那个人 commit 的后面。
+2. merge 会把公共分支和你当前的 commit 合并在一起，形成一个新的 commit 提交。
+   使用场景：  
+   个人开发，拉公共分支最新代码的时候使用 rebase，好处是提交记录会比较简洁，缺点就是 rebase 以后不知道当前分支最早是从哪个分支拉出来的。  
+   团队开发，往公共分支上合代码的时候，使用 merge。但无论个人开发还是团队开发建议还是用 merge。  
+
+#### cherry pick 的 fast forward、non-fast forward 的区别
+
+1. Fast-forward 合并：使用 git cherry-pick 时，如果要合并的提交在当前分支的提交历史中是连续的，没有其他提交插入其中，那么 Git 会执行一个快进(fast-forward)合并。 这意味着 Git 只需要简单地将当前分支的 HEAD 指针移动到要合并的提交上，不需要创建新的合并提交。
+2. Non-fast-forward 合并：如果要合并的提交不在当前分支的提交历史中，也就是说在合并过程中需要创建一个新的合并提交，那么 Git 会执行一个非快进(non-fast-forward)合并。 这意味着 Git 需要创建一个新的合并提交，将要合并的提交合并到当前分支上。
+
+#### git branch --show-current 和 git branch 的区别
+
+git branch --show-current 和 git branch 是 Git 命令中用于查看当前分支和分支列表的两个不同命令。
+
+1. git branch --show-current：该命令用于显示当前所在的分支名称。它是 Git 2.22 版本引入的新命令。执行该命令会输出当前所在分支的名称，例如 "main"、"develop" 或其他分支名称。如果当前没有分支或者不在任何分支上，则不会输出任何结果。
+2. git branch：该命令用于列出所有分支的列表。执行该命令会显示本地仓库中所有的分支名称，并在当前分支前面添加一个星号 (*) 标记。被标记的分支即为当前所在的分支。
+   git branch --show-current 有分支 master，git branch 无分支，添加或者修改文件，执行 git add .，git commit -m "123" 即可。
+
+#### 合并分支、扁平化分支、变基并合并的区别
+
+1. 合并分支（Merge）
+   合并分支是指将一个分支的更改合并到另一个分支中。这通常是在开发一个功能或修复一个 bug 时使用的。合并分支会将源分支中的提交应用到目标分支中，并创建一个新的合并提交，将两个分支的历史记录合并在一起。使用 Git 命令 `git merge` 即可实现合并分支。
+2. 扁平化分支（Squash）
+   扁平化分支是指将一个分支的多个提交压缩成一个提交。这通常是在提交一个功能或修复一个 bug 的最终版本时使用的。扁平化分支可以使提交历史记录更加简洁，减少噪音。使用 Git 命令 `git merge --squash` 可以将一个分支的多个提交压缩成一个提交。
+3. 变基并合并（Rebase and Merge）
+   变基并合并是指将一个分支上的提交应用到另一个分支上，但是与合并分支不同的是，它会将源分支的提交“重放”到目标分支上。这样可以在目标分支上形成一条干净的提交历史记录，但也可能会带来一些风险，因为它会改变提交的顺序和 SHA-1 值。使用 Git 命令 `git rebase` 可以对源分支进行变基操作，然后再使用 `git merge` 将源分支合并到目标分支。
+
+### git 拓展
+
+#### git 炸弹
+
 [什么是 Git 炸弹(git bomb)？](https://juejin.cn/post/7143544167178698783)
-[git-bomb](https://github.com/Katee/git-bomb)
+[示例仓库 git-bomb](https://github.com/Katee/git-bomb)
 
 Git 炸弹：指一个 git 仓库，.git 目录很小，但是 checkout 工作区会占据很大的磁盘空间。大体原理小文件大量地重复引用，git checkout 的时候复制出海量小文件，从而占据大量磁盘空间，导致当前机器磁盘被占满。
 描述：git 炸弹检测页面提示（同一个文件内容被引用到很多文件中，检出时占据大量磁盘空间，可能会导致客户端磁盘占满）
 
-#### Git LFS
+#### git LFS
+
 代码托管支持 Git LFS（Large File Storage，大文件存储）协议，可以把音乐、图片、视频等指定的任意大文件资源存储在 Git 仓库之外，对于使用者而言，类似在操作一个完整的 Git 仓库，非常方便。通过将大文件存储在 Git 原有的数据结构之中，可以减小 Git 仓库本身的体积，使克隆 Git 仓库的速度加快，也使得 Git 不会因为仓库中充满大文件而损失性能。
 当您要上传的文件单个超过200M 时，需要使用 Git LFS。
 [git-lfs 官网](https://git-lfs.com/)
@@ -1307,8 +1555,8 @@ git lfs --cached "logo.png"
 重写 master 分支，将历史提交中的 *.zip 都用 git lfs 进行管理
 git lfs migrate import --include-ref=master --include="*.zip"
 
-重写所有分支及标签，将历史提交中的 *.rar,*.zip 都用 git lfs 进行管理
-git lfs migrate import --everything --include="*.rar,*.zip"
+重写所有分支及标签，将历史提交中的 *.rar，*.zip 都用 git lfs 进行管理
+git lfs migrate import --everything --include="*.rar，*.zip"
 
 手动同步
 若 Gitee 的Git-LFS 自动同步不满足使用需求时，可以手动同步 Git-LFS 到Gitee 仓库
@@ -1333,7 +1581,7 @@ git lfs install --skip-smudge 是 Git LFS（Large File Storage）的安装命令
 
 在 Git LFS 中，清理过滤器（smudge filter）是用于在检出文件时自动替换指定的大文件（通常是二进制文件）为其指针的机制。这有助于减小仓库的体积，因为实际的大文件内容会被存储在 Git LFS 服务器上，而不是直接存储在 Git 仓库中。
 
-#### Git Hooks
+#### git Hooks
 
 [Git Hooks 简介](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
 
@@ -1352,7 +1600,7 @@ post-receive
 在更新所有 refs 后推送时，这将在远程运行。 它不接受参数，而是通过标准输入以"<old-value> <new-value> <ref-name>”的形式接收信息。 因为它是在更新之后调用的，所以它不能中止该过程。
 ```
 
-#### Git Scalar
+#### git Scalar
 
 巨型 Git 仓库管理工具 Scalar
 
@@ -1371,81 +1619,6 @@ scalar run all？
 
 scalar clone <url>
 scalar clone https://dev.azure.com/ms-scalar/_git/scalar
-```
-
-#### Git 回退代码
-
-1. 查看 commits 记录：
-   git reflog
-
-2. 查看 commits 记录(详细)：
-   git log
-
-3. 撤销已经 push 的commit  
-   1、git log 拿到要回退的版本号：3d0c40d40074a2ba0c4756d7d1697983c398bd0f  
-   2、git reset –-soft <版本号> , 如 git reset --soft 3d0c40d40074a2ba0c4756d7d1697983c398bd0f , 重置至指定版本的提交, 达到撤销提交的目的；回退本地代码：git reset --hard <版本号>  
-   3、git push origin master --force , 强制提交当前版本号  
-   问题：当我们有时候回滚了代码, 想强制 push 到远程仓库的时候, git push origin --force, 会报如下错误：You are not allowed to force push code to a protected branch on this project  
-   解决：如果用的是 gitlab 版本库, 这说明 gitlab 对仓库启用了保护, 需要在仓库中设置一下：进入项目 gitlab 网页版: 设置（setting）> 版本库（repo）> 保护分支（把保护的分支选择 unprotected）
-
-4. 合并 commit
-   git rebase 进行 git 压缩：git rebase -i HEAD~2 对最近的3个 commit 进行 rebase 操作  
-   对于 commit 合并可以使用 squash、fixup 指令,   
-   squash：将该 commit 的注释添加到上一个 commit 注释中  
-   fixup：是放弃当前 commit 的注释  
-   drop：删除当前 commit(drop 和fixup 的区别是啥？)  
-
-#### git https 和 git ssh 的区别
-
-1. https
-- clone 项目：使用 https 方式时, 没有要求, 可以直接克隆下来
-- push 项目：使用 https 方式时, 需要验证用户名和密码
-- 端口：一般使用443端口
-- 安全：通过用户名/密码授权, 可用性比较高
-- 速度：速度相较快点, 一般企业防火墙会打开80和443这两个 http/https 协议的端口, 很方便；而对于 ssh 来说, 企业防火墙很可能没打开22端口
-- 总结：https 利于匿名访问, 适合开源项目, 可以方便被别人克隆和读取(但没有 push 权限)
-
-2. ssh
-- clone 项目：使用 ssh 方式时, 需要配置 ssh key, 即要将生成的 ssh 密钥对的公钥上传至服务器
-- push 项目：使用 ssh 方式时, 不需要验证用户名和密码, 之前配置过 ssh key, (如果你没设置密码) 直接 push 即可
-- 端口：一般使用22端口
-- 速度：速度相较慢点
-- 总结：ssh 不利于匿名访问, 比较适合内部项目, 只要配置了 ssh 公钥极可自由实现 clone 和push 操作
-
-
-#### git fetch 和 git pull 的区别
-1. 相同点
-    首先在作用上他们的功能是大致相同的, 都是起到了更新代码的作用。
-
-2. 不同点
-- git fetch：git fetch 会将数据拉取到本地仓库, 它并不会自动合并或修改当前的工作。 
-- git pull：git pull 是从远程获取最新版本并 merge 到本地, 会自动合并或修改当前的工作。
-
-#### git rebase 和 git merge 的区别
-
-1、rebase 会把你当前分支的 commit 放到公共分支的最后面，所以叫变基。就好像你从公共分支又重新拉出来这个分支一样。
-举例：如果你从 master 拉了个 feature 分支出来，然后你提交了几个 commit，这个时候刚好有人把他开发的东西合并到 master 了，这个时候 master 就比你拉分支的时候多了几个 commit，如果这个时候你 rebase master 的话，就会把你当前的几个 commit，放到那个人 commit 的后面。
-2、merge 会把公共分支和你当前的 commit 合并在一起，形成一个新的 commit 提交。
-使用场景：  
-个人开发，拉公共分支最新代码的时候使用 rebase，好处是提交记录会比较简洁，缺点就是 rebase 以后不知道当前分支最早是从哪个分支拉出来的。  
-团队开发，往公共分支上合代码的时候，使用 merge。但无论个人开发还是团队开发建议还是用 merge。  
-
-#### 合并分支、扁平化分支、变基并合并 的区别
-
-1. 合并分支（Merge）
-   合并分支是指将一个分支的更改合并到另一个分支中。这通常是在开发一个功能或修复一个 bug 时使用的。合并分支会将源分支中的提交应用到目标分支中，并创建一个新的合并提交，将两个分支的历史记录合并在一起。使用 Git 命令 `git merge` 即可实现合并分支。
-2. 扁平化分支（Squash）
-   扁平化分支是指将一个分支的多个提交压缩成一个提交。这通常是在提交一个功能或修复一个 bug 的最终版本时使用的。扁平化分支可以使提交历史记录更加简洁，减少噪音。使用 Git 命令 `git merge --squash` 可以将一个分支的多个提交压缩成一个提交。
-3. 变基并合并（Rebase and Merge）
-   变基并合并是指将一个分支上的提交应用到另一个分支上，但是与合并分支不同的是，它会将源分支的提交“重放”到目标分支上。这样可以在目标分支上形成一条干净的提交历史记录，但也可能会带来一些风险，因为它会改变提交的顺序和 SHA-1 值。使用 Git 命令 `git rebase` 可以对源分支进行变基操作，然后再使用 `git merge` 将源分支合并到目标分支。
-
-
-#### 本地和远程连通检验
-
-```
-ssh -T gitee.com
-ssh -vvT gitee.com
-ssh -p 22 -T gitee.com   # 端口默认 22，如果不是则需 -p 指定
 ```
 
 #### GPG 签名
@@ -1499,17 +1672,7 @@ gpg --edit-key <GPG 密钥 ID>
 踩坑：用户名得是远端仓库的用户名？
 ```
 
-#### 设置 Git 缓冲区大小
 
-1、将本地 http.postBuffer 数值调整到 GitHub 服务对应的单次上传大小配置： http.postBuffer 默认单位为 B（字节），所以500MB=1024*1024*500。 
-
-方法一：全局配置 git config --global http.postBuffer 524288000   
-
-方法二：当前仓库配置  git config http.postBuffer 524288000 
-
-2、查看 http.postBuffer 数值是否设置成功 
-
-查看当前的 Git 配置 git config --list  
 
 #### git commit message helper
 
@@ -1527,7 +1690,7 @@ IDEA 插件：git commit message helper
 <footer>
 ```
 
-- Header头只有一行, 包括3个字段: type(必需), scope(可选), subject(必需)
+- Header头只有一行，包括3个字段: type(必需)，scope(可选)，subject(必需)
 
 | 属性          | 描述                |
 | :------------ | :------------------ |
@@ -1559,61 +1722,25 @@ scope说明提交影响范围：一般是修改的什么模块或者是什么功
 
 subject 说明提交简短描述：一般是5-10各自简单描述做的任务，如【xx模块加入消息队列】
 
-#### git fsck
-
-```
-git fsck
-检查整个仓库
-git fsck 命令用于检查 Git 仓库的完整性。它会执行一系列检查,以确保仓库中的对象(提交、树、blob等)之间的引用关系是正确的,并且所有对象都可以被访问到。
-
-检查特定的提交:
-git fsck <commit-hash>
-
-检查未引用的对象
-git fsck --unreachable
-
-显示更多详细信息
-git fsck --full
-
-找出悬空 blob
-git fsck --unreachable | grep "^blob^"
-
-检查引用日志
-git reflog expire --expire=now --all
-
-删除悬空 blob
-git prune --expire now
-```
-
 #### CODEOWNERS
 
 添加 CODEOWNERS 文件
 填写内容：
-src/test_codeowner.txt @gitqa @gitqa2
-scr/packageTest/ @gitqa @gitqa2
+```
+* @gitqa
+/test_codeowner.txt @gitqa @gitqa2
+/aa/test_codeowner.txt @gitqa @gitqa2
+/aa/bb/ @gitqa @gitqa2
+```
 
-#### cherry pick 的 fast forward、non-fast forward 的区别
-
-1. Fast-forward 合并:
-   使用 git cherry-pick 时，如果要合并的提交在当前分支的提交历史中是连续的,没有其他提交插入其中,那么 Git 会执行一个快进(fast-forward)合并。 这意味着 Git 只需要简单地将当前分支的 HEAD 指针移动到要合并的提交上,不需要创建新的合并提交。
-2. Non-fast-forward 合并:
-   如果要合并的提交不在当前分支的提交历史中,也就是说在合并过程中需要创建一个新的合并提交,那么 Git 会执行一个非快进(non-fast-forward)合并。 这意味着 Git 需要创建一个新的合并提交,将要合并的提交合并到当前分支上。
-
-#### git branch --show-current 和 git branch 的区别
-
-git branch --show-current 和 git branch 是 Git 命令中用于查看当前分支和分支列表的两个不同命令。
-1. git branch --show-current：该命令用于显示当前所在的分支名称。它是 Git 2.22 版本引入的新命令。执行该命令会输出当前所在分支的名称，例如 "main"、"develop" 或其他分支名称。如果当前没有分支或者不在任何分支上，则不会输出任何结果。
-2. git branch：该命令用于列出所有分支的列表。执行该命令会显示本地仓库中所有的分支名称，并在当前分支前面添加一个星号 (*) 标记。被标记的分支即为当前所在的分支。
-git branch --show-current 有分支 master，git branch 无分支，添加或者修改文件，执行 git add .，git commit -m "123" 即可。
-
-#### 其它
+#### 知识碎片
 
 “内容寻址存储(content addressed storage)”，它指的是对象在数据库中的文件名与文件内容的哈希值相同。
 
 [gitalypb](https://pkg.go.dev/gitlab.com/gitlab-org/gitaly/proto/go/gitalypb) 
 
-git push origin HEAD:refs/heads/<branch_name>
-将本地的 HEAD 提交推送到远程仓库的分支，refs/heads/ 表示将提交推送到远程仓库的正常分支，而不是用于代码审查的分支。
+`git push origin HEAD:refs/heads/<branchName>`
+将本地的 HEAD 提交推送到远程仓库的分支，`refs/heads/` 表示将提交推送到远程仓库的正常分支，而不是用于代码审查的分支。
 注意：将 heads 填错为 head 也不会报错，实际上推上去，但是查不出来
 
 其它命令
@@ -1623,28 +1750,85 @@ git push origin refs/tags/v1.0.0
 git push origin refs/pull/1
 ```
 
-用于向 Gerrit 等代码审查系统推送提交，refs/for/ 表示将提交推送到一个特殊的分支，以便进行代码审查。
-git push origin HEAD:refs/for/
-
-
-
-### 五、踩坑
+查看仓库中的大文件  
 
 ```
-1、问题一
-报错：remote: [session-7f4367b7] You hasn't joined this enterprise!
-解决：进入控制台 > 打开钥匙串 > 修改用户的密码
+git rev-list --objects --all | grep -E "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -10 | awk '{print$1}' | sed ':a;N;$!ba;s/\n/|/g')"
+```
+
+空提交  
+git commit --allow-empty
+
+git squash 
+提交 5 次 commit
+git rebase -i HEAD~n (n 是要压缩的提交数量)
+将要压缩的提交的 pick 改为 squash（或简写为 s），只保留第一个提交为 pick
+保存并退出编辑器
+
+```
+1. 创建并切换到功能分支：
+git checkout -b feature-branch
+
+2. 进行一些提交：
+echo "First change" > file.txt
+git add file.txt
+git commit -m "Add first change"
+
+echo "Second change" >> file.txt
+git add file.txt
+git commit -m "Add second change"
+
+echo "Third change" >> file.txt
+git add file.txt
+git commit -m "Add third change"
+
+3. 切换回主分支:
+git checkout master
+
+4. 执行 Squash Merge：
+git merge --squash feature-branch
+
+5. 提交更改：
+git commit -m "Merge feature-branch with squash"
+
+6. 查看提交历史：
+git log --oneline
+
+7. 其它
+git checkout feature-branch
+git push origin feature-branch
+```
+
+拉取 A 仓库的所有分支，并推送到远程 B 仓库
+```
+git clone --mirror https://github.com/user/repoA.git
+
+cd repoA.git
+git remote add b-repo https://github.com/user/repoB.git
+
+git push -f b-repo --all
+git push -f b-repo --tags
+```
+
+
+## 5. 踩坑
+
+1. 问题一
+现象：remote: [session-7f4367b7] You hasn't joined this enterprise!
+解决1：进入控制台 > 打开钥匙串 > 修改用户的密码
 解决2：git config --global --unset credential.helper，重新输入当前的账户和密码
 
-2、问题二
-gitee 报错"remote: [session-7f4367b7] Access denied
-在2个 git 账号切换的时候，需要清除上一个账号的信息，重新输入当前的账户和密码
-git config --system --unset credential.helper
-```
-问题三
-git pull/push 报错：fatal: refusing to merge unrelated histories
+2. 问题二
+现象：gitee 报错"remote: [session-7f4367b7] Access denied
+原因：在2个 git 账号切换的时候，需要清除上一个账号的信息，重新输入当前的账户和密码
+解决：git config --system --unset credential.helper
+
+3. 问题三
+现象：git pull/push 报错：fatal: refusing to merge unrelated histories
 原因：两个分支历史记录是完全独立的
 解决：git pull origin master --allow-unrelated-histories
 
-
+4. 问题四
+现象：git push 报错：! [remote rejected] master -> master (no merge base found)
+原因：分支历史分开：本地分支的历史与远程分支的历史完全不同，可能是由于强制推送或重写历史造成的。 分支被重置：远程分支可能被重置，导致本地分支无法找到共同的合并基础。
 

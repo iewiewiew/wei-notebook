@@ -1,7 +1,5 @@
 [TOC]
 
----
-
 <h1 align="center">ChaosMesh</h1>
 
 > By：weimenghua  
@@ -14,13 +12,13 @@
 
 
 
-## 一、Chaos Mesh 简介
+## 1. Chaos Mesh 简介
 
 Chaos Mesh 是一个开源的云原生混沌工程平台，提供丰富的故障模拟类型，具有强大的故障场景编排能力，方便用户在开发测试中以及生产环境中模拟现实世界中可能出现的各类异常，帮助用户发现系统潜在的问题。Chaos Mesh 提供完善的可视化操作，旨在降低用户进行混沌工程的门槛。用户可以方便地在 Web UI 界面上设计自己的混沌场景，以及监控混沌实验的运行状态。
 
 
 
-## 二、Chaos Mesh 搭建
+## 2. Chaos Mesh 搭建
 
 ### 2.1 kubertnetes 安装
 
@@ -54,7 +52,7 @@ kubectl get svc -n chaos-mesh |grep chaos-dashboard
 http://127.0.0.1:31903
 ```
 
-![](./img/Chaos Mesh Dashboard.png)
+![](./img/chaos-mesh-dashboard.png)
 
 ### 2.2 主机安装
 
@@ -76,7 +74,7 @@ export PATH=/usr/local/chaosd-$CHAOSD_VERSION-linux-amd64:$PATH
 
 
 
-## 三、Chaos Mesh 实验
+## 3. Chaos Mesh 实验
 
 ### 3.1 物理机
 
@@ -90,4 +88,3 @@ chaosd attack disk add-payload write -s 2G -n 8
 检查
 du -sh * | sort -n
 ```
-

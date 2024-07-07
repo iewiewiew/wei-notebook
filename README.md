@@ -29,14 +29,6 @@ sidebar_position: 1
   项目说明：Java 和前端项目，包含 Java 基础，SpringBoot，React，Vue，TypeScript 等。
   - <https://github.com/iewiewiew/Learn-Java.git>
   - <https://gitee.com/iewiewiew/Learn-Java.git>
-- Learn-Python
-  项目说明：Python 项目，包含 Python 基础，cypress，pytest，robotframework，selenium，unitest 等测试框架。
-  - <https://github.com/iewiewiew/Learn-Python.git>
-  - <https://gitee.com/iewiewiew/Learn-Python.git>
-- Learn-Go
-  项目说明：Go 项目。
-  - <https://github.com/iewiewiew/Learn-Go.git>
-  - <https://gitee.com/iewiewiew/Learn-Go.git>
 
 
 

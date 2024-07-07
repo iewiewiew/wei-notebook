@@ -8,7 +8,7 @@
 
 
 
-### 一、GiteeGo
+## 1. GiteeGo
 
 [示例代码库](https://gitee.com/gitee-go)
 
@@ -80,14 +80,14 @@ spec:
 **Helm Chart部署**
 - 命名空间：自定义，默认 default
 - 应用名：自定义，例如 nginx
-- Chart 文件目录：[./nginx](../Jenkins/nginx)
+- Chart 文件目录：[./nginx](../Kubernetes/Helm/nginx)
 - 指定values.yaml：./nginx/values.yaml
 
 ![](./img/helm_deploy.png)
 
 
 
-### 二、ZadigX
+## 2. ZadigX
 
 **参考资料**  
 [Zadig 官网](https://koderover.com/)    
@@ -108,11 +108,11 @@ helm repo add koderover-chart https://koderover.tencentcloudcr.com/chartrepo/cha
 kubectl logs -f aslan-7475f675bf-6vfmr -c aslan -n my-space
 ```
 
-![](../Mixinfo/img/ZadigX%20页面.png)
+![](./img/zadigx.png)
 
 
 
-### 三、TeamCity
+## 3. TeamCity
 
 注：未实践成功  
 [TeamCity 下载](https://www.jetbrains.com/teamcity/)   
@@ -128,7 +128,7 @@ jetbrains/teamcity-server
 
 
 
-### 四、Buddy
+## 4. Buddy
 
 [Buddy](https://buddy.works/)
 
@@ -136,7 +136,7 @@ jetbrains/teamcity-server
 
 
 
-### 五、Tekon
+## 5. Tekon
 
 - [Tekton 官网](https://tekton.dev/)
 - [Tekton 源码](https://github.com/tektoncd)
@@ -147,7 +147,7 @@ kubectl apply -f https://storage.googleapis.com/tekton-releases/operator/latest/
 
 
 
-### 六、Argo
+## 6. Argo
 
 - [Argo 官网](https://argoproj.github.io/)
 - [Argo Github](https://github.com/argoproj)
@@ -181,9 +181,66 @@ kubectl apply -f argo_example.yml
 
 
 
-
-### 七、阿里云效
+## 7. 阿里云效
 
 [阿里云效](https://flow.aliyun.com)
 
 阿里云效流水线接入智能排查助手
+
+
+
+## 8. 制品 Repo
+
+### 1. 制品库简介
+
+什么是制品库 制品库用以管理源代码编译后的构建产物，支持Docker、Maven、Helm、npm、PyPI 包等常见制品库类型。 制品库可以跟源代码协同进行版本化控制，可以与本地各构建工具和云上的持续集成、持续部署无缝结合，并支持漏洞扫描等特性，是一种企业处理软件开发过程中产生的所有包类型的标准化方式。
+
+### 2. Jfrog
+
+#### 2.1 Jfrog 搭建
+
+**参考资料**
+[Jfrog 官网](https://www.jfrogchina.com/)
+[Jfrog 搭建教程](https://jfrog.com/help/r/jfrog-installation-setup-documentation/installing-artifactory)
+
+```
+运行容器
+docker volume create --name artifactory_data
+docker run -d --name artifactory -p 8081:8081 -p 8082:8082 -v artifactory_data:/var/opt/jfrog/artifactory docker.bintray.io/jfrog/artifactory-oss:latest
+
+访问地址 原：admin/password 新：admin/Admin123
+http://127.0.0.1:8082
+```
+
+#### 2.2 Jfrog 使用
+
+上传
+```
+通用格式
+curl -T <filename> http://admin:password@服务地址+仓库路径+文件名
+
+范例
+curl -T tmp.txt "http://admin:Admin123@127.0.0.1:8082/artifactory/example-repo-local/tmp.txt"
+```
+
+下载
+```
+通用格式
+http://admin:password@服务地址+仓库路径+文件名
+
+范例：
+http://admin:Admin123@ip:8082/artifactory/tom-data1/example-repo-local/tmp.txt
+```
+
+![](../Mixinfo/img/jfrog-artifactory.png)
+
+### 3. Coding Repo
+
+[Coding Repo 帮助文档](https://coding.net/help/docs/artifacts/intro.html)
+
+[测试仓库](https://gitee.com/iewiewiew/wei-test-giteego)
+
+### 4. Gitee Repo
+
+[Gitee Repo 简介](https://gitee.com/repo)  
+[Gitee Repo 帮助文档](https://osc.gitee.work/help/#/repo/)

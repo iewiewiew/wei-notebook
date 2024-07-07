@@ -22,7 +22,7 @@ const config = {
   projectName: 'iewiewiew.github.io', // Usually your repo name.
   deploymentBranch: 'gh-pages',
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internalization, you can use this field to set useful
@@ -43,6 +43,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl: 'https://github.com/iewiewiew/iewiewiew.github.io/tree/main/',
+          exclude: ['./Chaos/高可用测试用例模板.md', './Database/MongoDB/**'],
         },
         blog: {
           showReadingTime: true,
@@ -61,12 +62,12 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/me.jpeg',
       navbar: {
         title: 'wei',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          src: 'img/me.jpeg',
         },
         items: [
           {

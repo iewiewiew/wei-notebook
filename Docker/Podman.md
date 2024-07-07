@@ -11,7 +11,8 @@
 
 
 
-### 安装
+### 1. 安装
+
 ```
 yum -y install podman
 
@@ -24,7 +25,8 @@ podman version
 
 
 
-### 使用
+### 2. 使用
+
 常用命令
 ```
 podman pull docker.io/nginx

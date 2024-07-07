@@ -94,14 +94,14 @@ function uninstall_helm() {
 
 
 case $1 in
-"install")
-install
-;;
-"uninstall")
-uninstall
-;;
-*)
-log "安装: sh install_k3s.sh install"
-log "卸载: sh install_k3s.sh uninstall"
-;;
+  "install")
+  install
+  ;;
+  "uninstall")
+  uninstall
+  ;;
+  *)
+  log "安装: sh install_k3s.sh install"
+  log "卸载: sh install_k3s.sh uninstall"
+  ;;
 esac

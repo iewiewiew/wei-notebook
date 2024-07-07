@@ -6,20 +6,17 @@
 > Date：2023.06.03  
 > Description：JaCoCo 单元覆盖率统计  
 
-
-
 **参考资料**  
 [Jacoco 官网](https://www.eclemma.org/jacoco/)  
 [Jacoco 源码](https://github.com/jacoco/jacoco)
 
+## 1. 代码覆盖率
 
-
-## 一、代码覆盖率
 代码覆盖（Code coverage）是软件测试中的一种度量，描述程序中源代码被测试的比例和程度，所得比例称为代码覆盖率。
 
 添加依赖后，执行：mvn clean test。
 
-```
+```text
 <dependency>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
@@ -27,7 +24,7 @@
 </dependency>
 ```
 
-```
+```xml
 <build>
         <plugins>
             <plugin>
