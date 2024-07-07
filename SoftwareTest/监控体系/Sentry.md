@@ -11,13 +11,11 @@
 [sentry 开发文档](https://develop.sentry.dev/)   
 [sentry 源码](https://github.com/getsentry/sentry)  
 
-
-
-## 一、Sentry 搭建
+## 1. Sentry 搭建
 
 ### 方式一（未实践成功）
 
-```
+```text
 git clone https://github.com/getsentry/onpremise.git
 cd onpremise
 ./install.sh
@@ -28,11 +26,9 @@ docker-compose up -d
 http://127.0.0.1:9000
 ```
 
-
-
 ### 方式二
 
-```
+```text
 1、启动 redis 和postgres
 docker run -d --name sentry-redis --restart=always redis
 docker run -d --name sentry-postgres -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=sentry --restart=always postgres 
@@ -57,17 +53,14 @@ docker run -d --name sentry-worker-1 -e SENTRY_SECRET_KEY='<密钥>' --link sent
 http://127.0.0.1:9000
 ```
 
-
-
-## 二、Sentry 接入
+## 2. Sentry 接入
 
 ### Python
 
 在 Sentry 新建 Python Project
 
-```
+```Python
 import sentry_sdk
-
 
 def demo():
     sentry_sdk.init("http://ea9261e951fa4dca81a31d1ef15fab21@127.0.0.1:9000/2")
@@ -79,4 +72,4 @@ if __name__ == '__main__':
     demo()
 ```
 
-![](../../Mixinfo/img/Sentry_Python.png)
+![sentry-python](../../Mixinfo/img/sentry-python.png)

@@ -13,19 +13,23 @@
 
 
 
-### 一、MQTT 协议
+### 1. MQTT 协议
+
 MQTT 是一种基于发布/ 订阅模式的轻量级消息传输协议（Message Queuing Telemetry Transport，消息队列遥测传输协议），专门针对低带宽和不稳定网络环境的物联网应用而设计，可以用极少的代码为联网设备提供实时可靠的消息服务。 MQTT 协议广泛应用于物联网、移动互联网、智能硬件、车联网、智慧城市、远程医疗、电力、石油与能源等领域。
 
 
 
-### 二、MQTT 消息服务器
-#### 1、EMQX 简介
+### 2. MQTT 消息服务器
+
+#### 2.1 EMQX 简介
+
 EMQX 是一款开源 (opens new window)的大规模分布式 MQTT 消息服务器，功能丰富，专为物联网和实时通信应用而设计。EMQX 5.0 单集群支持 MQTT 并发连接数高达 1 亿条，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，并保证延迟在亚毫秒级。
 
 EMQX 支持多种协议，包括 MQTT (3.1、3.1.1 和 5.0)、HTTP、QUIC 和 WebSocket 等，保证各种网络环境和硬件设备的可访问性。EMQX 还提供了全面的 SSL/TLS 功能支持，比如双向认证以及多种身份验证机制，为物联网设备和应用程序提供可靠和高效的通信基础设施。
 
 
-#### 2、EMQX 搭建
+#### 2.2 EMQX 搭建
+
 [Docker 搭建 emqx](https://www.emqx.io/zh/downloads)
 
 - 1883：MQTT 协议端口
@@ -44,7 +48,8 @@ docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p
 
 
 
-### 三、JMeter 测试 MQTT
+### 3. JMeter 测试 MQTT
+
 下载 [JMeter MQTT 插件](https://github.com/emqx/mqtt-jmeter/releases) 放到 `$JMETER_HOME/lib/ext` 目录下并重启 JMeter。
 
 新建 MQTT Connect（MQTT 连接采样器）、MQTT Pub Sampler（MQTT 消息发布采样器）、MQTT Sub Sampler 请求，配置线程数 10 个，运行线程。

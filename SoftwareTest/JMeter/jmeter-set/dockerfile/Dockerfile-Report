@@ -1,0 +1,15 @@
+FROM python:3.9
+
+COPY script/templates /root/jmeter-test/script/templates
+COPY script/download_file.py /root/jmeter-test/script
+COPY script/jmeter_report.py /root/jmeter-test/script
+COPY script/main.py /root/jmeter-test/script
+COPY script/requirements.txt /root/jmeter-test
+
+WORKDIR /root/jmeter-test
+
+RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "script/main.py"]

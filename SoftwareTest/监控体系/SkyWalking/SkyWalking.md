@@ -12,26 +12,19 @@
 [skywalking-ui](https://hub.docker.com/r/apache/skywalking-ui)  
 [skywalking-quick-start](https://skywalking.apache.org/zh/2020-04-19-skywalking-quick-start/)
 
-
-
-## 一、SkyWalking 简介
+## 1. SkyWalking 简介
 
 SkyWalking: 一个开源的可观测平台, 用于从服务和云原生基础设施收集, 分析, 聚合及可视化数据。SkyWalking 提供了一种简便的方式来清晰地观测分布式系统, 甚至横跨多个云平台。SkyWalking 更是一个现代化的应用程序性能监控(Application Performance Monitoring)系统, 尤其专为云原生、基于容器的分布式系统设计.
 
+![](../img/SkyWalking架构.png)
 
-![](../img/SkyWalking%20架构.png)
-
-
-
-
-
-## 二、SkyWalking 搭建
+## 2. SkyWalking 搭建
 
 [SkyWalking 下载](https://archive.apache.org/dist/skywalking/)
 
 安装 Elasticsearch
 
-```
+```bash
 docker run -d --name elasticsearch \
 -p 9200:9200 \
 -e "discovery.type=single-node" \
@@ -40,7 +33,7 @@ elasticsearch:7.6.2
 
 安装 skywalking-oap-server
 
-```
+```bash
 docker run -d --name oap \
 --restart always \
 -p 12800:12800 \
@@ -56,7 +49,7 @@ apache/skywalking-oap-server:6.6.0-es7
 
 安装 skywalking-ui
 
-```
+```bash
 docker run -d --name oap-ui \
 --restart=always \
 -e TZ=Asia/Shanghai \
@@ -69,17 +62,15 @@ apache/skywalking-ui:6.6.0
 6.6.0
 ```
 
-访问地址：`http://127.0.0.1:8088`
+访问地址：http://127.0.0.1:8088
 
+## 3. SkyWalking 使用
 
-
-## 三、SkyWalking 使用
-
-![](../img/SkyWalking%20UI.png)
+![](../img/SkyWalking-UI.png)
 
 启动应用
 
-```
+```text
 # 下载 skywalking-agent
 https://archive.apache.org/dist/skywalking/6.6.0/apache-skywalking-apm-es7-6.6.0.tar.gz
 
