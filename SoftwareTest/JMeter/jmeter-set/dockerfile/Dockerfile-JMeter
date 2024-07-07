@@ -1,0 +1,25 @@
+FROM openjdk:8-jdk-alpine
+
+#RUN addgroup -g 993 git
+#RUN adduser -D -u 996 -G git git
+
+RUN echo "https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.9/main" > /etc/apk/repositories
+
+RUN apk add --no-cache bash wget
+
+RUN wget https://mirrors.tuna.tsinghua.edu.cn/apache//jmeter/binaries/apache-jmeter-5.5.tgz \
+    && tar -xzf apache-jmeter-5.5.tgz \
+    && rm apache-jmeter-5.5.tgz
+
+#USER git
+
+RUN mkdir -vp /root/jmeter-test && chmod -R 777 /root/jmeter-test
+
+#COPY config/reportgenerator.properties /apache-jmeter-5.5/bin/
+#COPY config/jmeter /apache-jmeter-5.5/bin/
+COPY config/log4j2.xml /apache-jmeter-5.5/bin/
+
+ENV JMETER_HOME /apache-jmeter-5.5
+ENV PATH $JMETER_HOME/bin:$PATH
+
+CMD ["/bin/bash"]

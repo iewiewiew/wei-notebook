@@ -8,7 +8,7 @@
 
 
 
-## 一、Elasticsearch 简介
+## 1. Elasticsearch 简介
 
 The Elastic Stack, 包括 Elasticsearch、Kibana、Beats和Logstash（也称为 ELK Stack）。能够安全可靠地获取任何来源、任何格式的数据，然后实时地对数据进行搜索、分析和可视化。Elaticsearch，简称为 ES，ES 是一个开源的高扩展的分布式全文搜索引擎，是整个 Elastic Stack 技术栈的核心。它可以近乎实时的存储、检索数据；本身扩展性很好，可以扩展到上百台服务器，处理PB级别的数据。
 
@@ -29,7 +29,7 @@ Elasticsearch比传统关系型数据库如下：
 
 
 
-## 二、Elasticsearch 环境搭建
+## 2. Elasticsearch 环境搭建
 
 [Elasticsearch 下载地址](https://www.elastic.co/cn/downloads/elasticsearch)
 
@@ -50,7 +50,7 @@ elasticsearch:7.6.2
 访问地址
 `http://127.0.0.1:9200/`
 
-![](./img/ES_9200.png)
+![](./images/ES_9200.png)
 
 启动 Elasticsearch-head 容器
 ```
@@ -63,11 +63,12 @@ mobz/elasticsearch-head:5
 访问地址
 `http://127.0.0.1:9200/`
 
-![](./img/ES_HEAD_9100.png)
+![](./images/ES_HEAD_9100.png)
 
 修改 conf\jvm.option 文件
 将#-Xms2g                                  
 #-Xmx2g修改成为：
+
 ```
 -Xms340m
 -Xmx340m
@@ -84,7 +85,7 @@ network.host: 127.0.0.1
 
 
 
-## 三、Elasticsearch 基本操作
+## 3. Elasticsearch 基本操作
 
 ### 3.1 索引操作
 
@@ -93,7 +94,7 @@ network.host: 127.0.0.1
 - 请求：http://127.0.0.1:9200/_cat/health?v
 - 响应：
 
-![](./img/cat_health.png)
+![](./images/cat_health.png)
 
 
 2. 获取集群的节点列表
@@ -101,7 +102,7 @@ network.host: 127.0.0.1
 - 请求：http://127.0.0.1:9200/_cat/nodes?v
 - 响应：
 
-![](./img/cat_node.png)
+![](./images/cat_node.png)
 
 
 3. 创建索引
@@ -130,7 +131,7 @@ number_of_replicas 备份
 - 请求：http://127.0.0.1:9200/_cat/indices?v
 - 响应：
 
-![](./img/cat_indices.png)
+![](./images/cat_indices.png)
 
 | 响应字段       | 说明                                                         |
 | -------------- | ------------------------------------------------------------ |
@@ -151,7 +152,7 @@ number_of_replicas 备份
 - 请求：http://127.0.0.1:9200/person
 - 响应：
 
-![](./img/cat_one_index.png)
+![](./images/cat_one_index.png)
 
 6. 删除索引
 - 方法：delete
@@ -179,7 +180,7 @@ number_of_replicas 备份
 {'_index': 'person', '_type': '_doc', '_id': '1', '_version': 1, 'result': 'created', '_shards': {'total': 2, 'successful': 1, 'failed': 0}, '_seq_no': 0, '_primary_term': 1}
 ```
 
-说明：此处发送请求的方式必须为 post，不能是 put，否则会发生错误。这里是因为put是一个幂等的请求，post生成的id是随机的。使用JMeter创建文档时注意设置编码：utf-8，否则中文会变成???
+说明：此处发送请求的方式必须为 post，不能是 put，否则会发生错误。这里是因为 put 是一个幂等的请求，post 生成的 id 是随机的。使用 JMeter 创建文档时注意设置编码：utf-8，否则中文会变成 ???
 
 
 2. 查看单个文档
@@ -187,7 +188,7 @@ number_of_replicas 备份
 - 请求：http://127.0.0.1:9200/person/_doc/1
 - 响应：
 
-![](./img/cat_one_doc.png)
+![](./images/cat_one_doc.png)
 
 说明：查看文档时，需要指明文档的唯一性标识，类似于 MySQL 中数据的主键查询
 
@@ -197,7 +198,7 @@ number_of_replicas 备份
 - 请求：http://127.0.0.1:9200/person/_search // <index_name>/_search
 - 响应：
 
-![](./img/cat_all_doc.png)
+![](./images/cat_all_doc.png)
 
 
 4. 修改文档
@@ -225,11 +226,36 @@ number_of_replicas 备份
 
 ### 3.3 curl 操作索引和文档
 ```
+直接访问本地 ES API
+curl -XGET http://127.0.0.1:9200/
+
+查看集群健康状态 "status"：green（健康）、yellow（部分副本未分配）、red（主分片缺失）"number_of_nodes"：节点数量。
+curl -XGET 'http://127.0.0.1:9200/_cluster/health?pretty'
+
+查看节点信息
+curl -XGET 'http://localhost:9200/_cat/nodes?v'
+
+查看分片分配情况
+curl -XGET 'http://localhost:9200/_cat/shards?v'
+
+检查未分配的分片
+curl -XGET 'http://localhost:9200/_cluster/allocation/explain?pretty'
+
+快照备份 注：没有实践过
+curl -XPUT 'http://localhost:9200/_snapshot/my_backup'
+curl -XPUT 'http://localhost:9200/_snapshot/my_backup/snapshot_1?wait_for_completion=true&pretty'
+
+--------------------------------------------------------------------------------------------
+
 创建索引
 curl -XPUT "http://127.0.0.1:9200/<index_name>"
 
 查看所有索引
+curl -XGET 'http://127.0.0.1:9200/_cat/indices?v'
 curl -XGET "http://127.0.0.1:9200/_cat/indices/?v&pretty&h=index,pri,rep,docs.count,docs.deleted,store.size,pri.store.size"
+
+查看索引映射（mapping）
+curl -XGET 'http://127.0.0.1:9200/<index_name>/_mapping?pretty'
 
 查看索引内的前 n 个文档
 curl -XGET "http://127.0.0.1:9200/<index_name>/_search?size=10"
@@ -237,29 +263,142 @@ curl -XGET "http://127.0.0.1:9200/<index_name>/_search?size=10"
 删除索引
 curl -XDELETE "http://127.0.0.1:9200/<index_name>"
 
+--------------------------------------------------------------------------------------------
+
 创建文档
 curl -XPUT "http://127.0.0.1:9200/<index_name>/_doc/<document_id>" -d '{"field1": "value1", "field2": "value2"}'
 
 更新文档
 curl -XPOST "http://127.0.0.1:9200/<index_name>/_update/<document_id>" -d '{"doc": {"field1": "new_value"}}'
 
-查看单个文档(文档id根据 <查看索引内的前 n 个文档> 接口获取)
-curl -XGET "http://127.0.0.1:9200/<index_name>/_doc/<document_id>"
-
-搜索文档
-curl -XPOST "http://127.0.0.1:9200/<index_name>/_search" -d '{"query": {"match": {"field": "value"}}}'
-
-聚合查询
-curl -XPOST "http://127.0.0.1:9200/<index_name>/_search" -d '{"aggs": {"agg_name": {"aggregation_type": {"field": "field_name"}}}}'
-
 删除文档
 curl -XDELETE "http://127.0.0.1:9200/<index_name>/_doc/<document_id>"
+
+查看单个文档(文档 id 根据 <查看索引内的前 n 个文档> 接口获取，1、2、3...)
+curl -XGET "http://127.0.0.1:9200/<index_name>/_doc/<document_id>"
+
+1. 搜索文档 - 查询所有文档 (match_all)
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "match_all": {}
+  }
+}'
+
+2. 搜索文档 - 根据 title 精确匹配，查询 title 为 "scrum_sprint_risk_template" 的文档
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "term": {
+      "title.keyword": "scrum_sprint_risk_template"
+    }
+  }
+}'
+
+3. 搜索文档 - 根据 content 模糊查询，查询 content 包含 "风险" 的文档：
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "match": {
+      "content": "风险"
+    }
+  }
+}'
+
+4. 搜索文档 - 查询 status 为 1 的文档
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "term": {
+      "status": 1
+    }
+  }
+}'
+
+5. 搜索文档 - 组合查询，查询 status 为 1 且 spaceId 为 2 的文档：
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "term": { "status": 1 }},
+        { "term": { "spaceId": 2 }}
+      ]
+    }
+  }
+}'
+
+6. 分页查询 - 每页两条，查询所有文档，返回第 1 页，每页 2 条数据：
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "match_all": {}
+  },
+  "size": 2,
+  "from": 0
+}'
+
+7. 排序查询 - 按 size 降序排序，查询所有文档，按 size 字段从大到小排序：
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "match_all": {}
+  },
+  "sort": [
+    { "size": { "order": "desc" }}
+  ]
+}'
+
+8. 多字段查询 - 查询 title 或 content 包含 "模板" 的文档
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "multi_match": {
+      "query": "模板",
+      "fields": ["title", "content"]
+    }
+  }
+}'
+
+9. 统计查询 - 获取文档总数
+curl -XGET "http://localhost:9200/<index_name>/_count" -H "Content-Type: application/json" -d'
+{
+  "query": {
+    "match_all": {}
+  }
+}'
+
+10. 搜索文档 - 匹配单个字段（match）
+curl -XPOST "http://127.0.0.1:9200/<index_name>/_search" -H 'Content-Type: application/json' -d '{"query": {"match": {"field": "value"}}}'
+
+11. 搜索文档 - 精确短语匹配（match_phrase）
+curl -XPOST "http://127.0.0.1:9200/<index_name>/_search" -H 'Content-Type: application/json' -d '{"query": {"match_phrase": {"field": "value"}}}'
+
+12. 搜索文档 - 查询特定 ID 的文档 (ids) 查询 ID 为 1 和 2 的文档
+curl -XGET "http://localhost:9200/<index_name>/_search" -H "Content-Type: application/json" -d'{"query": {"ids": {"values": ["1", "2"]}}}'
 ```
 
 
 
-### 3.4 其它
+## 知识碎片
+
+[映答搜索](https://indexea.com/docs)
+
+````
 k8s endpoint
-```
 username:password@elasticsearch-client.comm.svc.cluster.local:9200
+
+如果 Elasticsearch Service 是 ClusterIP 类型，可以通过端口转发本地访问：
+kubectl port-forward svc/elasticsearch-master 9200:9200 -n <namespace>
+
+如果 Pod 频繁 OOM，可以修改 ES_JAVA_OPTS：
+kubectl edit statefulset elasticsearch-master -n <namespace>
+找到 env 并修改：
 ```
+- name: ES_JAVA_OPTS
+  value: "-Xms4g -Xmx4g"  # 根据节点内存调整
+```
+````
+
+
+

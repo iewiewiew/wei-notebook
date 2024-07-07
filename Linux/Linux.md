@@ -9,10 +9,12 @@
 
 
 ### 环境变量
+
 基本提示符，对于 root 用户是#，对于普通用户是$
 1. 使用 echo 命令查看单个环境变量。例如：echo $PATH
 2. 使用 env 查看所有环境变量。例如：env
 3. 使用 set 查看所有本地定义的环境变量。
+
 常用的环境变量：
 1. PATH      决定了 shell 将到哪些目录中寻找命令或程序
 2. HOME      当前用户主目录
@@ -26,6 +28,7 @@
 
 
 ### Linux 下获取当前的目录
+
 Linux 下获取当前的目录：$(cd `dirname $0`;pwd)  
 dirname $0，取得当前执行的脚本文件的父目录  
 cd `dirname $0`，进入这个目录(切换当前工作目录)  
@@ -34,11 +37,13 @@ pwd，显示当前工作目录(cd 执行后的)
 
 
 ### Linux 设置开机自启
+
 /etc/rc.local 映射文件是/etc/rc.d/rc.local。(前提：chmod +x /etc/rc.d/rc.local)  
 在/etc/rc.local 或者/etc/rc.d/rc.local 添加执行脚本语句, 举例：sh /tmp/demo.sh。
 
 
 ### Linux 查看防火墙状态
+
 1. getenforce
 2. /usr/sbin/sestatus -v
 SELinux 有三种工作模式，分别是：  
@@ -49,11 +54,13 @@ SELinux 工作模式可以在 /etc/selinux/config 中设定, 如果想从 disabl
 
 
 ### Linux 修改主机名
+
 1. vim /etc/hostname（ubuntu） 或者 /etc/sysconfig/network（RHEL、CentOS 和 Fedora）, 添加：HOSTNAME=主机名, hostname 新主机名, 然后用 ssh 重新登录，就会显示新的主机名。
 2. hostnamectl set-hostname 新主机名, 重启：reboot。
 
 
 ### Linux 字体颜色
+
 1. 浅蓝色：表示链接文件
 2. 灰色：表示其他文件
 3. 绿色：表示可执行文件
@@ -64,6 +71,7 @@ SELinux 工作模式可以在 /etc/selinux/config 中设定, 如果想从 disabl
 
 
 ### 清除缓存 buff 或者 cache
+
 通过 free -m 查看到 buff/cache 的值比较大，通过下面的命令，清除缓存。
 ```
 echo 1 > /proc/sys/vm/drop_caches
@@ -72,6 +80,7 @@ echo 3 > /proc/sys/vm/drop_caches
 ```
 
 ### 常见服务对应的端口
+
 查看远端的服务是否开通：tcp 8000 端口，比如查看 baidu.com 是否开通：telnet baidu.com 8000。
 1. 21 FTP
 2. 22 SSH
@@ -89,6 +98,7 @@ echo 3 > /proc/sys/vm/drop_caches
 
 
 ### Linux 开放端口
+
 ```
 $ iptables -I INPUT -p tcp --dport 80 -j DROP
 $ iptables -I INPUT -p tcp -s 1.2.3.4 --dport 80 -j ACCEPT
@@ -110,8 +120,32 @@ $ yum install -y iptables-services
 $ service iptables save
 ```
 
+查看 Linux 服务有哪些开放端口
+```
+netstat -tuln
+ss -tuln
+lsof -i -P -n
+iptables -L -n -v
+```
+
+
+
+### 安装 Centos 系统常用工具
+
+yum install -y git
+yum install -y jq
+yum install -y sysstat
+yum install -y telnet.*
+yum install -y mysql
+yum install -y python-pip
+yum install -y epel-release
+yum install -y lsof
+yum install -y python3
+
+
 
 ### 设置 SSH 会话时长
+
 vim /etc/ssh/sshd_config
 
 - 设置 ClientAliveInterval 参数为一个较小的值，例如 300（表示 300 秒）。
@@ -124,14 +158,8 @@ vim /etc/ssh/sshd_config
 
 
 
-### 其它
-history 命令记录序号、日期时间、用户、登录IP及对应执行的命令
-vim /etc/profile
-export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  `who am i | awk '{print $1,$5}'` "
-source /etc/profile
-
-
 ### rsync+inotify-tools 实时同步数据
+
 ```
 安装 raync
 yum install rsync -y
@@ -180,6 +208,7 @@ sh rsync.sh
 
 
 ### Trickle 带宽控制供给
+
 ```
 yum install trickle
 
@@ -194,6 +223,7 @@ trickled 配置：cat /etc/trickled.conf
 
 
 ### speedtest 测速工具
+
 ```
 安装
 sudo yum install speedtest-cli
@@ -205,7 +235,7 @@ speedtest-cli
 speedtest
 ```
 
-![](./img/speedtest.png)
+![](./images/speedtest.png)
 
 
 
@@ -229,6 +259,7 @@ wondershaper -s -a eth0
 
 
 ### 查看 Linux 开放公网的端口
+
 - netstat -tuln
 - ss -tuln
 - sudo lsof -i -P -n | grep LISTEN
@@ -334,8 +365,129 @@ Linux 发行版是一个由 Linux 内核、GNU 工具、附加软件和软件包
 
 这个术语之所以是 “Linux 发行版”，是因为像 Debian、Ubuntu 这样的机构“发行”了 Linux 内核以及所有必要的软件及实用程序（如网络管理器、软件包管理器、桌面环境等），使其可以作为一个操作系统使用。
 
+[Debian 发行版本](https://www.debian.org/releases/index.zh-cn.html)，[Debian 发行版常见问题](https://www.debian.org/doc/manuals/debian-faq/basic-defs.zh-cn.html)
 
 
 ### swp
 
 交换文件（.swp）的存在是为了在编辑器会话意外中断的情况下保护数据。再次打开相同的文件进行编辑时，编辑器会检测到交换文件的存在，并询问是否恢复之前的编辑会话。
+
+### 其它
+
+history 命令记录序号、日期时间、用户、登录IP及对应执行的命令
+vim /etc/profile
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  `who am i | awk '{print $1,$5}'` "
+source /etc/profile
+
+### NTrace
+
+NTrace 是一款Golang 实现的开源的、轻量级的可视化路由追踪CLI工具
+https://github.com/nxtrace/NTrace-core
+注：多试几次才安装成功
+curl nxtrace.org/nt |bash
+使用示例
+nexttrace gitee.com
+
+
+
+### ffmpeg
+$ apt-get install ffmpeg
+$ yum install ffmpeg
+$ brew install ffmpeg
+
+mp4 转 avi:
+$ ffmpeg -i input.mp4 output.avi
+
+webm 转 mp4:
+$ ffmpeg -i movie.webm movie.mp4
+
+tzdata 是一个包含世界各地时区信息的数据库包。  
+apt install -y tzdata
+
+
+当前CPU是否支持SSE 4.2的命令  
+$ grep -q sse4_2 /proc/cpuinfo && echo "SSE 4.2 supported" || echo "SSE 4.2 not supported"
+
+
+/etc/security/limits.d/default.conf 文件在 Linux 系统中用于配置用户和用户组的资源限制。它是 PAM（Pluggable Authentication Modules） 框架的一部分，具体作用如下：
+主要作用：
+1. 资源限制：
+- 可用来限制用户的资源使用量，例如：
+- 最大打开文件数（nofile）
+- 最大进程数（nproc）
+- 虚拟内存（as）
+- 栈大小（stack）
+这些限制可以帮助防止单个用户或进程耗尽系统资源。
+2. 用户和用户组配置：
+- 文件可以针对特定用户或用户组设置限制。
+- 可以使用 * 来表示所有用户，或指定特定的用户名或组名。
+
+```
+cat > /etc/security/limits.d/default.conf << EOF
+* soft nofile 102400
+* hard nofile 102400
+* soft nproc 102400
+* hard nproc 102400
+EOF
+```
+
+
+### 查询当前目录及子目录的所有文件总数
+
+```
+. 表示当前目录。
+-type f 选项用于仅查找文件。
+wc -l 用于统计行数，即文件总数。
+find . -type f | wc -l
+
+-f 选项显示完整路径。
+grep -v '/$' 过滤掉目录，只保留文件。
+tree -f | grep -v '/$' | wc -l
+```
+
+获取 IP
+
+```shell
+# 通过 resolve 进行 IP 映射
+curl --resolve 'example.com:443:127.0.0.1' https://example.com/api/v5/information/ip
+
+参数说明：
+example.com: 要请求的主机名。
+443: HTTPS 的标准端口。
+127.0.0.1: 将 example.com 映射到的 IP 地址，在这里它指向本地机器。
+
+# 正常情况下获取 IP
+curl https://example.com/api/v5/information/ip
+
+# 伪造 `X-Forwarded-For` 头部
+curl -H 'X-Forwarded-For: 1.1.1.1' https://example.com/api/v5/information/ip
+
+# 伪造 `X-Real-IP` 头部
+curl -H 'X-Real-IP: 1.1.1.1' https://example.com/api/v5/information/ip
+
+# 获取公网 IP
+curl cip.cc
+```
+
+作用是向 https://example.com/api/v5/information/ip 发送请求，但在请求时，curl 会将 example.com 映射到本地 IP 地址 127.0.0.1。这通常用于：
+- 测试本地开发环境: 在开发过程中，可以将请求指向本地的服务器而不是实际的远程服务器。
+- 调试: 确保请求被发送到特定的服务器，以便进行故障排除或验证。
+- 绕过 DNS: 有时可以用于绕过 DNS 解析问题。
+
+X-Forwarded-For 是一个 HTTP 头部，用于标识通过代理服务器或负载均衡器转发的原始客户端 IP 地址。X-Forwarded-For 头部的格式通常是一个以逗号分隔的 IP 地址列表：
+
+```text
+X-Forwarded-For: client-ip, proxy1-ip, proxy2-ip
+```
+
+- client-ip: 最初的客户端 IP 地址。
+- proxy1-ip: 第一个代理服务器的 IP 地址。
+- proxy2-ip: 第二个代理服务器的 IP 地址（如果存在）。
+
+工作原理
+
+1. 客户端请求: 当客户端发送请求到代理服务器时，代理服务器会接收到客户端的 IP 地址。
+2. 添加头部: 代理服务器在转发请求时，会在请求头中添加 X-Forwarded-For 头部，其中包含客户端的 IP 地址。
+3. 多个代理: 如果请求经过多个代理，每个代理都会将其自身的 IP 地址添加到 X-Forwarded-For 头部，形成完整的 IP 地址链。
+
+X-Real-IP 是一个 HTTP 头部，用于传递客户端的真实 IP 地址，尤其是在通过代理服务器或负载均衡器转发请求时。与 X-Forwarded-For 类似，X-Real-IP 旨在帮助后端服务器识别原始客户端的 IP，但通常只包含一个 IP 地址，而不是一个以逗号分隔的列表。

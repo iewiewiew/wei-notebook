@@ -1,0 +1,24 @@
+---
+
+- name: Make Dir Ant Files
+  shell: |
+    rm -rf {{ ant_dir }}
+    mkdir -p {{ ant_dir }}/files
+
+- name: Copy Ant File To Remote
+  copy: src={{ ant_file_name }} dest={{ ant_dir }}/files
+
+- name: Unzip {{ ant_file_name }}
+  command: unzip {{ ant_dir }}/files/{{ ant_file_name }} -d {{ ant_dir }}
+
+- name: Copy Jar To Lib
+  copy: src={{ item }} dest={{ ant_home }}/lib
+  with_fileglob:
+    - "*.jar"
+
+- name: Set Ant Env
+  shell: |
+    echo "" >> /etc/profile
+    echo "export ANT_HOME={{ ant_home }}" >> /etc/profile
+    echo "export PATH=\${ANT_HOME}/bin:\$PATH" >> /etc/profile
+    source /etc/profile
